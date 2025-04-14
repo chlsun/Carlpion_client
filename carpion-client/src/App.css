@@ -1,42 +1,40 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+@import "tailwindcss";
+
+@font-face {
+    font-family: "HakgyoansimAllimjangTTF-R";
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimAllimjangTTF-R.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+@font-face {
+    font-family: "HakgyoansimAllimjangTTF-B";
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimAllimjangTTF-B.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+@font-face {
+    font-family: "Pretendard-Regular";
+    src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff") format("woff");
+    font-weight: 400;
+    font-style: normal;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
+/*
+    사용되는 폰트
+    요소의 className에
+    font-maintheme, font-maintheme-bold, font-pretendard
+    입력하면 폰트 적용
+    */
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+@theme {
+    --color-maincolor-light: #86d4f2;
+    --color-maincolor: #35bdf2;
+    --color-maincolor-deep: #3dadf2;
+    --color-maincolor-coral: #05f2db;
+    --color-maincolor-purple: #7e84f2;
+    --font-maintheme: "HakgyoansimAllimjangTTF-R";
+    --font-maintheme-bold: "HakgyoansimAllimjangTTF-B";
+    --font-Pretendard: "Pretendard-Regular";
 }
