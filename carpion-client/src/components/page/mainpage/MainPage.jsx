@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import "../../../reset.css";
 
 const MainPage = () => {
    const navi = useNavigate();

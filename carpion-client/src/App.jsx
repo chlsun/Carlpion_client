@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import MainPage from "./components/page/mainpage/mainpage";
-import "./reset.css";
 import AdminPage from "./components/page/adminpage/AdminPage";
 import Header from "./components/include/Header/Header";
 import ModelPage from "./components/page/adminpage/ModelPage/ModelPage";
