@@ -1,0 +1,9 @@
+#admin-page {
+}
+
+#admin-page .main-container {
+   margin-left: 100px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
