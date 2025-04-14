@@ -1,12 +1,25 @@
 import "./ModelPage.css";
-import "../../../../reset.css";
+import "../../reset.css";
 import { useState } from "react";
 const ModelPage = () => {
-   const [imgFile, setImgFile] = useState("");
+   const [imgFile, setFile] = useState(null);
+   const [preview, setPreview] = useState(null);
+   const [isUpdateForm, setIsUpdateForm] = useState(true);
 
    const saveImgFile = (e) => {
-      console.log(e.target.files[0]);
+      setPreview(null);
+      const selectedFile = e.target.files[0];
+
+      if (selectedFile) {
+         setFile(selectedFile);
+         setPreview(URL.createObjectURL(selectedFile));
+      }
    };
+
+   const updateFormHandler = () => {
+      setIsUpdateForm(!isUpdateForm);
+   };
+
    return (
       <>
          <main id="model-page">
@@ -34,9 +47,283 @@ const ModelPage = () => {
                </div>
             </form>
 
-            <div className="model-preview"></div>
+            <div className={`model-preview ${preview ? "active" : ""}`}>
+               <img src={preview} alt="" />
+            </div>
 
             <div className="model-list">
+               <div className="model">
+                  <div className="model-num">
+                     <p>1</p>
+                  </div>
+                  <div className="model-name">
+                     <p>차량 모델명</p>
+                  </div>
+                  <div className="rent-price">
+                     <p>렌트 비용</p>
+                  </div>
+                  <div className="hour-price">
+                     <p>시간당 비용</p>
+                  </div>
+                  <div className="charge-type">
+                     <p>충전타입</p>
+                  </div>
+                  <div className="seat-count">
+                     <p>승차인원</p>
+                  </div>
+                  <div className="model-img">
+                     <img src="/img/테슬라.webp" alt="" />
+                  </div>
+                  <div className="btn-box">
+                     <button className="update-btn" onClick={updateFormHandler}>
+                        수정
+                     </button>
+                     <button className="delete-btn">삭제</button>
+                  </div>
+               </div>
+               <div className="model">
+                  <div className="model-num">
+                     <p>1</p>
+                  </div>
+                  <div className="model-name">
+                     <p>차량 모델명</p>
+                  </div>
+                  <div className="rent-price">
+                     <p>렌트 비용</p>
+                  </div>
+                  <div className="hour-price">
+                     <p>시간당 비용</p>
+                  </div>
+                  <div className="charge-type">
+                     <p>충전타입</p>
+                  </div>
+                  <div className="seat-count">
+                     <p>승차인원</p>
+                  </div>
+                  <div className="model-img">
+                     <img src="/img/테슬라.webp" alt="" />
+                  </div>
+                  <div className="btn-box">
+                     <button className="update-btn">수정</button>
+                     <button className="delete-btn">삭제</button>
+                  </div>
+               </div>
+               <div className="model">
+                  <div className="model-num">
+                     <p>1</p>
+                  </div>
+                  <div className="model-name">
+                     <p>차량 모델명</p>
+                  </div>
+                  <div className="rent-price">
+                     <p>렌트 비용</p>
+                  </div>
+                  <div className="hour-price">
+                     <p>시간당 비용</p>
+                  </div>
+                  <div className="charge-type">
+                     <p>충전타입</p>
+                  </div>
+                  <div className="seat-count">
+                     <p>승차인원</p>
+                  </div>
+                  <div className="model-img">
+                     <img src="/img/테슬라.webp" alt="" />
+                  </div>
+                  <div className="btn-box">
+                     <button className="update-btn">수정</button>
+                     <button className="delete-btn">삭제</button>
+                  </div>
+               </div>
+               <div className="model">
+                  <div className="model-num">
+                     <p>1</p>
+                  </div>
+                  <div className="model-name">
+                     <p>차량 모델명</p>
+                  </div>
+                  <div className="rent-price">
+                     <p>렌트 비용</p>
+                  </div>
+                  <div className="hour-price">
+                     <p>시간당 비용</p>
+                  </div>
+                  <div className="charge-type">
+                     <p>충전타입</p>
+                  </div>
+                  <div className="seat-count">
+                     <p>승차인원</p>
+                  </div>
+                  <div className="model-img">
+                     <img src="/img/테슬라.webp" alt="" />
+                  </div>
+                  <div className="btn-box">
+                     <button className="update-btn">수정</button>
+                     <button className="delete-btn">삭제</button>
+                  </div>
+               </div>
+               <div className="model">
+                  <div className="model-num">
+                     <p>1</p>
+                  </div>
+                  <div className="model-name">
+                     <p>차량 모델명</p>
+                  </div>
+                  <div className="rent-price">
+                     <p>렌트 비용</p>
+                  </div>
+                  <div className="hour-price">
+                     <p>시간당 비용</p>
+                  </div>
+                  <div className="charge-type">
+                     <p>충전타입</p>
+                  </div>
+                  <div className="seat-count">
+                     <p>승차인원</p>
+                  </div>
+                  <div className="model-img">
+                     <img src="/img/테슬라.webp" alt="" />
+                  </div>
+                  <div className="btn-box">
+                     <button className="update-btn">수정</button>
+                     <button className="delete-btn">삭제</button>
+                  </div>
+               </div>
+               <div className="model">
+                  <div className="model-num">
+                     <p>1</p>
+                  </div>
+                  <div className="model-name">
+                     <p>차량 모델명</p>
+                  </div>
+                  <div className="rent-price">
+                     <p>렌트 비용</p>
+                  </div>
+                  <div className="hour-price">
+                     <p>시간당 비용</p>
+                  </div>
+                  <div className="charge-type">
+                     <p>충전타입</p>
+                  </div>
+                  <div className="seat-count">
+                     <p>승차인원</p>
+                  </div>
+                  <div className="model-img">
+                     <img src="/img/테슬라.webp" alt="" />
+                  </div>
+                  <div className="btn-box">
+                     <button className="update-btn">수정</button>
+                     <button className="delete-btn">삭제</button>
+                  </div>
+               </div>
+               <div className="model">
+                  <div className="model-num">
+                     <p>1</p>
+                  </div>
+                  <div className="model-name">
+                     <p>차량 모델명</p>
+                  </div>
+                  <div className="rent-price">
+                     <p>렌트 비용</p>
+                  </div>
+                  <div className="hour-price">
+                     <p>시간당 비용</p>
+                  </div>
+                  <div className="charge-type">
+                     <p>충전타입</p>
+                  </div>
+                  <div className="seat-count">
+                     <p>승차인원</p>
+                  </div>
+                  <div className="model-img">
+                     <img src="/img/테슬라.webp" alt="" />
+                  </div>
+                  <div className="btn-box">
+                     <button className="update-btn">수정</button>
+                     <button className="delete-btn">삭제</button>
+                  </div>
+               </div>
+               <div className="model">
+                  <div className="model-num">
+                     <p>1</p>
+                  </div>
+                  <div className="model-name">
+                     <p>차량 모델명</p>
+                  </div>
+                  <div className="rent-price">
+                     <p>렌트 비용</p>
+                  </div>
+                  <div className="hour-price">
+                     <p>시간당 비용</p>
+                  </div>
+                  <div className="charge-type">
+                     <p>충전타입</p>
+                  </div>
+                  <div className="seat-count">
+                     <p>승차인원</p>
+                  </div>
+                  <div className="model-img">
+                     <img src="/img/테슬라.webp" alt="" />
+                  </div>
+                  <div className="btn-box">
+                     <button className="update-btn">수정</button>
+                     <button className="delete-btn">삭제</button>
+                  </div>
+               </div>
+               <div className="model">
+                  <div className="model-num">
+                     <p>1</p>
+                  </div>
+                  <div className="model-name">
+                     <p>차량 모델명</p>
+                  </div>
+                  <div className="rent-price">
+                     <p>렌트 비용</p>
+                  </div>
+                  <div className="hour-price">
+                     <p>시간당 비용</p>
+                  </div>
+                  <div className="charge-type">
+                     <p>충전타입</p>
+                  </div>
+                  <div className="seat-count">
+                     <p>승차인원</p>
+                  </div>
+                  <div className="model-img">
+                     <img src="/img/테슬라.webp" alt="" />
+                  </div>
+                  <div className="btn-box">
+                     <button className="update-btn">수정</button>
+                     <button className="delete-btn">삭제</button>
+                  </div>
+               </div>
+               <div className="model">
+                  <div className="model-num">
+                     <p>1</p>
+                  </div>
+                  <div className="model-name">
+                     <p>차량 모델명</p>
+                  </div>
+                  <div className="rent-price">
+                     <p>렌트 비용</p>
+                  </div>
+                  <div className="hour-price">
+                     <p>시간당 비용</p>
+                  </div>
+                  <div className="charge-type">
+                     <p>충전타입</p>
+                  </div>
+                  <div className="seat-count">
+                     <p>승차인원</p>
+                  </div>
+                  <div className="model-img">
+                     <img src="/img/테슬라.webp" alt="" />
+                  </div>
+                  <div className="btn-box">
+                     <button className="update-btn">수정</button>
+                     <button className="delete-btn">삭제</button>
+                  </div>
+               </div>
                <div className="model">
                   <div className="model-num">
                      <p>1</p>
@@ -69,7 +356,7 @@ const ModelPage = () => {
             <div className="pagination">
                <div className="page-num">1</div>
                <div className="page-num">2</div>
-               <div className="page-num">3</div>
+               <div className="page-num active">3</div>
                <div className="page-num">4</div>
                <div className="page-num">5</div>
                <div className="page-num">6</div>

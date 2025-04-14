@@ -9,7 +9,7 @@
    width: 100%;
    display: flex;
    align-items: center;
-   height: 4%;
+   height: 40px;
    border: 1px solid grey;
 }
 
@@ -44,7 +44,7 @@
 #model-page .model-input .submit-btn button {
    width: 100%;
    height: 100%;
-   background-color: gray;
+   background-color: #3dadf2;
    color: white;
    display: flex;
    align-items: center;
@@ -58,6 +58,79 @@
    margin-top: 80px;
    display: none;
 }
-#model-page .model-preview .active {
+#model-page .model-preview.active {
    display: block;
+}
+
+#model-page .model-list {
+   width: 100%;
+   margin-top: 80px;
+}
+#model-page .model-list .model {
+   display: flex;
+   align-items: center;
+   width: 100%;
+   height: 40px;
+   border: 1px solid gray;
+}
+#model-page .model-list .model > div {
+   width: 10%;
+   height: 100%;
+   display: flex;
+   align-items: center;
+   padding: 10px;
+   border-right: 1px solid gray;
+}
+#model-page .model-list .model .model-num {
+   width: 5%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+#model-page .model-list .model .model-name {
+   width: 30%;
+}
+#model-page .model-list .model .charge-type {
+   width: 15%;
+}
+#model-page .model-list .model .model-img {
+   width: 8%;
+   padding: 0;
+}
+#model-page .model-list .model .btn-box {
+   width: 12%;
+   border-right: 0;
+   display: flex;
+   padding: 0;
+}
+#model-page .model-list .model .btn-box > button {
+   background-color: #3dadf2;
+   color: #ffffff;
+   height: 100%;
+   width: 50%;
+}
+#model-page .model-list .model .btn-box .update-btn {
+   border-right: 1px solid gray;
+}
+
+#model-page .pagination {
+   margin-top: 40px;
+   margin-bottom: 40px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+#model-page .pagination .page-num {
+   width: 30px;
+   height: 30px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border: 1px solid rgb(117, 117, 117);
+   background-color: #dcdcdc;
+   cursor: pointer;
+}
+#model-page .pagination .page-num.active {
+   background-color: #5c5c5c;
+   color: #ffffff;
 }

@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import Carlpion_Logo from "/src/assets/carlpion_logo.png";
 import Carlpion_Logo_TextOnly from "/src/assets/carlpion_logo_textonly.png";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
    const [isScrolled, setIsScrolled] = useState(false);
+
+   const navi = useNavigate();
 
    const handleScroll = () => {
       if (window.scrollY > 0) {
@@ -28,7 +31,7 @@ const Header = () => {
          }`}
       >
          <div className="w-7xl h-full flex justify-center">
-            <section className="w-2/6 h-full">
+            <section className="w-2/6 h-full" onClick={() => navi("/")}>
                <div className="h-full flex justify-center items-center cursor-pointer">
                   <img
                      className={`cursor-pointer ${
@@ -88,14 +91,17 @@ const Header = () => {
                         </ul>
                      </div>
                   </li>
-                  <li className="h-full flex items-center">
+                  <li
+                     className="h-full flex items-center"
+                     onClick={() => navi("/admin")}
+                  >
                      <label
                         htmlFor=""
                         className={`h-full flex items-center font-maintheme text-maincolor cursor-pointer ${
                            isScrolled ? "text-xl" : "text-2xl"
                         }`}
                      >
-                        메뉴4
+                        운영자
                      </label>
                      <div>
                         <ul>
