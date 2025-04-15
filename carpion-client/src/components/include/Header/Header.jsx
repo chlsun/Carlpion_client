@@ -3,6 +3,7 @@ import Carlpion_Logo from "/src/assets/carlpion_logo.png";
 import Carlpion_Logo_TextOnly from "/src/assets/carlpion_logo_textonly.png";
 
 const Header = () => {
+    // const
     const [isScrolled, setIsScrolled] = useState(false);
     const [openMenu, setOpenMenu] = useState(0);
 

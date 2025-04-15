@@ -5,13 +5,16 @@ import AdminPage from "./components/page/adminpage/AdminPage";
 import Header from "./components/include/Header/Header";
 import ModelPage from "./components/page/adminpage/ModelPage/ModelPage";
 import CarPage from "./components/page/adminpage/CarPage/CarPage";
+import SignUp from "./components/page/user/SignUp/SignUp";
+import Footer from "./components/include/Footer/Footer";
 
 function App() {
     return (
         <>
             <Header />
-            <div className="w-full h-screen"></div>
-            <Routes>
+            <SignUp />
+            <Footer />
+            {/* <Routes>
                 <Route path="/" element={<MainPage />} />
                 <Route path="/admin" element={<AdminPage />}>
                     <Route index element={<Navigate to="model" replace />} />
@@ -19,7 +22,7 @@ function App() {
                     <Route path="model" element={<ModelPage />} />
                     <Route path="car" element={<CarPage />} />
                 </Route>
-            </Routes>
+            </Routes> */}
         </>
     );
 }
