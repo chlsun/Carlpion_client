@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { yul } from "./PostBoard.styles";
+import * as yul from "./PostBoard.styles";
 
 import img1 from "/img/cBoard/img1.jpg";
 import img2 from "/img/cBoard/img2.jpg";
