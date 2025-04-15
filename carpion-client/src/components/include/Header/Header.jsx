@@ -1,28 +1,24 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Carlpion_Logo from "/src/assets/carlpion_logo.png";
 import Carlpion_Logo_TextOnly from "/src/assets/carlpion_logo_textonly.png";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
    const [isScrolled, setIsScrolled] = useState(false);
+   const [openMenu, setOpenMenu] = useState(0);
 
-   const navi = useNavigate();
-
-   const handleScroll = () => {
-      if (window.scrollY > 0) {
-         setIsScrolled(true);
-      } else {
-         setIsScrolled(false);
-      }
-   };
+   const handleScroll = useCallback(() => {
+      window.requestAnimationFrame(() => {
+         setIsScrolled(window.scrollY > 0);
+      });
+   }, []);
 
    useEffect(() => {
       window.addEventListener("scroll", handleScroll);
-
       return () => {
          window.removeEventListener("scroll", handleScroll);
       };
-   }, []);
+   }, [handleScroll]);
 
    return (
       <header
@@ -31,22 +27,24 @@ const Header = () => {
          }`}
       >
          <div className="w-7xl h-full flex justify-center">
-            <section className="w-2/6 h-full" onClick={() => navi("/")}>
+            <section className="w-2/6 h-full">
                <div className="h-full flex justify-center items-center cursor-pointer">
                   <img
                      className={`cursor-pointer ${
                         isScrolled ? "w-1/2" : "w-full"
                      }`}
-                     src={`${
-                        isScrolled ? Carlpion_Logo_TextOnly : Carlpion_Logo
-                     }`}
+                     src={isScrolled ? Carlpion_Logo_TextOnly : Carlpion_Logo}
                      alt="Carlpion_Logo"
                   />
                </div>
             </section>
             <section className="w-3/6 h-full flex justify-end items-center">
                <ul className="w-144 h-full flex justify-evenly items-center">
-                  <li className="h-full flex items-center">
+                  <li
+                     onMouseEnter={() => setOpenMenu(1)}
+                     onMouseLeave={() => setOpenMenu(0)}
+                     className="h-full flex items-center"
+                  >
                      <label
                         htmlFor=""
                         className={`h-full flex items-center font-maintheme text-maincolor cursor-pointer ${
@@ -55,59 +53,26 @@ const Header = () => {
                      >
                         메뉴1
                      </label>
-                     <div>
-                        <ul>
-                           <li></li>
-                        </ul>
-                     </div>
-                  </li>
-                  <li className="h-full flex items-center">
-                     <label
-                        htmlFor=""
-                        className={`h-full flex items-center font-maintheme text-maincolor cursor-pointer ${
-                           isScrolled ? "text-xl" : "text-2xl"
-                        }`}
-                     >
-                        메뉴2
-                     </label>
-                     <div>
-                        <ul>
-                           <li></li>
-                        </ul>
-                     </div>
-                  </li>
-                  <li className="h-full flex items-center">
-                     <label
-                        htmlFor=""
-                        className={`h-full flex items-center font-maintheme text-maincolor cursor-pointer ${
-                           isScrolled ? "text-xl" : "text-2xl"
-                        }`}
-                     >
-                        메뉴3
-                     </label>
-                     <div>
-                        <ul>
-                           <li></li>
-                        </ul>
-                     </div>
-                  </li>
-                  <li
-                     className="h-full flex items-center"
-                     onClick={() => navi("/admin")}
-                  >
-                     <label
-                        htmlFor=""
-                        className={`h-full flex items-center font-maintheme text-maincolor cursor-pointer ${
-                           isScrolled ? "text-xl" : "text-2xl"
-                        }`}
-                     >
-                        운영자
-                     </label>
-                     <div>
-                        <ul>
-                           <li></li>
-                        </ul>
-                     </div>
+                     {openMenu === 1 && (
+                        <div
+                           className={`w-full py-2 flex justify-center bg-white border-b-2 border-maincolor shadow-sm absolute top-full left-0`}
+                        >
+                           <ul className="w-6xl flex justify-center flex-wrap">
+                              <li className="w-full p-2 font-maintheme text-lg text-maincolor hover:bg-gray-100">
+                                 서브메뉴1 메인
+                              </li>
+                              <li className="w-full p-2 font-maintheme text-md text-gray-500 hover:bg-gray-100">
+                                 서브메뉴1 서브1
+                              </li>
+                              <li className="w-full p-2 font-maintheme text-md text-gray-500 hover:bg-gray-100">
+                                 서브메뉴1 서브2
+                              </li>
+                              <li className="w-full p-2 font-maintheme text-md text-gray-500 hover:bg-gray-100">
+                                 서브메뉴1 서브3
+                              </li>
+                           </ul>
+                        </div>
+                     )}
                   </li>
                </ul>
             </section>
