@@ -1,0 +1,138 @@
+#paking-modal {
+   margin: 0;
+   padding: 0;
+   font-family: "pretendard";
+   box-sizing: border-box;
+   position: absolute;
+   top: 0;
+   left: 0;
+   z-index: 99;
+   width: 100%;
+   min-height: 100vh;
+   background-color: #0000003a;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+#paking-modal .modal-container {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   width: 80%;
+   height: 90%;
+   background-color: #ffffff;
+   border-radius: 30px;
+   position: relative;
+   padding: 30px;
+   padding-top: 80px;
+}
+#paking-modal .exit-btn {
+   position: absolute;
+   top: 5%;
+   left: 5%;
+   background-color: #858585;
+   width: 30px;
+   height: 30px;
+   border-radius: 50%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+}
+#paking-modal .exit-btn svg {
+   width: 24px;
+   height: 24px;
+   fill: #ffffff;
+   margin-left: 8px;
+}
+
+#paking-modal .search-form {
+   width: 600px;
+   height: 30px;
+   display: flex;
+   align-items: center;
+   margin-bottom: 40px;
+}
+#paking-modal .search-form > input {
+   width: 90%;
+   height: 100%;
+   border: 1px solid rgb(188, 188, 188);
+   padding: 0 10px;
+}
+#paking-modal .search-form > button {
+   width: 10%;
+   height: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background-color: #858585;
+   color: #ffffff;
+}
+
+#paking-modal .search-list {
+   display: flex;
+   flex-direction: column;
+   width: 80%;
+}
+#paking-modal .search-list .parking-info {
+   height: 50px;
+   width: 100%;
+   border: 1px solid gray;
+   display: flex;
+   align-items: center;
+   margin-bottom: 2px;
+}
+#paking-modal .search-list .parking-info > div {
+   height: 100%;
+   border-right: 1px solid gray;
+   display: flex;
+   align-items: center;
+   padding: 0 10px;
+}
+
+#paking-modal .search-list .parking-info .num {
+   width: 5%;
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-weight: 600;
+}
+#paking-modal .search-list .parking-info .name {
+   width: 20%;
+}
+#paking-modal .search-list .parking-info .addr {
+   width: 45%;
+}
+#paking-modal .search-list .parking-info .id {
+   width: 25%;
+}
+#paking-modal .search-list .parking-info .choose-btn {
+   width: 5%;
+   height: 100%;
+   font-weight: 500;
+   background-color: #858585;
+   color: #ffffff;
+}
+
+#paking-modal .pagination {
+   margin-top: 40px;
+   margin-bottom: 40px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+#paking-modal .pagination .page-num {
+   width: 30px;
+   height: 30px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border: 1px solid rgb(117, 117, 117);
+   background-color: #dcdcdc;
+   cursor: pointer;
+}
+#paking-modal .pagination .page-num.active {
+   background-color: #5c5c5c;
+   color: #ffffff;
+}

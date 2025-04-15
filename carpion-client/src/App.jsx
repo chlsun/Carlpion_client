@@ -9,23 +9,24 @@ import Header from "./components/include/Header/Header";
 import Footer from "./components/include/Footer/Footer";
 import SignUp from "./components/page/user/SignUp/SignUp";
 import Login from "./components/page/user/Login/Login";
+import CarRentPage from "./components/page/carrentpage/CarRentPage";
 
 function App() {
-    return (
-        <>
-            <Header />
-            <Routes>
-                <Route path="/" element={<MainPage />} />
-                <Route path="/admin" element={<AdminPage />}>
-                    <Route index element={<Navigate to="model" replace />} />
+   return (
+      <>
+         <Header />
+         <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/admin" element={<AdminPage />}>
+               <Route index element={<Navigate to="model" replace />} />
 
-                    <Route path="model" element={<ModelPage />} />
-                    <Route path="car" element={<CarPage />} />
-                </Route>
-            </Routes>
-            <Footer />
-        </>
-    );
+               <Route path="model" element={<ModelPage />} />
+               <Route path="car" element={<CarPage />} />
+            </Route>
+            <Route path="/rent" element={<CarRentPage />} />
+         </Routes>
+      </>
+   );
 }
 
 export default App;
