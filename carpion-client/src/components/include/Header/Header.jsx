@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 const Header = () => {
    const [isScrolled, setIsScrolled] = useState(false);
    const [openMenu, setOpenMenu] = useState(0);
+   const navi = useNavigate();
 
    const handleScroll = useCallback(() => {
       window.requestAnimationFrame(() => {
@@ -73,6 +74,17 @@ const Header = () => {
                            </ul>
                         </div>
                      )}
+                  </li>
+                  <li className="h-full flex items-center">
+                     <label
+                        onClick={() => navi("admin")}
+                        htmlFor=""
+                        className={`h-full flex items-center font-maintheme text-maincolor cursor-pointer ${
+                           isScrolled ? "text-xl" : "text-2xl"
+                        }`}
+                     >
+                        운영자
+                     </label>
                   </li>
                </ul>
             </section>
