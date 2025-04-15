@@ -1,19 +1,5 @@
 @import url("https://webfontworld.github.io/pretendard/Pretendard.css");
 
-#admin-page * {
-   margin: 0;
-   padding: 0;
-   font-family: "pretendard";
-   box-sizing: border-box;
-}
-
-#car-rent-page * {
-   margin: 0;
-   padding: 0;
-   font-family: "pretendard";
-   box-sizing: border-box;
-}
-
 a {
    text-decoration: none;
 }
@@ -52,10 +38,10 @@ button {
    border-radius: 0;
 }
 #root .css-13cymwt-control {
-   padding-left: 10px;
+   padding-left: 0px;
 }
 #root .css-t3ipsp-control {
-   padding-left: 10px;
+   padding-left: 0px;
 }
 #root .css-1nmdiq5-menu > div > div {
    padding-left: 10px;
