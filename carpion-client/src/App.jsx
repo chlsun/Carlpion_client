@@ -5,6 +5,7 @@ import AdminPage from "./components/page/adminpage/AdminPage";
 import Header from "./components/include/Header/Header";
 import ModelPage from "./components/page/adminpage/ModelPage/ModelPage";
 import CarPage from "./components/page/adminpage/CarPage/CarPage";
+import CarRentPage from "./components/page/carrentpage/CarRentPage";
 
 function App() {
    return (
@@ -18,6 +19,7 @@ function App() {
                <Route path="model" element={<ModelPage />} />
                <Route path="car" element={<CarPage />} />
             </Route>
+            <Route path="/rent" element={<CarRentPage />} />
          </Routes>
       </>
    );
