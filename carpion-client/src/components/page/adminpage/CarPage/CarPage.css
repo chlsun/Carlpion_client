@@ -63,26 +63,6 @@
    border: none;
 }
 
-#car-page .css-1u9des2-indicatorSeparator {
-   display: none;
-}
-
-#car-page .css-13cymwt-control {
-   border-radius: 0;
-}
-#car-page .css-t3ipsp-control {
-   border-radius: 0;
-}
-#car-page .css-13cymwt-control {
-   padding-left: 10px;
-}
-#car-page .css-t3ipsp-control {
-   padding-left: 10px;
-}
-#car-page .css-1nmdiq5-menu > div > div {
-   padding-left: 10px;
-}
-
 #car-page .car-list {
    width: 100%;
    margin-top: 80px;
