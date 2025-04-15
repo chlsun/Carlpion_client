@@ -164,7 +164,7 @@ const SignUp = () => {
 
                 setIsEmptyMessage((prev) => ({
                     ...prev,
-                    [key]: `${labelMap[key]}${particle} 입력해주세요.`,
+                    [key]: `${labelMap[key]}${particle} 입력해 주세요.`,
                 }));
 
                 if (!focusedElement) {
@@ -209,14 +209,14 @@ const SignUp = () => {
 
     return (
         <>
-            <div className="size-full bg-gray-100 flex justify-center">
-                <div className="w-xl px-24 my-48 bg-white border-2 border-maincolor rounded-2xl flex flex-col justify-center items-center">
-                    <section className="my-24 font-maintheme text-5xl text-maincolor">회원가입</section>
+            <div className="size-full bg-gray-100 flex justify-center select-none">
+                <div className="w-xl px-24 my-64 bg-white border-2 border-maincolor rounded-2xl flex flex-col justify-center items-center">
+                    <section className="mt-24 mb-16 font-maintheme text-5xl text-maincolor">회원가입</section>
                     <section className="w-full h-auto">
-                        <ul className="flex flex-col gap-4">
+                        <ul className="flex flex-col gap-6">
                             {inputFields.map((field) => (
                                 <li key={field.id} className="flex flex-col">
-                                    <label htmlFor={field.id} className="pt-4 ml-1 font-maintheme text-2xl text-maincolor">
+                                    <label htmlFor={field.id} className="ml-1 font-maintheme text-2xl text-maincolor">
                                         {field.label}
                                     </label>
                                     <input
@@ -227,6 +227,20 @@ const SignUp = () => {
                                         onChange={handleChange}
                                         className="p-2 mt-1 border-2 border-gray-300 rounded-md font-Pretendard text-lg"
                                     />
+                                    {field.id === "email" ? (
+                                        <div className="w-full mt-2 flex justify-between">
+                                            <button className="px-2 py-1 border-2 border-maincolor rounded-md font-maintheme text-md text-maincolor tracking-wider cursor-pointer hover:underline hover:decoration-2 hover:underline-offset-3 active:bg-maincolor active:text-white">
+                                                이메일 인증
+                                            </button>
+                                            <input
+                                                type="text"
+                                                placeholder="메일로 발송된 인증번호를 입력하세요."
+                                                className="w-68 px-2 py-1 border-2 border-gray-300 rounded-md font-Pretendard text-md"
+                                            />
+                                        </div>
+                                    ) : (
+                                        ""
+                                    )}
                                     {isEmptyMessage[field.id] && <p className="mt-1 ml-1 text-red-500 font-Pretendard text-lg">{isEmptyMessage[field.id]}</p>}
                                     {fieldMessages[field.id] && (
                                         <p className={`mt-1 ml-1 font-Pretendard text-lg ${isValid[field.id] ? "text-green-500" : "text-red-500"}`}>{fieldMessages[field.id]}</p>
@@ -239,7 +253,7 @@ const SignUp = () => {
                     <section className="w-full h-auto flex justify-center">
                         <button
                             onClick={handleSubmit}
-                            className="w-56 h-24 my-16 border-2 border-maincolor rounded-full font-maintheme text-maincolor text-3xl hover:bg-maincolor hover:text-white cursor-pointer"
+                            className="w-56 h-24 mt-16 mb-24 border-2 border-maincolor rounded-full font-maintheme text-maincolor text-3xl hover:bg-maincolor hover:text-white cursor-pointer"
                         >
                             회원가입
                         </button>

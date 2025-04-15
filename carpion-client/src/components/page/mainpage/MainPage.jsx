@@ -5,9 +5,7 @@ const MainPage = () => {
 
     return (
         <>
-            <h3 onClick={() => navi("/admin")} style={{ cursor: "pointer" }}>
-                운영자페이지 이동
-            </h3>
+            <div className="w-full h-screen"></div>
         </>
     );
 };
