@@ -1,8 +1,12 @@
+html {
+   position: relative;
+}
 #model-page {
    width: 80%;
    display: flex;
    flex-direction: column;
    align-items: center;
+   position: relative;
 }
 
 #model-page .model-input {
@@ -70,8 +74,9 @@
    display: flex;
    align-items: center;
    width: 100%;
-   height: 40px;
+   height: 80px;
    border: 1px solid gray;
+   margin-bottom: 2px;
 }
 #model-page .model-list .model > div {
    width: 10%;
@@ -133,4 +138,41 @@
 #model-page .pagination .page-num.active {
    background-color: #5c5c5c;
    color: #ffffff;
+}
+
+#img-modal {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100vh;
+   background-color: #0000003a;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+#img-modal .modal-container {
+   width: 70%;
+   height: 70%;
+   border-radius: 30px;
+   overflow: hidden;
+   position: relative;
+}
+#img-modal .exit-btn {
+   position: absolute;
+   top: 5%;
+   right: 2%;
+   background-color: #858585;
+   width: 30px;
+   height: 30px;
+   border-radius: 50%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+}
+#img-modal .exit-btn svg {
+   width: 24px;
+   height: 24px;
+   fill: #ffffff;
 }

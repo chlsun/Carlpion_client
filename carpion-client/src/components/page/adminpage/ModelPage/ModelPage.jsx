@@ -1,10 +1,14 @@
 import "./ModelPage.css";
 import "../../reset.css";
-import { useState } from "react";
+import { useRef, useState } from "react";
 const ModelPage = () => {
    const [imgFile, setFile] = useState(null);
    const [preview, setPreview] = useState(null);
    const [isUpdateForm, setIsUpdateForm] = useState(true);
+
+   const [zoomedImage, setZoomedImage] = useState(null);
+
+   const modalBackground = useRef();
 
    const saveImgFile = (e) => {
       setPreview(null);
@@ -18,6 +22,21 @@ const ModelPage = () => {
 
    const updateFormHandler = () => {
       setIsUpdateForm(!isUpdateForm);
+   };
+
+   const zoomImageHandler = (e) => {
+      const imageSrc = e.target.src;
+      setZoomedImage(imageSrc);
+   };
+
+   const closeModalHandlerBybg = (e) => {
+      if (e.target === modalBackground.current) {
+         setZoomedImage(null);
+      }
+   };
+
+   const closeModalHandler = () => {
+      setZoomedImage(null);
    };
 
    return (
@@ -72,7 +91,11 @@ const ModelPage = () => {
                      <p>승차인원</p>
                   </div>
                   <div className="model-img">
-                     <img src="/img/테슬라.webp" alt="" />
+                     <img
+                        src="/img/테슬라.webp"
+                        alt=""
+                        onClick={zoomImageHandler}
+                     />
                   </div>
                   <div className="btn-box">
                      <button className="update-btn" onClick={updateFormHandler}>
@@ -365,6 +388,28 @@ const ModelPage = () => {
                <div className="page-num">9</div>
             </div>
          </main>
+         {zoomedImage && (
+            <div
+               id="img-modal"
+               ref={modalBackground}
+               onClick={closeModalHandlerBybg}
+            >
+               <div className="modal-container">
+                  <img src={zoomedImage} alt="" />
+                  <div className="exit-btn" onClick={closeModalHandler}>
+                     <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        fill="#e3e3e3"
+                     >
+                        <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                     </svg>
+                  </div>
+               </div>
+            </div>
+         )}
       </>
    );
 };
