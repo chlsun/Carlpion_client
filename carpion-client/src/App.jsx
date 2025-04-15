@@ -25,7 +25,6 @@ function App() {
                 </Route>
                 <Route path="/rent" element={<CarRentPage />} />
             </Routes>
-            <SignUp />
             <Footer />
         </>
     );
