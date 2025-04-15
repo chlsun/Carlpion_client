@@ -1,4 +1,8 @@
 #admin-side {
+   margin: 0;
+   padding: 0;
+   font-family: "pretendard";
+   box-sizing: border-box;
    position: fixed;
    top: 300px;
    left: 0;
