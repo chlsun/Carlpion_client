@@ -10,7 +10,6 @@ function App() {
    return (
       <>
          <Header />
-         <div className="w-full h-screen"></div>
          <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/admin" element={<AdminPage />}>
