@@ -22,7 +22,7 @@ const Footer = () => {
                         <div className="font-maintheme text-gray-500 text-lg tracking-widest cursor-pointer hover:underline hover:decoration-2 hover:underline-offset-3">고객 지원</div>
                     </section>
                     <section className="w-1/6 h-full flex justify-end items-center">
-                        <button className="size-12 border-2 border-gray-400 rounded-full cursor-pointer">
+                        <button className="size-12 border-2 border-gray-400 rounded-full cursor-pointer opacity-75">
                             {isDarkMode ? <img src={Dark_Mode_Icon} alt="Mode_Icon" /> : <img src={Light_Mode_Icon} alt="Mode_Icon" />}
                         </button>
                     </section>

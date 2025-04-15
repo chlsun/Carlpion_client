@@ -1,0 +1,140 @@
+#car-page {
+   width: 80%;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+#car-page .car-input {
+   width: 100%;
+   display: flex;
+   align-items: center;
+   height: 40px;
+   border: 1px solid grey;
+}
+
+#car-page .car-input .input-box {
+   height: 100%;
+   border-right: 1px solid grey;
+   width: 10%;
+}
+#car-page .car-input .input-box input {
+   height: 100%;
+   width: 100%;
+   border: none;
+   padding: 10px;
+}
+#car-page .car-input .input-box p {
+   height: 100%;
+   width: 100%;
+   border: none;
+   padding: 10px;
+   color: #777777;
+   font-size: 15px;
+   -webkit-user-select: none;
+}
+
+#car-page .car-input .model-name {
+   width: 25%;
+}
+#car-page .car-input .parking-addr {
+   width: 25%;
+}
+#car-page .car-input .parking-name {
+   width: 13%;
+}
+#car-page .car-input .parking-id {
+   width: 15%;
+}
+
+#car-page .car-input .btn {
+   width: 12%;
+   height: 100%;
+   display: flex;
+}
+#car-page .car-input .btn > button {
+   width: 50%;
+   border-right: 1px solid gray;
+   background-color: #3dadf2;
+   cursor: pointer;
+   color: #ffffff;
+}
+#car-page .car-input .btn .insert-btn {
+   border: none;
+}
+
+#car-page .car-list {
+   width: 100%;
+   margin-top: 80px;
+}
+#car-page .car-list .car {
+   display: flex;
+   align-items: center;
+   width: 100%;
+   height: 40px;
+   border: 1px solid gray;
+   margin-bottom: 2px;
+}
+#car-page .car-list .car > div {
+   width: 10%;
+   height: 100%;
+   display: flex;
+   align-items: center;
+   padding: 10px;
+   border-right: 1px solid gray;
+}
+#car-page .car-list .car .car-no {
+   width: 3%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+#car-page .car-list .car .model-name {
+   width: 25%;
+}
+#car-page .car-list .car .parking-name {
+   width: 13%;
+}
+#car-page .car-list .car .parking-addr {
+   width: 25%;
+}
+#car-page .car-list .car .parking-id {
+   width: 15%;
+}
+#car-page .car-list .car .btn-box {
+   width: 10%;
+   border-right: 0;
+   display: flex;
+   padding: 0;
+}
+#car-page .car-list .car .btn-box > button {
+   background-color: #3dadf2;
+   color: #ffffff;
+   height: 100%;
+   width: 50%;
+}
+#car-page .car-list .car .btn-box .update-btn {
+   border-right: 1px solid gray;
+}
+
+#car-page .pagination {
+   margin-top: 40px;
+   margin-bottom: 40px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+#car-page .pagination .page-num {
+   width: 30px;
+   height: 30px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border: 1px solid rgb(117, 117, 117);
+   background-color: #dcdcdc;
+   cursor: pointer;
+}
+#car-page .pagination .page-num.active {
+   background-color: #5c5c5c;
+   color: #ffffff;
+}

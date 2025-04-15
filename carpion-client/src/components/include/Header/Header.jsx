@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import Carlpion_Logo from "/src/assets/carlpion_logo.png";
 import Carlpion_Logo_TextOnly from "/src/assets/carlpion_logo_textonly.png";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [openMenu, setOpenMenu] = useState(0);
+    const navi = useNavigate();
 
     const handleScroll = useCallback(() => {
         window.requestAnimationFrame(() => {

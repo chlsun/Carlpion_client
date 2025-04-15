@@ -1,5 +1,178 @@
+html {
+   position: relative;
+}
 #model-page {
-   height: 1000px;
-   width: 200px;
-   background-color: blue;
+   width: 80%;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   position: relative;
+}
+
+#model-page .model-input {
+   width: 100%;
+   display: flex;
+   align-items: center;
+   height: 40px;
+   border: 1px solid grey;
+}
+
+#model-page .model-input .input-box {
+   height: 100%;
+   border-right: 1px solid grey;
+   width: 10%;
+}
+#model-page .model-input .input-box input {
+   height: 100%;
+   width: 100%;
+   border: none;
+   padding: 10px;
+}
+#model-page .model-input .model-name {
+   width: 25%;
+}
+#model-page .model-input .charge-type {
+   width: 15%;
+}
+#model-page .model-input .seat-count {
+   width: 10%;
+}
+#model-page .model-input .model-img {
+   width: 20%;
+}
+#model-page .model-input .submit-btn {
+   width: 10%;
+   height: 100%;
+}
+
+#model-page .model-input .submit-btn button {
+   width: 100%;
+   height: 100%;
+   background-color: #3dadf2;
+   color: white;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+#model-page .model-preview {
+   width: 600px;
+   height: 400px;
+   background-color: #933a3a;
+   margin-top: 80px;
+   display: none;
+}
+#model-page .model-preview.active {
+   display: block;
+}
+
+#model-page .model-list {
+   width: 100%;
+   margin-top: 80px;
+}
+#model-page .model-list .model {
+   display: flex;
+   align-items: center;
+   width: 100%;
+   height: 80px;
+   border: 1px solid gray;
+   margin-bottom: 2px;
+}
+#model-page .model-list .model > div {
+   width: 10%;
+   height: 100%;
+   display: flex;
+   align-items: center;
+   padding: 10px;
+   border-right: 1px solid gray;
+}
+#model-page .model-list .model .model-num {
+   width: 5%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+#model-page .model-list .model .model-name {
+   width: 30%;
+}
+#model-page .model-list .model .charge-type {
+   width: 15%;
+}
+#model-page .model-list .model .model-img {
+   width: 8%;
+   padding: 0;
+}
+#model-page .model-list .model .btn-box {
+   width: 12%;
+   border-right: 0;
+   display: flex;
+   padding: 0;
+}
+#model-page .model-list .model .btn-box > button {
+   background-color: #3dadf2;
+   color: #ffffff;
+   height: 100%;
+   width: 50%;
+}
+#model-page .model-list .model .btn-box .update-btn {
+   border-right: 1px solid gray;
+}
+
+#model-page .pagination {
+   margin-top: 40px;
+   margin-bottom: 40px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+#model-page .pagination .page-num {
+   width: 30px;
+   height: 30px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border: 1px solid rgb(117, 117, 117);
+   background-color: #dcdcdc;
+   cursor: pointer;
+}
+#model-page .pagination .page-num.active {
+   background-color: #5c5c5c;
+   color: #ffffff;
+}
+
+#img-modal {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100vh;
+   background-color: #0000003a;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+#img-modal .modal-container {
+   width: 70%;
+   height: 70%;
+   border-radius: 30px;
+   overflow: hidden;
+   position: relative;
+}
+#img-modal .exit-btn {
+   position: absolute;
+   top: 5%;
+   right: 2%;
+   background-color: #858585;
+   width: 30px;
+   height: 30px;
+   border-radius: 50%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+}
+#img-modal .exit-btn svg {
+   width: 24px;
+   height: 24px;
+   fill: #ffffff;
 }

@@ -9,14 +9,12 @@ const Login = () => {
             label: "아이디",
             type: "text",
             placeholder: "아이디를 입력해 주세요.",
-            validationKey: "username",
         },
         {
             id: "password",
             label: "비밀번호",
             type: "password",
             placeholder: "비밀번호를 입력해 주세요.",
-            validationKey: "password",
         },
     ];
 
@@ -62,7 +60,7 @@ const Login = () => {
         setIsEmptyMessage({ ...isEmptyMessage, [id]: "" });
 
         const field = inputFields.find((f) => f.id === id);
-        const validation = validationRules[field.validationKey];
+        const validation = validationRules[field.id];
 
         if (!validation) return;
 
@@ -106,10 +104,10 @@ const Login = () => {
                 isValid = false;
             }
 
-            if (inputValues[key] && !validationRules[field.validationKey].regExp.test(inputValues[key])) {
+            if (inputValues[key] && !validationRules[field.id].regExp.test(inputValues[key])) {
                 setFieldMessages((prev) => ({
                     ...prev,
-                    [key]: validationRules[field.validationKey].errorMessage,
+                    [key]: validationRules[field.id].errorMessage,
                 }));
 
                 if (!focusedElement) {

@@ -8,35 +8,30 @@ const SignUp = () => {
             label: "아이디",
             type: "text",
             placeholder: "사용할 아이디를 입력해 주세요.",
-            validationKey: "username",
         },
         {
             id: "password",
             label: "비밀번호",
             type: "password",
             placeholder: "사용할 비밀번호를 입력해 주세요.",
-            validationKey: "password",
         },
         {
             id: "nickname",
             label: "닉네임",
             type: "text",
             placeholder: "사용할 닉네임을 입력해 주세요.",
-            validationKey: "nickname",
         },
         {
             id: "realname",
             label: "이름",
             type: "text",
             placeholder: "이름을 입력해 주세요.",
-            validationKey: "realname",
         },
         {
             id: "email",
             label: "이메일",
             type: "email",
             placeholder: "이메일을 입력해 주세요.",
-            validationKey: "email",
         },
     ];
 
@@ -118,7 +113,7 @@ const SignUp = () => {
         setIsEmptyMessage({ ...isEmptyMessage, [id]: "" });
 
         const field = inputFields.find((f) => f.id === id);
-        const validation = validationRules[field.validationKey];
+        const validation = validationRules[field.id];
 
         if (!validation) return;
 
@@ -173,10 +168,10 @@ const SignUp = () => {
                 isValid = false;
             }
 
-            if (inputValues[key] && !validationRules[field.validationKey].regExp.test(inputValues[key])) {
+            if (inputValues[key] && !validationRules[field.id].regExp.test(inputValues[key])) {
                 setFieldMessages((prev) => ({
                     ...prev,
-                    [key]: validationRules[field.validationKey].errorMessage,
+                    [key]: validationRules[field.id].errorMessage,
                 }));
 
                 if (!focusedElement) {

@@ -9,6 +9,7 @@ import Header from "./components/include/Header/Header";
 import Footer from "./components/include/Footer/Footer";
 import SignUp from "./components/page/user/SignUp/SignUp";
 import Login from "./components/page/user/Login/Login";
+import CarRentPage from "./components/page/carrentpage/CarRentPage";
 
 function App() {
     return (
@@ -22,7 +23,9 @@ function App() {
                     <Route path="model" element={<ModelPage />} />
                     <Route path="car" element={<CarPage />} />
                 </Route>
+                <Route path="/rent" element={<CarRentPage />} />
             </Routes>
+            <SignUp />
             <Footer />
         </>
     );
