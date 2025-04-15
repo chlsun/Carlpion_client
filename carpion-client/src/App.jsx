@@ -15,12 +15,13 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/c" element={<PostBoard />} />
-        <Route path="/notice" element={<NoticePage />} />
+
         <Route path="/admin" element={<AdminPage />}>
           <Route index element={<Navigate to="model" replace />} />
 
           <Route path="model" element={<ModelPage />} />
           <Route path="car" element={<CarPage />} />
+          <Route path="notice" element={<NoticePage />} />
         </Route>
       </Routes>
     </>

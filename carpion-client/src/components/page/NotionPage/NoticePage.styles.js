@@ -1,12 +1,16 @@
 import styled from "styled-components";
 
+export const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 export const FullBanner = styled.div`
   width: 1200px;
-  height: 400px;
-  margin: 0 auto;
-  padding-top: 150px;
+  height: 300px;
   position: relative;
-  z-index: -1;
+  margin-bottom: 40px;
   img {
     width: 100%;
     height: 100%;
@@ -27,21 +31,21 @@ export const BannerText = styled.div`
 
 export const Container = styled.div`
   max-width: 900px;
+  width: 100%;
   margin: 0 auto;
   padding: 60px 24px 24px;
   background-color: #fff;
+  margin-top: 40px;
+  position: relative;
 `;
 
-export const Title = styled.h2`
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 24px;
-`;
 export const TitleRow = styled.div`
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 8px;
   margin-bottom: 24px;
+  position: relative;
+  width: 100%;
 `;
 
 export const TitleIcon = styled.img`
@@ -49,8 +53,32 @@ export const TitleIcon = styled.img`
   height: 28px;
   object-fit: contain;
   display: block;
-  margin-bottom: 24px;
 `;
+
+export const Title = styled.h2`
+  font-size: 24px;
+  font-weight: 700;
+`;
+
+export const WriteButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 16px 32px;
+  font-size: 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 70px;
+  height: 30px;
+
+  &:hover {
+    background-color: #0062cc;
+  }
+`;
+
 export const List = styled.ul`
   display: flex;
   flex-direction: column;
@@ -76,7 +104,7 @@ export const ItemHeader = styled.div`
 `;
 
 export const ItemTitle = styled.span`
-  font-size: 16px;
+  font-size: 18px; /* 제목 크기 조정 */
   font-weight: 500;
   color: #333;
 `;
@@ -105,18 +133,4 @@ export const ItemContent = styled.div`
   font-size: 15px;
   color: #444;
   line-height: 1.5;
-`;
-export const WriteButton = styled.button`
-  margin-left: auto;
-  padding: 6px 14px;
-  font-size: 14px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #0062cc;
-  }
 `;

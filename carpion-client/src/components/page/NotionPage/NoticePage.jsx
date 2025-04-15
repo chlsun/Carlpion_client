@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import * as S from "./NoticePage.styles";
+import "./NoticePage.css";
 import CustomerBanner from "/img/notice/안내.jpg";
 
 const notices = [
@@ -17,46 +17,59 @@ const notices = [
   },
 ];
 
+const NoticeItem = ({ notice, isOpen, onToggle }) => (
+  <li className="item" onClick={onToggle}>
+    <div className="itemHeader">
+      <span className="itemTitle">{notice.title}</span>
+      <div className="rightBox">
+        <span className="itemDate">{notice.date}</span>
+        <span className="toggleIcon">{isOpen ? "−" : "+"}</span>
+      </div>
+    </div>
+    {isOpen && <div className="itemContent">{notice.content}</div>}
+  </li>
+);
+
 const NoticePage = () => {
   const [openId, setOpenId] = useState(null);
-  const isAdmin = true; // or false
-  const toggleItem = (id) => {
-    setOpenId(openId === id ? null : id);
+  const isAdmin = true;
+
+  const handleToggleItem = (id) => {
+    setOpenId((prevId) => (prevId === id ? null : id));
   };
 
   return (
     <>
-      <S.FullBanner>
-        <img src="/img/notice/안내.jpg" alt="고객센터 배너" />
-        <S.BannerText>고객센터</S.BannerText>
-      </S.FullBanner>
+      <div className="banner">
+        <img src={CustomerBanner} alt="고객센터 배너" />
+        <div className="bannerText">고객센터</div>
+      </div>
 
-      <S.Container>
-        <S.TitleRow>
-          <S.TitleIcon src="/img/notice/사이렌.png" alt="공지 아이콘" />
-          <S.Title>공지사항</S.Title>
-          {isAdmin && <S.WriteButton>작성</S.WriteButton>}
-        </S.TitleRow>
+      <div className="container">
+        <div className="titleRow">
+          <img
+            src="/img/notice/사이렌.png"
+            alt="공지 아이콘"
+            className="titleIcon"
+          />
+          <h2 className="title">공지사항</h2>
+          {isAdmin && <button className="writeButton">작성</button>}
+        </div>
 
-        <S.List>
-          {notices.map((notice) => (
-            <S.Item key={notice.id} onClick={() => toggleItem(notice.id)}>
-              <S.ItemHeader>
-                <S.ItemTitle>{notice.title}</S.ItemTitle>
-                <S.RightBox>
-                  <S.ItemDate>{notice.date}</S.ItemDate>
-                  <S.ToggleIcon>
-                    {openId === notice.id ? "−" : "+"}
-                  </S.ToggleIcon>
-                </S.RightBox>
-              </S.ItemHeader>
-              {openId === notice.id && (
-                <S.ItemContent>{notice.content}</S.ItemContent>
-              )}
-            </S.Item>
-          ))}
-        </S.List>
-      </S.Container>
+        <ul className="list">
+          {notices.map((notice) => {
+            const isOpen = openId === notice.id;
+            return (
+              <NoticeItem
+                key={notice.id}
+                notice={notice}
+                isOpen={isOpen}
+                onToggle={() => handleToggleItem(notice.id)}
+              />
+            );
+          })}
+        </ul>
+      </div>
     </>
   );
 };
