@@ -1,7 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import "./AdminSide.css";
 import { useEffect } from "react";
-import "../../../reset.css";
 
 const AdminSide = () => {
    const location = useLocation();

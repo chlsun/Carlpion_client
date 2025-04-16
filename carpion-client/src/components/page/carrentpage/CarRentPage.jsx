@@ -1,6 +1,5 @@
 import Select from "react-select";
 import "./CarRentPage.css";
-import "../reset.css";
 const CarRentPage = () => {
    const yymmdd = [
       { value: "250409", label: "2025/04/09" },
