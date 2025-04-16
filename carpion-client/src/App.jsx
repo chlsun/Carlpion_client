@@ -2,15 +2,21 @@ import "./App.css";
 import { Navigate, Route, Routes } from "react-router-dom";
 import MainPage from "./components/page/mainpage/MainPage";
 import AdminPage from "./components/page/adminpage/AdminPage";
-
+import DetailPage from "./components/page/DetailPage/DetailPage";
 import ModelPage from "./components/page/adminpage/ModelPage/ModelPage";
 import CarPage from "./components/page/adminpage/CarPage/CarPage";
+import PostBoard from "./components/page/CommunitePage/PostBoard";
+import NoticePage from "./components/page/NotionPage/NoticePage";
 import Header from "./components/include/Header/Header";
 import Footer from "./components/include/Footer/Footer";
 import CarRentPage from "./components/page/carrentpage/CarRentPage";
 import MainMyPage from "./components/page/MyPage/MainMyPage";
 import Body from "./components/page/Body/Body";
 import Point from "./components/page/Point/Point";
+import FindId from "./components/page/user/FIndId/FIndId";
+import FindPw from "./components/page/user/FindPw/FindPw";
+import FindPwCompleted from "./components/page/user/FindPw/FindPwCompleted";
+
 import Reply from "./components/page/reply/reply";
 function App() {
   return (
