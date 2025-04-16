@@ -36,9 +36,6 @@ const Body = () => {
     }
   }, [nickName, selectedImage]);
 
-  const handleReply = () => {
-    console.log("댓글 수정 클릭됨");
-  };
   const handleReport = () => {
     console.log("문의게시판 수정 클릭됨");
   };
@@ -84,7 +81,6 @@ const Body = () => {
   };
   return (
     <Container>
-      <Header>마이페이지</Header>
       <div>
         <GradeText>XXX님 안녕하세요</GradeText>
       </div>
@@ -190,7 +186,7 @@ const Body = () => {
       </ButtonWrapper>
       <GradeText>내 활동</GradeText>
       <Box>
-        <Button onClick={handleReply}>작성한 댓글 조회</Button>
+        <Button onClick={() => navi("/reply")}>작성한 댓글 조회</Button>
         <Button onClick={handleReport}>작성한 문의 게시글 조회</Button>
         <Button onClick={handleReview}> 작성한 리뷰 게시글 조회</Button>
       </Box>

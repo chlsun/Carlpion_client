@@ -11,7 +11,7 @@ import CarRentPage from "./components/page/carrentpage/CarRentPage";
 import MainMyPage from "./components/page/MyPage/MainMyPage";
 import Body from "./components/page/Body/Body";
 import Point from "./components/page/Point/Point";
-
+import Reply from "./components/page/reply/reply";
 function App() {
    return (
       <>
@@ -24,12 +24,14 @@ function App() {
                <Route path="model" element={<ModelPage />} />
                <Route path="car" element={<CarPage />} />
             </Route>
+
             <Route path="/rent" element={<CarRentPage />} />
+
             <Route path="/mypage" element={<Body />} />
             <Route path="/modify" element={<MainMyPage />} />
             <Route path="/point" element={<Point />} />
+            <Route path="/reply" element={<Reply />} />
          </Routes>
-         <Footer />
       </>
    );
 }
