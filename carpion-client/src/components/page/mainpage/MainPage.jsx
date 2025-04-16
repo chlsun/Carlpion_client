@@ -8,7 +8,7 @@ const MainPage = () => {
          <h3
             className="test-navi"
             onClick={() => navi("/rent")}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", margin: "400px" }}
          >
             자동차 렌트 페이지 이동
          </h3>
