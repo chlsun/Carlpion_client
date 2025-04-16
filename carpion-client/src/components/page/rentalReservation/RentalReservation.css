@@ -1,0 +1,14 @@
+#rental-reservation {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   height: 89vh;
+   margin-top: 96px;
+}
+
+#rental-reservation .map {
+   width: 90%;
+   height: 90%;
+   border-radius: 30px;
+   overflow: hidden;
+}
