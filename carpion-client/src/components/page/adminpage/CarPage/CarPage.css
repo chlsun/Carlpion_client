@@ -1,3 +1,43 @@
+@import url("https://webfontworld.github.io/pretendard/Pretendard.css");
+
+#car-page a {
+   text-decoration: none;
+}
+
+#car-page input::placeholder {
+   font-family: "pretendard";
+}
+
+#car-page img,
+#car-page svg {
+   width: 100%;
+   height: 100%;
+}
+
+#car-page button {
+   border: none;
+}
+
+#root .css-1u9des2-indicatorSeparator {
+   display: none;
+}
+
+#root .css-13cymwt-control {
+   border-radius: 0;
+}
+#root .css-t3ipsp-control {
+   border-radius: 0;
+}
+#root .css-13cymwt-control {
+   padding-left: 0px;
+}
+#root .css-t3ipsp-control {
+   padding-left: 0px;
+}
+#root .css-1nmdiq5-menu > div > div {
+   padding-left: 10px;
+}
+
 #car-page {
    margin: 0;
    padding: 0;

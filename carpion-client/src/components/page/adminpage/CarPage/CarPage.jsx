@@ -1,5 +1,4 @@
 import "./CarPage.css";
-import "../../reset.css";
 import Select from "react-select";
 import { useRef, useState } from "react";
 import ParkingModal from "./parkingModal/ParkingModal";
