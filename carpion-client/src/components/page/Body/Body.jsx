@@ -22,7 +22,10 @@ import { useEffect } from "react";
 
 const Body = () => {
   const [activeForm, setActiveForm] = useState("");
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(
+    "/img/mypage/profile.logo.png/"
+  );
+  const [tempImage, setTempImage] = useState("");
   const [nickName, setNickName] = useState("");
   const [tempNick, setTempNick] = useState("");
   const navi = useNavigate();
@@ -35,6 +38,10 @@ const Body = () => {
       localStorage.setItem("nickName", nickName);
     }
   }, [nickName, selectedImage]);
+
+  useEffect(() => {
+    setSelectedImage("/img/mypage/profile.logo.png");
+  }, []);
 
   const handleReport = () => {
     console.log("문의게시판 수정 클릭됨");
@@ -49,17 +56,16 @@ const Body = () => {
       const reader = new FileReader();
 
       reader.onloadend = () => {
-        setSelectedImage(reader.result);
+        setTempImage(reader.result);
       };
       reader.readAsDataURL(file);
     } else {
-      setSelectedImage("img/test.jpg");
+      setSelectedImage("/img/mypage/profile.logo.png");
     }
   };
 
   const submitProfile = (e) => {
     e.preventDefault();
-    console.log(selectedImage);
     setActiveForm(null);
   };
 
@@ -76,9 +82,18 @@ const Body = () => {
       return;
     }
     setNickName(tempNick);
-
     setActiveForm(null);
   };
+  const handleProfileSubmit = () => {
+    if (tempImage) {
+      selectedImage(tempImage);
+    }
+    setActiveForm(null);
+  };
+  const handleCancel = () => {
+    setActiveForm(null);
+  };
+
   return (
     <Container>
       <div>
@@ -146,8 +161,12 @@ const Body = () => {
                   </div>
                 )}
                 <ButtonWrapper>
-                  <Button type="submit">수정하기</Button>
-                  <Button onClick={() => setActiveForm(null)}>취소</Button>
+                  <Button type="button" onClick={handleProfileSubmit}>
+                    수정하기
+                  </Button>
+                  <Button type="button" onClick={handleCancel}>
+                    취소
+                  </Button>
                 </ButtonWrapper>
               </form>
             </ModalBox>
