@@ -1,6 +1,11 @@
 import Select from "react-select";
 import "./CarRentPage.css";
+import CarRentMap from "../../include/map/carRentMap/CarRentMap";
+import { useNavigate } from "react-router-dom";
+
 const CarRentPage = () => {
+   const navi = useNavigate();
+
    const yymmdd = [
       { value: "250409", label: "2025/04/09" },
       { value: "250410", label: "2025/04/10" },
@@ -25,7 +30,9 @@ const CarRentPage = () => {
       <>
          <main id="car-rent-page">
             <section className="banner">
-               <div className="map"></div>
+               <div className="map">
+                  <CarRentMap />
+               </div>
 
                <div className="select-container">
                   <div className="rental-date">
@@ -84,7 +91,9 @@ const CarRentPage = () => {
                   </div>
                   <p className="parking-name">운정역 공영주차장</p>
                   <p className="parking-addr">경기도 파주시 목동동 뭐시기</p>
-                  <button className="rent-btn">예약하기</button>
+                  <button className="rent-btn" onClick={() => navi("/rent/1")}>
+                     예약하기
+                  </button>
                </div>
                <div className="rent-car">
                   <div className="car-info">
@@ -98,7 +107,9 @@ const CarRentPage = () => {
                   </div>
                   <p className="parking-name">운정역 공영주차장</p>
                   <p className="parking-addr">경기도 파주시 목동동 뭐시기</p>
-                  <button className="rent-btn">예약하기</button>
+                  <button className="rent-btn" onClick={() => navi("/rent/1")}>
+                     예약하기
+                  </button>
                </div>
                <div className="rent-car active">
                   <div className="car-info">
@@ -112,7 +123,9 @@ const CarRentPage = () => {
                   </div>
                   <p className="parking-name">운정역 공영주차장</p>
                   <p className="parking-addr">경기도 파주시 목동동 뭐시기</p>
-                  <button className="rent-btn">예약하기</button>
+                  <button className="rent-btn" onClick={() => navi("/rent/1")}>
+                     예약하기
+                  </button>
                   <div className="no-rent">
                      <div className="txt">예약불가</div>
                   </div>
@@ -129,7 +142,9 @@ const CarRentPage = () => {
                   </div>
                   <p className="parking-name">운정역 공영주차장</p>
                   <p className="parking-addr">경기도 파주시 목동동 뭐시기</p>
-                  <button className="rent-btn">예약하기</button>
+                  <button className="rent-btn" onClick={() => navi("/rent/1")}>
+                     예약하기
+                  </button>
                </div>
                <div className="rent-car">
                   <div className="car-info">
@@ -143,7 +158,9 @@ const CarRentPage = () => {
                   </div>
                   <p className="parking-name">운정역 공영주차장</p>
                   <p className="parking-addr">경기도 파주시 목동동 뭐시기</p>
-                  <button className="rent-btn">예약하기</button>
+                  <button className="rent-btn" onClick={() => navi("/rent/1")}>
+                     예약하기
+                  </button>
                </div>
                <div className="rent-car">
                   <div className="car-info">
@@ -157,7 +174,9 @@ const CarRentPage = () => {
                   </div>
                   <p className="parking-name">운정역 공영주차장</p>
                   <p className="parking-addr">경기도 파주시 목동동 뭐시기</p>
-                  <button className="rent-btn">예약하기</button>
+                  <button className="rent-btn" onClick={() => navi("/rent/1")}>
+                     예약하기
+                  </button>
                </div>
                <div className="rent-car">
                   <div className="car-info">
@@ -171,7 +190,9 @@ const CarRentPage = () => {
                   </div>
                   <p className="parking-name">운정역 공영주차장</p>
                   <p className="parking-addr">경기도 파주시 목동동 뭐시기</p>
-                  <button className="rent-btn">예약하기</button>
+                  <button className="rent-btn" onClick={() => navi("/rent/1")}>
+                     예약하기
+                  </button>
                </div>
             </section>
          </main>

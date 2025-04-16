@@ -29,13 +29,16 @@
    display: flex;
    flex-direction: column;
    align-items: center;
+   background-color: #ffffff;
 }
 #car-rent-page .map {
-   height: 700px;
-   width: 1715px;
+   height: 540px;
+   width: 88%;
    background-color: antiquewhite;
    border-radius: 30px;
    margin-bottom: 64px;
+   overflow: hidden;
+   box-shadow: 0 0 8px 8px #0000000f;
 }
 
 #car-rent-page .select-container {
@@ -129,12 +132,6 @@
    font-weight: 600;
 }
 
-#car-rent-page .car-list .rent-btn {
-   position: absolute;
-   bottom: 20px;
-   right: 20px;
-   z-index: 9;
-}
 #car-rent-page .car-list .parking-name {
    margin-top: 20px;
    font-size: 16px;
@@ -147,6 +144,10 @@
    color: #333333;
 }
 #car-rent-page .car-list .rent-btn {
+   position: absolute;
+   bottom: 20px;
+   right: 20px;
+   z-index: 9;
    padding: 6px 18px;
    background-color: #7eb4c9;
    border-radius: 10px;
