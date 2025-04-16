@@ -1,5 +1,4 @@
 import "./ModelPage.css";
-import "../../reset.css";
 import { useRef, useState } from "react";
 const ModelPage = () => {
    const [imgFile, setFile] = useState(null);

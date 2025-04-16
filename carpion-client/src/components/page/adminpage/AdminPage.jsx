@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 import "./AdminPage.css";
-import "../reset.css";
 import AdminSide from "./module/adminside/AdminSide";
 
 const AdminPage = () => {

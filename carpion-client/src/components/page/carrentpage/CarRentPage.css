@@ -1,3 +1,23 @@
+@import url("https://webfontworld.github.io/pretendard/Pretendard.css");
+
+#car-rent-page a {
+   text-decoration: none;
+}
+
+#car-rent-page input::placeholder {
+   font-family: "pretendard";
+}
+
+#car-rent-page img,
+#car-rent-page svg {
+   width: 100%;
+   height: 100%;
+}
+
+#car-rent-page button {
+   border: none;
+}
+
 #car-rent-page {
    margin: 0;
    padding: 0;
