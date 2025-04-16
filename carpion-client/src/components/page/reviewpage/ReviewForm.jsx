@@ -1,17 +1,18 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const reviewForm = () => {
   const navi = useNavigate();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [userNo, setUserNo] = useState("");
+  const [count, setCount] = useState("");
   const [file , setFile] = useState(null);
 
   useEffect(() => {
     
-  });
+  }, []);
 
   axios
     .post(`http://localhost/reviews`,  {
@@ -26,10 +27,11 @@ const reviewForm = () => {
     .catch((err) => {
       console.log(err);
     });
+
   return (
     <>
       <form>
-      <title>게시글 작성</title>
+        <title>리뷰 게시글 작성</title>
         <label>제목</label>
         <input 
           type="text" 
