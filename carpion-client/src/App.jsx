@@ -29,9 +29,7 @@ function App() {
                     <Route path="model" element={<ModelPage />} />
                     <Route path="car" element={<CarPage />} />
                 </Route>
-
                 <Route path="/rent" element={<CarRentPage />} />
-
                 <Route path="/mypage" element={<Body />} />
                 <Route path="/modify" element={<MainMyPage />} />
                 <Route path="/point" element={<Point />} />
