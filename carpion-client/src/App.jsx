@@ -18,7 +18,6 @@ function App() {
     return (
         <>
             <Header />
-            <FindPwCompleted />
             <Routes>
                 <Route path="/" element={<MainPage />} />
                 <Route path="/admin" element={<AdminPage />}>
