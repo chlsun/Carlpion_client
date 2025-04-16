@@ -6,9 +6,7 @@ const MainPage = () => {
 
     return (
         <>
-            <h3 className="test-navi" onClick={() => navi("/rent")} style={{ cursor: "pointer" }}>
-                자동차 렌트 페이지 이동
-            </h3>
+            <div className="w-full h-screen bg-gray-100"></div>
         </>
     );
 };

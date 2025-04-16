@@ -8,7 +8,7 @@ const Footer = () => {
 
     return (
         <>
-            <footer className="w-full h-16 z-50 bg-white border-t-2 border-maincolor flex justify-center select-none">
+            <footer className="w-full h-16 z-50 bg-white border-t-2 border-maincolor flex justify-center absolute select-none">
                 <div className="w-7xl h-full flex">
                     <section className="w-1/6 h-full">
                         <div className="h-full flex justify-center items-center cursor-pointer">

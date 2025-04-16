@@ -205,7 +205,7 @@ const SignUp = () => {
     return (
         <>
             <div className="size-full bg-gray-100 flex justify-center select-none">
-                <div className="w-xl px-24 my-64 bg-white border-2 border-maincolor rounded-2xl flex flex-col justify-center items-center">
+                <div className="w-xl px-24 my-48 bg-white border-2 border-maincolor rounded-2xl flex flex-col justify-center items-center">
                     <section className="mt-24 mb-16 font-maintheme text-5xl text-maincolor">회원가입</section>
                     <section className="w-full h-auto">
                         <ul className="flex flex-col gap-6">

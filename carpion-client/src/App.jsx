@@ -10,11 +10,15 @@ import Footer from "./components/include/Footer/Footer";
 import SignUp from "./components/page/user/SignUp/SignUp";
 import Login from "./components/page/user/Login/Login";
 import CarRentPage from "./components/page/carrentpage/CarRentPage";
+import FindId from "./components/page/user/FIndId/FIndId";
+import FindPw from "./components/page/user/FindPw/FindPw";
+import FindPwCompleted from "./components/page/user/FindPw/FindPwCompleted";
 
 function App() {
     return (
         <>
             <Header />
+            <FindPwCompleted />
             <Routes>
                 <Route path="/" element={<MainPage />} />
                 <Route path="/admin" element={<AdminPage />}>

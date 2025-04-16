@@ -1,20 +1,25 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-import Icon_Google from "/src/assets/Icon_Google.svg";
 
-const Login = () => {
+const FindPw = () => {
     const inputFields = [
         {
             id: "username",
             label: "아이디",
             type: "text",
-            placeholder: "아이디를 입력해 주세요.",
+            placeholder: "가입한 아이디를 입력해 주세요.",
         },
         {
-            id: "password",
-            label: "비밀번호",
-            type: "password",
-            placeholder: "비밀번호를 입력해 주세요.",
+            id: "realname",
+            label: "이름",
+            type: "text",
+            placeholder: "가입 시 입력한 이름을 입력해 주세요.",
+        },
+        {
+            id: "email",
+            label: "이메일",
+            type: "email",
+            placeholder: "가입 시 입력한 이메일을 입력해 주세요.",
         },
     ];
 
@@ -23,36 +28,39 @@ const Login = () => {
             regExp: /^[a-z][a-z0-9]{6,18}[0-9]$/,
             errorMessage: "잘못된 아이디 입니다.",
         },
-        password: {
-            regExp: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]).{8,30}$/,
-            errorMessage: "잘못된 비밀번호 입니다.",
+        realname: {
+            regExp: /^([a-zA-Z]{2,30}|[\uAC00-\uD7A3]{2,5})$/,
+            errorMessage: "잘못된 이름 형식 입니다.",
+        },
+        email: {
+            regExp: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+            errorMessage: "잘못된 이메일 형식 입니다.",
         },
     };
 
     const [inputValues, setInputValues] = useState({
         username: "",
-        password: "",
-        keep: false,
+        realname: "",
+        email: "",
     });
 
     const [isEmptyMessage, setIsEmptyMessage] = useState({
         username: "",
-        password: "",
+        realname: "",
+        email: "",
     });
 
     const [fieldMessages, setFieldMessages] = useState({
         username: "",
-        password: "",
+        realname: "",
+        email: "",
     });
 
     const [isValid, setIsValid] = useState({
         username: null,
-        password: null,
+        realname: null,
+        email: null,
     });
-
-    const [keep, isKeep] = useState(false);
-
-    const keepBtnRef = useRef(null);
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -75,6 +83,7 @@ const Login = () => {
             setFieldMessages({ ...fieldMessages, [id]: validation.errorMessage });
         } else {
             setIsValid({ ...isValid, [id]: true });
+            setFieldMessages({ ...fieldMessages, [id]: validation.successMessage });
         }
     };
 
@@ -86,16 +95,21 @@ const Login = () => {
             const key = field.id;
 
             if (!inputValues[key]) {
-                let particle = "를";
+                let particle = "을";
+
+                if (key === "username") {
+                    particle = "를";
+                }
 
                 const labelMap = {
                     username: "아이디",
-                    password: "비밀번호",
+                    realname: "이름",
+                    email: "이메일",
                 };
 
                 setIsEmptyMessage((prev) => ({
                     ...prev,
-                    [key]: `${labelMap[key]}${particle} 입력해주세요.`,
+                    [key]: `${labelMap[key]}${particle} 입력해 주세요.`,
                 }));
 
                 if (!focusedElement) {
@@ -124,18 +138,6 @@ const Login = () => {
         return isValid;
     };
 
-    const handleKeep = () => {
-        if (keep === false) {
-            keepBtnRef.current.classList.add("bg-maincolor");
-            isKeep(true);
-            setInputValues({ ...inputValues, keep: true });
-        } else {
-            keepBtnRef.current.classList.remove("bg-maincolor");
-            isKeep(false);
-            setInputValues({ ...inputValues, keep: false });
-        }
-    };
-
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!validateForm()) return;
@@ -147,14 +149,14 @@ const Login = () => {
             .catch((error) => {
                 console.log(error);
             });
-        console.log("로그인 완료:", inputValues);
+        console.log("비밀번호 찾기 완료:", inputValues);
     };
 
     return (
         <>
             <div className="size-full bg-gray-100 flex justify-center select-none">
                 <div className="w-xl px-24 my-48 bg-white border-2 border-maincolor rounded-2xl flex flex-col justify-center items-center">
-                    <section className="mt-24 mb-16 font-maintheme text-5xl text-maincolor">로그인</section>
+                    <section className="mt-24 mb-16 font-maintheme text-5xl text-maincolor">비밀번호 찾기</section>
                     <section className="w-full h-auto">
                         <ul className="flex flex-col gap-6">
                             {inputFields.map((field) => (
@@ -170,47 +172,33 @@ const Login = () => {
                                         onChange={handleChange}
                                         className="p-2 mt-1 border-2 border-gray-300 rounded-md font-Pretendard text-lg"
                                     />
+                                    {field.id === "email" ? (
+                                        <div className="w-full mt-2 flex justify-between">
+                                            <button className="px-2 py-1 border-2 border-maincolor rounded-md font-maintheme text-md text-maincolor tracking-wider cursor-pointer hover:underline hover:decoration-2 hover:underline-offset-3 active:bg-maincolor active:text-white">
+                                                이메일 인증
+                                            </button>
+                                            <input
+                                                type="text"
+                                                placeholder="메일로 발송된 인증번호를 입력하세요."
+                                                className="w-68 px-2 py-1 border-2 border-gray-300 rounded-md font-Pretendard text-md"
+                                            />
+                                        </div>
+                                    ) : (
+                                        ""
+                                    )}
                                     {isEmptyMessage[field.id] && <p className="mt-1 ml-1 text-red-500 font-Pretendard text-lg">{isEmptyMessage[field.id]}</p>}
                                     {fieldMessages[field.id] && <p className={`mt-1 ml-1 font-Pretendard text-lg text-red-500`}>{isValid[field.id] ? "" : fieldMessages[field.id]}</p>}
                                 </li>
                             ))}
                         </ul>
                     </section>
-                    <section className="w-full mt-6 flex">
-                        <button id="keep" ref={keepBtnRef} onClick={handleKeep} className="size-7 mr-2 text-gray-300 border-2 border-gray-300 rounded-full">
-                            ✓
-                        </button>
-                        <label htmlFor="keep" className="font-maintheme text-xl text-gray-500">
-                            로그인 상태 유지
-                        </label>
-                    </section>
-                    {/* <section className="mt-6 flex justify-center">
-                        <p className="font-Pretendard text-md text-red-500">로그인에 실패 했습니다. 아이디와 비밀번호를 확인해주세요.</p>
-                    </section> */}
                     <section className="w-full h-auto flex justify-center">
                         <button
                             onClick={handleSubmit}
-                            className="w-56 h-24 mt-12 mb-8 border-2 border-maincolor rounded-full font-maintheme text-maincolor text-3xl hover:bg-maincolor hover:text-white cursor-pointer"
+                            className="w-56 h-24 mt-16 mb-24 border-2 border-maincolor rounded-full font-maintheme text-maincolor text-3xl hover:bg-maincolor hover:text-white cursor-pointer"
                         >
-                            로그인
+                            비밀번호 찾기
                         </button>
-                    </section>
-                    <section className="flex flex-col">
-                        <div className="flex justify-center gap-8">
-                            <div className="font-maintheme text-lg text-maincolor tracking-wider hover:underline hover:decoration-2 hover:underline-offset-3 cursor-pointer">아이디 찾기</div>
-                            <div className="font-maintheme text-lg text-maincolor tracking-wider hover:underline hover:decoration-2 hover:underline-offset-3 cursor-pointer">비밀번호 찾기</div>
-                        </div>
-                        <div className="mt-12 mb-4 flex justify-center font-maintheme text-xl text-gray-500 tracking-wider">처음이신가요?</div>
-                        <div className="mb-24 flex items-center gap-4">
-                            <div className="font-maintheme text-2xl text-maincolor tracking-wider hover:underline hover:decoration-2 hover:underline-offset-3 cursor-pointer">회원가입</div>
-                            <div className="font-maintheme text-lg text-gray-500 tracking-wider">또는</div>
-                            <div className="flex items-center gap-2">
-                                <button className="size-12 border-2 border-gray-300 rounded-md cursor-pointer">
-                                    <img src={Icon_Google} alt="Icon_Google" />
-                                </button>
-                                <div className="font-maintheme text-lg text-gray-500 tracking-wider">로 시작하기</div>
-                            </div>
-                        </div>
                     </section>
                 </div>
             </div>
@@ -218,4 +206,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default FindPw;
