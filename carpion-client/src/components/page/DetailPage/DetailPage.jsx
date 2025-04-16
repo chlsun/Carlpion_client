@@ -13,7 +13,6 @@ function DetailPage() {
 
     console.log("제목:", title);
     console.log("내용:", content);
-    // TODO: POST 요청
   };
 
   return (

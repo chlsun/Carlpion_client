@@ -16,12 +16,11 @@ export const Header = styled.div`
 
 export const Box = styled.div`
   display: flex;
-   width: 100%;
+  width: 100%;
   border: 1px solid #ddd;
   padding: 50px;
   border-radius: 12px;
   margin: 20px;
-
 `;
 export const LeftBox = styled.div`
   flex: 1;
@@ -33,8 +32,8 @@ export const RightBox = styled.div`
   padding: 10px;
 `;
 export const DeleteWrapper = styled.div`
-   display: flex;
-  justify-content: flex-end; 
+  display: flex;
+  justify-content: flex-end;
   padding: 20px;
 `;
 
@@ -85,7 +84,7 @@ export const Input = styled.input`
   border: 1px solid #ccc;
 `;
 export const Area = styled.textarea`
-  width: 100%; 
+  width: 100%;
   padding: 20px;
   margin: 12px 0;
   border-radius: 6px;
@@ -127,7 +126,7 @@ export const FixedDeleteButton = styled.button`
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
   &:hover {
     background-color: #e60000;
@@ -136,5 +135,21 @@ export const FixedDeleteButton = styled.button`
 export const GradeText = styled.div`
   font-size: 22px;
   font-weight: bold;
-  margin :20px;
+  margin: 20px;
+`;
+
+export const DeleteBox = styled.div`
+  display:flex
+  justify-content:center;
+  align-text:center;
+  border: 1px solid #ddd;
+  padding: 50px;
+  border-radius: 12px;
+  margin: 15px;
+  
+`;
+export const DeleteText = styled.div`
+  font-size: 15px;
+  font-weight: bold;
+  margin: 5px;
 `;
