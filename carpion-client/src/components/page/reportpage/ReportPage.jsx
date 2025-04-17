@@ -8,20 +8,20 @@ const ReportPage = () => {
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost/reports`,{
-        params: {
-          page: page,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        setBoards([...boards, ...response.data]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [page]);
+    // axios
+    //   .get(`http://localhost/reports`,{
+    //     params: {
+    //       page: page,
+    //     },
+    //   })
+    //   .then((response) => {
+    //     console.log(response.data);
+    //     setBoards([...boards, ...response.data]);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+  }, );
 
   return (
     <>
@@ -41,7 +41,6 @@ const ReportPage = () => {
             <div>{board.createDate}</div>
             <div>{board.count}</div>
           </div>
-
         ))}       
       </div>     
     </> 
