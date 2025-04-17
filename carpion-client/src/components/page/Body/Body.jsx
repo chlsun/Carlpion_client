@@ -23,6 +23,7 @@ import { useEffect } from "react";
 const Body = () => {
   const [activeForm, setActiveForm] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [tempImage, setTempImage] = useState("");
   const [nickName, setNickName] = useState("");
   const [tempNick, setTempNick] = useState("");
   const navi = useNavigate();
@@ -36,9 +37,14 @@ const Body = () => {
     }
   }, [nickName, selectedImage]);
 
-  const handleReply = () => {
-    console.log("댓글 수정 클릭됨");
-  };
+  useEffect(() => {
+    setSelectedImage("/img/mypage/profile.logo.png");
+  }, []);
+  useEffect(() => {
+    if (activeForm === "profile") {
+      setTempImage(null);
+    }
+  }, [activeForm]);
   const handleReport = () => {
     console.log("문의게시판 수정 클릭됨");
   };
@@ -52,17 +58,16 @@ const Body = () => {
       const reader = new FileReader();
 
       reader.onloadend = () => {
-        setSelectedImage(reader.result);
+        setTempImage(reader.result);
       };
       reader.readAsDataURL(file);
     } else {
-      setSelectedImage("img/test.jpg");
+      setSelectedImage("/img/mypage/profile.logo.png");
     }
   };
 
   const submitProfile = (e) => {
     e.preventDefault();
-    console.log(selectedImage);
     setActiveForm(null);
   };
 
@@ -79,12 +84,21 @@ const Body = () => {
       return;
     }
     setNickName(tempNick);
-
     setActiveForm(null);
   };
+  const handleProfileSubmit = () => {
+    if (tempImage) {
+      setSelectedImage(tempImage);
+    }
+    setTempImage(null);
+    setActiveForm(null);
+  };
+  const handleCancel = () => {
+    setActiveForm(null);
+  };
+
   return (
     <Container>
-      <Header>마이페이지</Header>
       <div>
         <GradeText>XXX님 안녕하세요</GradeText>
       </div>
@@ -146,12 +160,16 @@ const Body = () => {
                 <Input type="file" onChange={handleFileChange} />
                 {selectedImage && (
                   <div>
-                    <img src={selectedImage} alt="나오나" />
+                    <img src={tempImage || selectedImage} alt="나오나" />
                   </div>
                 )}
                 <ButtonWrapper>
-                  <Button type="submit">수정하기</Button>
-                  <Button onClick={() => setActiveForm(null)}>취소</Button>
+                  <Button type="button" onClick={handleProfileSubmit}>
+                    수정하기
+                  </Button>
+                  <Button type="button" onClick={handleCancel}>
+                    취소
+                  </Button>
                 </ButtonWrapper>
               </form>
             </ModalBox>
@@ -190,7 +208,7 @@ const Body = () => {
       </ButtonWrapper>
       <GradeText>내 활동</GradeText>
       <Box>
-        <Button onClick={handleReply}>작성한 댓글 조회</Button>
+        <Button onClick={() => navi("/reply")}>작성한 댓글 조회</Button>
         <Button onClick={handleReport}>작성한 문의 게시글 조회</Button>
         <Button onClick={handleReview}> 작성한 리뷰 게시글 조회</Button>
       </Box>

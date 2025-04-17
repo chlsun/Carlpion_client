@@ -4,10 +4,10 @@ import MainPage from "./components/page/mainpage/MainPage";
 import AdminPage from "./components/page/adminpage/AdminPage";
 import ModelPage from "./components/page/adminpage/ModelPage/ModelPage";
 import CarPage from "./components/page/adminpage/CarPage/CarPage";
+import PostBoard from "./components/page/CommunitePage/PostBoard";
+import NoticePage from "./components/page/NotionPage/NoticePage";
 import Header from "./components/include/Header/Header";
 import Footer from "./components/include/Footer/Footer";
-import SignUp from "./components/page/user/SignUp/SignUp";
-import Login from "./components/page/user/Login/Login";
 import CarRentPage from "./components/page/carrentpage/CarRentPage";
 import MainMyPage from "./components/page/MyPage/MainMyPage";
 import Body from "./components/page/Body/Body";
@@ -16,6 +16,9 @@ import FindId from "./components/page/user/FIndId/FIndId";
 import FindPw from "./components/page/user/FindPw/FindPw";
 import FindPwCompleted from "./components/page/user/FindPw/FindPwCompleted";
 import SignUpCompleted from "./components/page/user/SignUp/SignUpCompleted";
+import Reply from "./components/page/reply/reply";
+import ReportPage from "./components/page/reportpage/ReportPage";
+import DetailPage from "./components/page/DetailPage/DetailPage";
 
 function App() {
     return (
@@ -38,6 +41,7 @@ function App() {
                 <Route path="/mypage" element={<Body />} />
                 <Route path="/modify" element={<MainMyPage />} />
                 <Route path="/point" element={<Point />} />
+                <Route path="/reply" element={<Reply />} />
             </Routes>
             <Footer />
         </>
