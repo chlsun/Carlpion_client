@@ -20,6 +20,7 @@ import FindPwCompleted from "./components/page/user/FindPw/FindPwCompleted";
 import Reply from "./components/page/reply/reply";
 import ReportForm from "./components/page/reportpage/ReportForm";
 
+import Reply from "./components/page/reply/reply";
 function App() {
   return (
     <>
