@@ -5,34 +5,43 @@ const FileUpload = ({ onFilesSelected, onFilesCleared, initialFiles = [] }) => {
   const [selectedFiles, setSelectedFiles] = useState(initialFiles);
   const [filePreviews, setFilePreviews] = useState([]);
   const fileInputRef = useRef(null);
+  const maxFileSize = 1024 * 1024 * 20; //20MB
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    const imageFiles = files.filter(file => file.type.startsWith("image/"));
-
-    if (imageFiles.length < files.length) {
-      alert("이미지 파일만 선택해주세요.");
-      setSelectedFiles(imageFiles);
+    const imageFiles = [];
+    const previews = [];
+  
+    for (const file of files) {
+      if (file.size > maxFileSize) {
+        alert(`${file.name} 파일의 크기가 제한(20MB)을 초과합니다.`);
+        continue;
+      }
+  
+      if (file.type.startsWith("image/")) {
+        imageFiles.push(file);
+  
+        const reader = new FileReader();
+        const previewPromise = new Promise((resolve) => {
+          reader.onload = (e) => {
+            resolve({
+              name: file.name,
+              type: file.type,
+              previewUrl: e.target.result
+            });
+          };
+        });
+        reader.readAsDataURL(file);
+        previews.push(previewPromise);
+      }
     }
 
-    const newPreviews = imageFiles.map((file) => {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          resolve({
-            name: file.name,
-            type: file.type,
-            previewUrl: e.target.result
-          });
-        };
-        reader.readAsDataURL(file);
-      });
-    });
+    setSelectedFiles(imageFiles);   
 
-    Promise.all(newPreviews).then((results) => {
+    Promise.all(previews).then((results) => {
       setFilePreviews(results);
     });
-      
+
     onFilesSelected(imageFiles);
   };
 
@@ -66,7 +75,7 @@ const FileUpload = ({ onFilesSelected, onFilesCleared, initialFiles = [] }) => {
           className="file-upload-button"
           onClick={handleButtonClick}
         >
-          파일
+          파일 업로드
         </button>
         {selectedFiles.length > 0 && (
           <>
@@ -93,7 +102,10 @@ const FileUpload = ({ onFilesSelected, onFilesCleared, initialFiles = [] }) => {
           <h4>파일 미리보기:</h4>
           <div className="preview-container">
             {filePreviews.map((preview, index) => (
-              <div key={index} className="preview-item">
+              <div 
+                key={index} 
+                className="preview-item"
+              >
                 {preview.previewUrl ? (
                   <img
                     src={preview.previewUrl}
