@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import axios from "axios";
 import Icon_Google from "/src/assets/Icon_Google.svg";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const inputFields = [
@@ -49,6 +50,8 @@ const Login = () => {
         username: null,
         password: null,
     });
+
+    const navi = useNavigate();
 
     const [keep, isKeep] = useState(false);
 
@@ -152,7 +155,7 @@ const Login = () => {
 
     return (
         <>
-            <div className="size-full bg-gray-100 flex justify-center select-none">
+            <div className="size-full min-h-screen bg-gray-100 flex justify-center select-none">
                 <div className="w-xl px-24 my-48 bg-white border-2 border-maincolor rounded-2xl flex flex-col justify-center items-center">
                     <section className="mt-24 mb-16 font-maintheme text-5xl text-maincolor">로그인</section>
                     <section className="w-full h-auto">
@@ -197,12 +200,27 @@ const Login = () => {
                     </section>
                     <section className="flex flex-col">
                         <div className="flex justify-center gap-8">
-                            <div className="font-maintheme text-lg text-maincolor tracking-wider hover:underline hover:decoration-2 hover:underline-offset-3 cursor-pointer">아이디 찾기</div>
-                            <div className="font-maintheme text-lg text-maincolor tracking-wider hover:underline hover:decoration-2 hover:underline-offset-3 cursor-pointer">비밀번호 찾기</div>
+                            <div
+                                onClick={() => navi("/find-id")}
+                                className="font-maintheme text-lg text-maincolor tracking-wider hover:underline hover:decoration-2 hover:underline-offset-3 cursor-pointer"
+                            >
+                                아이디 찾기
+                            </div>
+                            <div
+                                onClick={() => navi("/find-pw")}
+                                className="font-maintheme text-lg text-maincolor tracking-wider hover:underline hover:decoration-2 hover:underline-offset-3 cursor-pointer"
+                            >
+                                비밀번호 찾기
+                            </div>
                         </div>
                         <div className="mt-12 mb-4 flex justify-center font-maintheme text-xl text-gray-500 tracking-wider">처음이신가요?</div>
                         <div className="mb-24 flex items-center gap-4">
-                            <div className="font-maintheme text-2xl text-maincolor tracking-wider hover:underline hover:decoration-2 hover:underline-offset-3 cursor-pointer">회원가입</div>
+                            <div
+                                onClick={() => navi("/sign-up")}
+                                className="font-maintheme text-2xl text-maincolor tracking-wider hover:underline hover:decoration-2 hover:underline-offset-3 cursor-pointer"
+                            >
+                                회원가입
+                            </div>
                             <div className="font-maintheme text-lg text-gray-500 tracking-wider">또는</div>
                             <div className="flex items-center gap-2">
                                 <button className="size-12 border-2 border-gray-300 rounded-md cursor-pointer">
