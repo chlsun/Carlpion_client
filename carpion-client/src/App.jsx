@@ -18,6 +18,8 @@ import FindPw from "./components/page/user/FindPw/FindPw";
 import FindPwCompleted from "./components/page/user/FindPw/FindPwCompleted";
 
 import Reply from "./components/page/reply/reply";
+import ReportPage from "./components/page/reportpage/ReportPage";
+
 function App() {
   return (
     <>
@@ -32,6 +34,7 @@ function App() {
         </Route>
 
         <Route path="/rent" element={<CarRentPage />} />
+        
 
         <Route path="/mypage" element={<Body />} />
         <Route path="/modify" element={<MainMyPage />} />
