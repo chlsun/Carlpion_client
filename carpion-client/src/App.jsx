@@ -34,8 +34,7 @@ function App() {
         </Route>
 
         <Route path="/rent" element={<CarRentPage />} />
-        <Route path="/r" element={<ReportForm />} />
-
+        
 
         <Route path="/mypage" element={<Body />} />
         <Route path="/modify" element={<MainMyPage />} />

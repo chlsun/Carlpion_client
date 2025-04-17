@@ -7,21 +7,21 @@ const ReportPage = () => {
   const [boards, setBoards] = useState([]);
   const [page, setPage] = useState(0);
 
-  useEffect(() => {
-    // axios
-    //   .get(`http://localhost/reports`,{
-    //     params: {
-    //       page: page,
-    //     },
-    //   })
-    //   .then((response) => {
-    //     console.log(response.data);
-    //     setBoards([...boards, ...response.data]);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-  }, );
+  // useEffect(() => {
+  //   axios
+  //     .get(`http://localhost/reports`,{
+  //       params: {
+  //         page: page,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       console.log(response.data);
+  //       setBoards([...boards, ...response.data]);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, );
 
   return (
     <>
@@ -30,18 +30,7 @@ const ReportPage = () => {
         <button onClick={() => navi("/reportForm")}>
           글 작성
         </button>
-        { boards.map((board) => (
-          <div 
-            key={board.reportNo}
-            onClick={() => navi(`/reports/${board.reportNo}`)}
-          >
-            <div>{board.title}</div>
-            <div>{board.content}</div>
-            <div>{board.userNo}</div>
-            <div>{board.createDate}</div>
-            <div>{board.count}</div>
-          </div>
-        ))}       
+
       </div>     
     </> 
   );
