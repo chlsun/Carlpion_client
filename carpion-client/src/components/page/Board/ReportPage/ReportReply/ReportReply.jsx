@@ -1,8 +1,11 @@
-import React from "react";
-import "./QAPage.css";
+import React, { useState } from "react";
+import "./ReportReply.css";
 
-function QAPage() {
-  const messages = [
+function ReportReply() {
+  // 관리자 여부 (나중에 props 또는 context로 연결 가능)
+  const isAdmin = true;
+
+  const [messages, setMessages] = useState([
     {
       type: "question",
       message: " 문의드립니다. 언제 처리 되나요?",
@@ -23,7 +26,26 @@ function QAPage() {
       message: "코와이네 얏떼미로",
       timestamp: "2025-04-17 10:32",
     },
-  ];
+  ]);
+
+  const [inputValue, setInputValue] = useState("");
+
+  const handleSend = () => {
+    if (inputValue.trim() === "") return;
+
+    const newMessage = {
+      type: isAdmin ? "answer" : "question",
+      message: inputValue,
+      timestamp: new Date().toLocaleString(),
+    };
+
+    setMessages([...messages, newMessage]);
+    setInputValue("");
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") handleSend();
+  };
 
   return (
     <div className="chat-container">
@@ -50,11 +72,16 @@ function QAPage() {
           type="text"
           placeholder="메시지를 입력하세요..."
           className="chat-input"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyPress={handleKeyPress}
         />
-        <button className="send-button">전송</button>
+        <button className="send-button" onClick={handleSend}>
+          전송
+        </button>
       </div>
     </div>
   );
 }
 
-export default QAPage;
+export default ReportReply;

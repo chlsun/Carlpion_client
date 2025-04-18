@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
     const inputFields = [
@@ -66,6 +67,8 @@ const SignUp = () => {
             helpMessage: "이메일 형식을 확인해 주세요. (예: example@email.com)",
         },
     };
+
+    const navi = useNavigate();
 
     const [inputValues, setInputValues] = useState({
         username: "",
@@ -192,19 +195,18 @@ const SignUp = () => {
         e.preventDefault();
         if (!validateForm()) return;
         axios
-            .post(``, inputValues)
-            .then((result) => {
-                console.log(result);
+            .post(`http://localhost:80/users`, inputValues)
+            .then(() => {
+                navi("/sign-up-done");
             })
             .catch((error) => {
                 console.log(error);
             });
-        console.log("회원가입 완료:", inputValues);
     };
 
     return (
         <>
-            <div className="size-full bg-gray-100 flex justify-center select-none">
+            <div className="size-full min-h-screen bg-gray-100 flex justify-center select-none">
                 <div className="w-xl px-24 my-48 bg-white border-2 border-maincolor rounded-2xl flex flex-col justify-center items-center">
                     <section className="mt-24 mb-16 font-maintheme text-5xl text-maincolor">회원가입</section>
                     <section className="w-full h-auto">

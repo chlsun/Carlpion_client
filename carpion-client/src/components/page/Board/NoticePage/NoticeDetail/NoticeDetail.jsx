@@ -1,16 +1,15 @@
 import React, { useState } from "react";
-import "./QAPage.css";
+import "./NoticeDetail.css";
 import img1 from "/img/cBoard/img1.jpg";
 import img2 from "/img/cBoard/img2.jpg";
 import img3 from "/img/cBoard/img3.jpg";
-import QAReplyPage from "./QAReplyPage";
-import "./QAReplyPage.css";
-function QAPage() {
+import NoticeReply from "../NoticeReply/NoticeReply";
+function NoticeDetail() {
   const post = {
-    title: "신고/문의 제목 예시입니다",
+    title: "공지사항 제목 예시입니다",
     content: "여기에 본문 내용이 들어갑니다.\n줄바꿈도 표현됩니다.",
     createdAt: "2025-04-17T10:00:00Z",
-    author: { id: 1, name: "홍길동" },
+    author: { id: 1, name: "관리자" },
     images: [img1, img2, img3],
     likes: 12,
   };
@@ -23,18 +22,9 @@ function QAPage() {
   const [likes, setLikes] = useState(post.likes);
   const [liked, setLiked] = useState(false);
 
-  const handleLike = () => {
-    if (!liked) {
-      setLikes(likes + 1);
-      setLiked(true);
-    } else {
-      alert("이미 추천하셨습니다!");
-    }
-  };
-
   return (
     <>
-      <div className="pageTitle">신고/문의 게시판</div>
+      <div className="pageTitle">공지사항</div>
 
       <div className="container">
         <h1 className="title">{post.title}</h1>
@@ -60,11 +50,11 @@ function QAPage() {
         )}
 
         <div className="commentPlaceholder">
-          <QAReplyPage />
+          <NoticeReply />
         </div>
       </div>
     </>
   );
 }
 
-export default QAPage;
+export default NoticeDetail;

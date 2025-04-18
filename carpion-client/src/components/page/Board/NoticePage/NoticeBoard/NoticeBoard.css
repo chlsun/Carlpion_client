@@ -1,4 +1,4 @@
-.banner {
+#notice-board .banner {
   width: 1200px;
   height: 300px;
   margin: 0 auto;
@@ -6,14 +6,14 @@
   position: relative;
 }
 
-.banner img {
+#notice-board .banner img {
   width: 100%;
   height: 100%;
   object-fit: fill;
   display: block;
 }
 
-.bannerText {
+#notice-board .bannerText {
   position: absolute;
   bottom: 32px;
   left: 40px;
@@ -23,7 +23,7 @@
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
-.container {
+#notice-board .container {
   max-width: 900px;
   margin: 0 auto 0;
   padding: 60px 32px;
@@ -32,25 +32,25 @@
   border-radius: 12px;
 }
 
-.titleRow {
+#notice-board .titleRow {
   display: flex;
   align-items: center;
   gap: 16px;
   margin-bottom: 32px;
 }
 
-.titleIcon {
+#notice-board .titleIcon {
   width: 32px;
   height: 32px;
 }
 
-.title {
+#notice-board .title {
   font-size: 28px;
   font-weight: 700;
   flex-grow: 1;
 }
 
-.writeButton {
+#notice-board .writeButton {
   padding: 12px 24px;
   font-size: 16px;
   background-color: #007bff;
@@ -61,17 +61,17 @@
   transition: background-color 0.2s;
 }
 
-.writeButton:hover {
+#notice-board .writeButton:hover {
   background-color: #0062cc;
 }
 
-.list {
+#notice-board .list {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.item {
+#notice-board .item {
   border: 1px solid #e0e0e0;
   border-radius: 12px;
   padding: 20px 24px;
@@ -80,35 +80,35 @@
   list-style: none;
 }
 
-.item:hover {
+#notice-board .item:hover {
   background-color: #f9f9f9;
 }
 
-.itemHeader {
+#notice-board .itemHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
 }
 
-.itemTitle {
+#notice-board .itemTitle {
   font-size: 16px;
   font-weight: 500;
   color: #333;
 }
 
-.rightBox {
+#notice-board .rightBox {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.itemDate {
+#notice-board .itemDate {
   font-size: 14px;
   color: #888;
 }
 
-.toggleIcon {
+#notice-board .toggleIcon {
   font-size: 20px;
   font-weight: bold;
   color: #666;
@@ -116,7 +116,7 @@
   display: inline-block;
 }
 
-.itemContent {
+#notice-board .itemContent {
   margin-top: 12px;
   padding-top: 8px;
   border-top: 1px solid #eee;
