@@ -19,6 +19,9 @@ import SignUpCompleted from "./components/page/user/SignUp/SignUpCompleted";
 import Reply from "./components/page/reply/reply";
 import ReportPage from "./components/page/reportpage/ReportPage";
 import DetailPage from "./components/page/DetailPage/DetailPage";
+import Login from "./components/page/user/Login/Login";
+import SignUp from "./components/page/user/SignUp/SignUp";
+import RentalReservation from "./components/page/rentalReservation/RentalReservation";
 
 function App() {
     return (
@@ -38,6 +41,7 @@ function App() {
                     <Route path="car" element={<CarPage />} />
                 </Route>
                 <Route path="/rent" element={<CarRentPage />} />
+                <Route path="/rent/:id" element={<RentalReservation />} />
                 <Route path="/mypage" element={<Body />} />
                 <Route path="/modify" element={<MainMyPage />} />
                 <Route path="/point" element={<Point />} />

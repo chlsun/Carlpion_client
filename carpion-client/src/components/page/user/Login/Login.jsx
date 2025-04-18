@@ -143,7 +143,7 @@ const Login = () => {
         e.preventDefault();
         if (!validateForm()) return;
         axios
-            .post(``, inputValues)
+            .post(`http://localhost:80/login`, inputValues)
             .then((result) => {
                 console.log(result);
             })
