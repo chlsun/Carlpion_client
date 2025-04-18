@@ -1,48 +1,49 @@
-import React, { useState, useRef } from 'react';
-import './FileUpload.css'; 
+import React, { useState, useRef, useEffect } from 'react';
+import './FileUpload.css'; // CSS 파일은 그대로 사용
 
 const FileUpload = ({ onFilesSelected, onFilesCleared, initialFiles = [] }) => {
   const [selectedFiles, setSelectedFiles] = useState(initialFiles);
-  const [filePreviews, setFilePreviews] = useState([]);
   const fileInputRef = useRef(null);
-  const maxFileSize = 1024 * 1024 * 20; //20MB
+  const maxFileSize = 1024 * 1024 * 20; // 20MB
+  const allowedDocExtensions = [
+    '.pdf', 
+    '.doc', 
+    '.docx', 
+    '.hwp', 
+    '.txt', 
+    '.xls', 
+    '.xlsx', 
+    '.ppt', 
+    '.pptx'
+  ];
+
+  useEffect(() => {
+    setSelectedFiles(initialFiles);
+  }, [initialFiles]);
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    const imageFiles = [];
-    const previews = [];
-  
+    const documentFiles = [];
+
     for (const file of files) {
-      if (file.size > maxFileSize) {
+      if(file.size > maxFileSize) {
         alert(`${file.name} 파일의 크기가 제한(20MB)을 초과합니다.`);
         continue;
       }
-  
-      if (file.type.startsWith("image/")) {
-        imageFiles.push(file);
-  
-        const reader = new FileReader();
-        const previewPromise = new Promise((resolve) => {
-          reader.onload = (e) => {
-            resolve({
-              name: file.name,
-              type: file.type,
-              previewUrl: e.target.result
-            });
-          };
-        });
-        reader.readAsDataURL(file);
-        previews.push(previewPromise);
+
+      const fileExtension = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
+
+      if(allowedDocExtensions.includes(fileExtension)) {
+        documentFiles.push(file);
       }
     }
 
-    setSelectedFiles(imageFiles);   
+    setSelectedFiles(documentFiles);
+    onFilesSelected(documentFiles); 
 
-    Promise.all(previews).then((results) => {
-      setFilePreviews(results);
-    });
-
-    onFilesSelected(imageFiles);
+    if(fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const handleButtonClick = () => {
@@ -51,13 +52,11 @@ const FileUpload = ({ onFilesSelected, onFilesCleared, initialFiles = [] }) => {
 
   const handleClearFiles = () => {
     setSelectedFiles([]);
-    setFilePreviews([]);
-
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
     
-    onFilesCleared();
+    if(fileInputRef.current) {
+      fileInputRef.current.value = ""; 
+    }
+    onFilesCleared(); 
   };
 
   return (
@@ -65,18 +64,19 @@ const FileUpload = ({ onFilesSelected, onFilesCleared, initialFiles = [] }) => {
       <div className="file-selector-group">
         <input
           type="file"
-          multiple
+          multiple 
           onChange={handleFileChange}
           className="file-input-hidden"
           ref={fileInputRef}
-          accept="image/*"
+          accept={allowedDocExtensions.join(', ')} 
         />
         <button
           className="file-upload-button"
           onClick={handleButtonClick}
         >
-          파일 업로드
+          문서 파일
         </button>
+
         {selectedFiles.length > 0 && (
           <>
             <button
@@ -86,40 +86,11 @@ const FileUpload = ({ onFilesSelected, onFilesCleared, initialFiles = [] }) => {
               삭제
             </button>
             <span className="selected-file-info">
-              선택된 파일: {" "}
-              {selectedFiles.map((file, index) => (
-                <React.Fragment key={index}>
-                  {index > 0 && ", "}
-                  {file.name}
-                </React.Fragment>
-              ))}
+              선택된 파일: {selectedFiles.length}개
             </span>
           </>
         )}
       </div>
-      {filePreviews.length > 0 && (
-        <div className="file-preview-section">
-          <h4>파일 미리보기:</h4>
-          <div className="preview-container">
-            {filePreviews.map((preview, index) => (
-              <div 
-                key={index} 
-                className="preview-item"
-              >
-                {preview.previewUrl ? (
-                  <img
-                    src={preview.previewUrl}
-                    alt={preview.name}
-                    style={{ maxWidth: '100px', maxHeight: '100px' }}
-                  />
-                ) : (
-                  <span>{preview.name}</span>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
