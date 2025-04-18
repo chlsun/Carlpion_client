@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { Link } from "react-router-dom"; // 추가
 import "./NoticePage.css";
 import CustomerBanner from "/img/notice/안내.jpg";
 
@@ -17,26 +18,21 @@ const notices = [
   },
 ];
 
-const NoticeItem = ({ notice, isOpen, onToggle }) => (
-  <li className="item" onClick={onToggle}>
-    <div className="itemHeader">
-      <span className="itemTitle">{notice.title}</span>
-      <div className="rightBox">
-        <span className="itemDate">{notice.date}</span>
-        <span className="toggleIcon">{isOpen ? "−" : "+"}</span>
+const NoticeItem = ({ notice }) => (
+  <li className="item">
+    <Link to={`/notice/${notice.id}`} className="itemLink">
+      <div className="itemHeader">
+        <span className="itemTitle">{notice.title}</span>
+        <div className="rightBox">
+          <span className="itemDate">{notice.date}</span>
+        </div>
       </div>
-    </div>
-    {isOpen && <div className="itemContent">{notice.content}</div>}
+    </Link>
   </li>
 );
 
 const NoticePage = () => {
-  const [openId, setOpenId] = useState(null);
   const isAdmin = true;
-
-  const handleToggleItem = (id) => {
-    setOpenId((prevId) => (prevId === id ? null : id));
-  };
 
   return (
     <>
@@ -57,17 +53,9 @@ const NoticePage = () => {
         </div>
 
         <ul className="list">
-          {notices.map((notice) => {
-            const isOpen = openId === notice.id;
-            return (
-              <NoticeItem
-                key={notice.id}
-                notice={notice}
-                isOpen={isOpen}
-                onToggle={() => handleToggleItem(notice.id)}
-              />
-            );
-          })}
+          {notices.map((notice) => (
+            <NoticeItem key={notice.id} notice={notice} />
+          ))}
         </ul>
       </div>
     </>

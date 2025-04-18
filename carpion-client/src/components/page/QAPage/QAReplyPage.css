@@ -1,0 +1,150 @@
+/* 전체 가운데 정렬 */
+.chat-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+  height: 100%;
+  background-color: #f0f2f5;
+}
+
+/* 대화창 스타일 */
+.chat-thread {
+  width: 800px;
+  padding: 16px;
+  background-color: #f9f9f9;
+  height: 500px;
+  overflow-y: auto;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+/* 버블 래퍼 */
+.chat-bubble-wrapper {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.chat-bubble-wrapper.left {
+  justify-content: flex-start;
+}
+
+.chat-bubble-wrapper.right {
+  justify-content: flex-end;
+}
+
+/* 공통 말풍선 스타일 */
+.chat-bubble {
+  max-width: 500px;
+  padding: 12px 16px;
+  border-radius: 20px;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 말풍선 꼬리 공통 */
+.chat-bubble::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 8px solid transparent;
+}
+
+/* 질문(Q) - 오른쪽 말풍선 */
+.chat-bubble.question {
+  background-color: #d2f1ff;
+  border-bottom-right-radius: 20px; /* 수정 */
+  font-size: 16px; /* 글자 크기 키움 */
+}
+
+.chat-bubble.question::after {
+  border-left-color: #d2f1ff;
+  top: 50%;
+  right: -16px;
+  transform: translateY(-50%);
+}
+
+/* 답변(A) - 왼쪽 말풍선 */
+.chat-bubble.answer {
+  background-color: #eeeeee;
+  border-bottom-left-radius: 20px; /* 수정 */
+  font-size: 16px; /* 글자 크기 키움 */
+}
+
+.chat-bubble.answer::after {
+  border-right-color: #eeeeee;
+  top: 50%;
+  left: -16px;
+  transform: translateY(-50%);
+}
+
+/* 메시지 내용 */
+.chat-message {
+  margin: 0;
+  color: #333;
+}
+
+/* Q. A. 구분 추가 */
+.chat-prefix {
+  font-weight: bold;
+  margin-right: 8px;
+  color: #444;
+}
+
+/* 이미지 첨부 */
+.chat-image {
+  margin-top: 8px;
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+/* 타임스탬프 */
+.chat-timestamp {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+  color: #888;
+  text-align: right;
+}
+.chat-input-area {
+  width: 800px;
+  margin-top: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: #ffffff;
+  border-top: 1px solid #ddd;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.05);
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.chat-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 14px;
+  outline: none;
+  margin-right: 8px;
+}
+
+.send-button {
+  background-color: #2d88ff;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.send-button:hover {
+  background-color: #1c6eea;
+}

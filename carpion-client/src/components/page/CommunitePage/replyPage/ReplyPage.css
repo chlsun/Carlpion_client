@@ -1,0 +1,134 @@
+.comment-section {
+  position: relative;
+  padding-bottom: 100px; /* 입력창 공간 확보 */
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.comment-list {
+  padding: 20px;
+}
+
+/* 댓글 하나 */
+.comment {
+  position: relative;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.nickname {
+  font-weight: 600;
+  color: #333;
+  font-size: 16px;
+}
+
+.menu-container {
+  position: relative;
+}
+
+.menu-button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #666;
+  cursor: pointer;
+}
+
+.menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: 24px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  z-index: 10;
+  min-width: 80px;
+}
+
+.menu-item {
+  width: 100%;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background-color: #f5f5f5;
+}
+
+.menu-item.delete {
+  color: #d03a3a;
+}
+
+.comment-content {
+  margin-top: 8px;
+  font-size: 15px;
+  color: #444;
+  white-space: pre-line;
+}
+
+.comment-time {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #aaa;
+}
+
+/* 입력창 */
+.chat-input-area {
+  width: 800px;
+  margin-top: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: #ffffff;
+  border-top: 1px solid #ddd;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.05);
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.chat-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 14px;
+  outline: none;
+  margin-right: 8px;
+}
+
+.send-button {
+  background-color: #2d88ff;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.send-button:hover {
+  background-color: #1c6eea;
+}
