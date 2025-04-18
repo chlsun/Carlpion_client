@@ -94,6 +94,38 @@ const Body = () => {
     setActiveForm(null);
   };
 
+  /*   axios
+    .put("http:/localhost:80/users/update-nickname", {
+      userNo: 1,
+      currentNickname: "가나다",
+      newCurrentNickname: "가나다라",
+    })
+    .then((response) => {
+      console.log("성공: ", response.data);
+      alert("닉네임 변경 성공!");
+    })
+    .catch((err) => {
+      console.error("실패", err);
+      alert("에러발생");
+    });
+
+  axios.put("http://localhost:80/users/update-pw", {
+    userNo: 1,
+    currentPassword: 1234,
+    newPassword: 1234,
+  });
+  .then(()=>{})
+
+  axios.put("http:/localhost:80/users/update-email", {
+    userNo: 1,
+    email: "kh@123.com",
+    newEmail: "kh@12345.com",
+  });
+
+  const formData = new FormData();
+  formData.append("file", selectedImage);
+  formData.append("userNo", 1); */
+
   return (
     <Container>
       <div>
