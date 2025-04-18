@@ -22,9 +22,7 @@ import { useEffect } from "react";
 
 const Body = () => {
   const [activeForm, setActiveForm] = useState("");
-  const [selectedImage, setSelectedImage] = useState(
-    "/img/mypage/profile.logo.png/"
-  );
+  const [selectedImage, setSelectedImage] = useState(null);
   const [tempImage, setTempImage] = useState("");
   const [nickName, setNickName] = useState("");
   const [tempNick, setTempNick] = useState("");
@@ -42,7 +40,11 @@ const Body = () => {
   useEffect(() => {
     setSelectedImage("/img/mypage/profile.logo.png");
   }, []);
-
+  useEffect(() => {
+    if (activeForm === "profile") {
+      setTempImage(null);
+    }
+  }, [activeForm]);
   const handleReport = () => {
     console.log("문의게시판 수정 클릭됨");
   };
@@ -86,8 +88,9 @@ const Body = () => {
   };
   const handleProfileSubmit = () => {
     if (tempImage) {
-      selectedImage(tempImage);
+      setSelectedImage(tempImage);
     }
+    setTempImage(null);
     setActiveForm(null);
   };
   const handleCancel = () => {
@@ -189,7 +192,7 @@ const Body = () => {
                 <Input type="file" onChange={handleFileChange} />
                 {selectedImage && (
                   <div>
-                    <img src={selectedImage} alt="나오나" />
+                    <img src={tempImage || selectedImage} alt="나오나" />
                   </div>
                 )}
                 <ButtonWrapper>

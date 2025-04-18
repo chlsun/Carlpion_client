@@ -2,8 +2,11 @@ import Carlpion_Logo_TextOnly from "/src/assets/carlpion_logo_textonly.png";
 import Light_Mode_Icon from "/src/assets/lightmode.png";
 import Dark_Mode_Icon from "/src/assets/darkmode.png";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
+    const navi = useNavigate();
+
     const [isDarkMode, setIsDarkMode] = useState(false);
 
     return (
@@ -11,7 +14,7 @@ const Footer = () => {
             <footer className="w-full h-16 z-50 bg-white border-t-2 border-maincolor flex justify-center select-none">
                 <div className="w-7xl h-full flex">
                     <section className="w-1/6 h-full">
-                        <div className="h-full flex justify-center items-center cursor-pointer">
+                        <div onClick={() => navi("/")} className="h-full flex justify-center items-center cursor-pointer">
                             <img src={Carlpion_Logo_TextOnly} alt="Carlpion_logo" className="w-5/6" />
                         </div>
                     </section>
