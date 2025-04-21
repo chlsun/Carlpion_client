@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import axios from "axios";
 import Icon_Google from "/src/assets/Icon_Google.svg";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../Context/AuthContext";
 
 const Login = () => {
     const inputFields = [
@@ -51,9 +52,11 @@ const Login = () => {
         password: null,
     });
 
-    const navi = useNavigate();
-
     const [keep, isKeep] = useState(false);
+
+    const { login } = useContext(AuthContext);
+
+    const navi = useNavigate();
 
     const keepBtnRef = useRef(null);
 
@@ -143,14 +146,15 @@ const Login = () => {
         e.preventDefault();
         if (!validateForm()) return;
         axios
-            .post(`http://localhost:80/login`, inputValues)
+            .post(`http://localhost:80/auth/login`, inputValues)
             .then((result) => {
-                console.log(result);
+                const { username, nickname, realname, email, accessToken, refreshToken } = result.data;
+                login(username, nickname, realname, email, accessToken, refreshToken);
+                navi("/");
             })
             .catch((error) => {
                 console.log(error);
             });
-        console.log("로그인 완료:", inputValues);
     };
 
     return (
