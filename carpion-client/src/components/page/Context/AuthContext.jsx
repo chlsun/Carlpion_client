@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+    const navi = useNavigate();
+
     const [auth, setAuth] = useState({
         username: null,
         nickname: null,
@@ -15,43 +17,52 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated: false,
     });
 
-    const navi = useNavigate();
+    const [refreshToken, setRefreshToken] = useState(() => {
+        return localStorage.getItem("refreshToken");
+    });
+    const [accessToken, setAccessToken] = useState(() => {
+        return sessionStorage.getItem("accessToken");
+    });
 
     useEffect(() => {
-        const accessToken = sessionStorage.getItem("accessToken");
-        const refreshToken = localStorage.getItem("refreshToken");
+        async function abc() {
+            if (!accessToken && refreshToken !== "undefined" && refreshToken) {
+                await axios
+                    .post(`http://localhost:80/auth/auto-login`, { refreshToken: refreshToken })
+                    .then((result) => {
+                        console.log(result.data);
+                        const { username, nickname, realname, email, accessToken, refreshToken } = result.data;
+                        login(username, nickname, realname, email, accessToken, refreshToken);
+                    })
+                    .catch(() => {
+                        localStorage.removeItem("refreshToken");
+                    });
 
-        if (!accessToken && refreshToken !== "undefined" && refreshToken) {
-            axios
-                .post(`http://localhost:80/auth/auto-login`, { refreshToken: refreshToken })
-                .then((result) => {
-                    const { username, nickname, realname, email, accessToken, refreshToken } = result.data;
-                    login(username, nickname, realname, email, accessToken, refreshToken);
-                })
-                .catch(() => {
-                    localStorage.removeItem("refreshToken");
+                const username = sessionStorage.getItem("username");
+                const nickname = sessionStorage.getItem("nickname");
+                const realname = sessionStorage.getItem("realname");
+                const email = sessionStorage.getItem("email");
+                const accessToken = sessionStorage.getItem("accessToken");
+                const newRefreshToken = localStorage.getItem("refreshToken");
+
+                setAuth({
+                    username,
+                    nickname,
+                    realname,
+                    email,
+                    accessToken,
+                    newRefreshToken,
+                    isAuthenticated: true,
                 });
-
-            const username = sessionStorage.getItem("username");
-            const nickname = sessionStorage.getItem("nickname");
-            const realname = sessionStorage.getItem("realname");
-            const email = sessionStorage.getItem("email");
-            const accessToken = sessionStorage.getItem("accessToken");
-            const newRefreshToken = localStorage.getItem("refreshToken");
-
-            setAuth({
-                username,
-                nickname,
-                realname,
-                email,
-                accessToken,
-                newRefreshToken,
-                isAuthenticated: true,
-            });
-        } else if (!accessToken) {
-            setAuth({ isAuthenticated: false });
+            }
         }
-    }, []);
+
+        abc();
+
+        if (accessToken) {
+            setAuth({ isAuthenticated: true });
+        }
+    }, [, refreshToken]); // 이거 무슨 의미?
 
     const login = (username, nickname, realname, email, accessToken, refreshToken) => {
         setAuth({
