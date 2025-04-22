@@ -17,54 +17,55 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated: false,
     });
 
-    const [refreshToken, setRefreshToken] = useState(() => {
-        return localStorage.getItem("refreshToken");
-    });
-    const [accessToken, setAccessToken] = useState(() => {
-        return sessionStorage.getItem("accessToken");
-    });
+    const [refreshToken, setRefreshToekn] = useState(() => localStorage.getItem("refreshToken"));
 
     useEffect(() => {
-        async function abc() {
-            if (!accessToken && refreshToken !== "undefined" && refreshToken) {
-                await axios
-                    .post(`http://localhost:80/auth/auto-login`, { refreshToken: refreshToken })
-                    .then((result) => {
-                        console.log(result.data);
-                        const { username, nickname, realname, email, accessToken, refreshToken } = result.data;
-                        login(username, nickname, realname, email, accessToken, refreshToken);
-                    })
-                    .catch(() => {
-                        localStorage.removeItem("refreshToken");
-                    });
+        const token = sessionStorage.getItem("accessToken");
 
-                const username = sessionStorage.getItem("username");
-                const nickname = sessionStorage.getItem("nickname");
-                const realname = sessionStorage.getItem("realname");
-                const email = sessionStorage.getItem("email");
-                const accessToken = sessionStorage.getItem("accessToken");
-                const newRefreshToken = localStorage.getItem("refreshToken");
-
-                setAuth({
-                    username,
-                    nickname,
-                    realname,
-                    email,
-                    accessToken,
-                    newRefreshToken,
-                    isAuthenticated: true,
+        if (token == null && refreshToken) {
+            axios
+                .post(`http://localhost:80/auth/auto-login`, { refreshToken: refreshToken })
+                .then((result) => {
+                    console.log(result.data);
+                    const { username, nickname, realname, email, accessToken, refreshToken } = result.data;
+                    login(username, nickname, realname, email, accessToken, refreshToken);
+                })
+                .catch(() => {
+                    localStorage.removeItem("refreshToken");
                 });
-            }
+        } else if (token) {
+            const username = sessionStorage.getItem("username");
+            const nickname = sessionStorage.getItem("nickname");
+            const realname = sessionStorage.getItem("realname");
+            const email = sessionStorage.getItem("email");
+            const accessToken = sessionStorage.getItem("accessToken");
+            const refreshToken = localStorage.getItem("refreshToken");
+
+            setAuth({ username, nickname, realname, email, accessToken, refreshToken, isAuthenticated: true });
+        }
+    }, [refreshToken]);
+
+    function login(username, nickname, realname, email, accessToken, refreshToken) {
+        if (refreshToken === undefined) {
+            setAuth({
+                username,
+                nickname,
+                realname,
+                email,
+                accessToken,
+                refreshToken: null,
+                isAuthenticated: true,
+            });
+
+            sessionStorage.setItem("username", username);
+            sessionStorage.setItem("nickname", nickname);
+            sessionStorage.setItem("realname", realname);
+            sessionStorage.setItem("email", email);
+            sessionStorage.setItem("accessToken", accessToken);
+
+            return;
         }
 
-        abc();
-
-        if (accessToken) {
-            setAuth({ isAuthenticated: true });
-        }
-    }, [, refreshToken]); // 이거 무슨 의미?
-
-    const login = (username, nickname, realname, email, accessToken, refreshToken) => {
         setAuth({
             username,
             nickname,
@@ -74,21 +75,21 @@ export const AuthProvider = ({ children }) => {
             refreshToken,
             isAuthenticated: true,
         });
+
         sessionStorage.setItem("username", username);
         sessionStorage.setItem("nickname", nickname);
         sessionStorage.setItem("realname", realname);
         sessionStorage.setItem("email", email);
         sessionStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
-    };
+    }
 
     const logout = () => {
         const refreshToken = localStorage.getItem("refreshToken");
 
         if (refreshToken && refreshToken !== "undefined") {
-            axios.post(`http://localhost:80/auth/logout`, { refreshToken: refreshToken }).then(() => {
-                navi("/");
-            });
+            axios.post(`http://localhost:80/auth/logout`, { refreshToken: refreshToken });
+            navi("/");
         }
 
         setAuth({
@@ -100,6 +101,7 @@ export const AuthProvider = ({ children }) => {
             refreshToken: null,
             isAuthenticated: false,
         });
+
         sessionStorage.removeItem("username");
         sessionStorage.removeItem("nickname");
         sessionStorage.removeItem("realname");

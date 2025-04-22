@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Icon_Google from "/src/assets/Icon_Google.svg";
 import { useNavigate } from "react-router-dom";
@@ -26,7 +26,7 @@ const Login = () => {
             errorMessage: "잘못된 아이디 입니다.",
         },
         password: {
-            regExp: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]).{8,30}$/,
+            regExp: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]).\S{8,30}$/,
             errorMessage: "잘못된 비밀번호 입니다.",
         },
     };
@@ -53,6 +53,8 @@ const Login = () => {
     });
 
     const [keep, isKeep] = useState(false);
+
+    const [exceptionMessage, setExceptionMessage] = useState(null);
 
     const { login } = useContext(AuthContext);
 
@@ -153,7 +155,7 @@ const Login = () => {
                 navi("/");
             })
             .catch((error) => {
-                console.log(error);
+                setExceptionMessage(error.response.data.cause);
             });
     };
 
@@ -191,9 +193,11 @@ const Login = () => {
                             로그인 상태 유지
                         </label>
                     </section>
-                    {/* <section className="mt-6 flex justify-center">
-                        <p className="font-Pretendard text-md text-red-500">로그인에 실패 했습니다. 아이디와 비밀번호를 확인해주세요.</p>
-                    </section> */}
+                    {exceptionMessage && (
+                        <section className="mt-8 flex justify-center">
+                            <p className="font-Pretendard text-lg text-red-500">{exceptionMessage}</p>
+                        </section>
+                    )}
                     <section className="w-full h-auto flex justify-center">
                         <button
                             onClick={handleSubmit}
