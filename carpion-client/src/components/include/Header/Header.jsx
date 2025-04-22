@@ -1,13 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import Carlpion_Logo from "/src/assets/carlpion_logo.png";
 import Carlpion_Logo_TextOnly from "/src/assets/carlpion_logo_textonly.png";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../page/Context/AuthContext";
 
 const Header = () => {
     const navi = useNavigate();
 
     const [isScrolled, setIsScrolled] = useState(false);
     const [openMenu, setOpenMenu] = useState(0);
+
+    const { auth, logout } = useContext(AuthContext);
 
     const handleScroll = useCallback(() => {
         window.requestAnimationFrame(() => {
@@ -30,9 +33,9 @@ const Header = () => {
         >
             <div className="w-7xl h-full flex justify-center">
                 <section className="w-2/6 h-full">
-                    <div onClick={() => navi("/")} className="h-full flex justify-center items-center cursor-pointer">
+                    <div onClick={() => navi("/")} className="h-full flex justify-start items-center cursor-pointer">
                         <img
-                            className={`cursor-pointer transition-all duration-300 ${isScrolled ? "w-1/2" : "w-full"}`}
+                            className={`cursor-pointer transition-all duration-300 ${isScrolled ? "w-1/2 ml-8" : "w-full"}`}
                             src={isScrolled ? Carlpion_Logo_TextOnly : Carlpion_Logo}
                             alt="Carlpion_Logo"
                         />
@@ -62,15 +65,36 @@ const Header = () => {
                         </li>
                     </ul>
                 </section>
-                <section className="w-1/6 h-full flex justify-end items-center">
-                    <div
-                        onClick={() => navi("/start")}
-                        className={`flex items-center font-maintheme text-maincolor border-2 cursor-pointer hover:bg-maincolor hover:text-white transition-all duration-300 ${
-                            isScrolled ? "px-1 text-lg rounded-lg" : "px-2 py-1 text-2xl rounded-xl"
-                        }`}
-                    >
-                        시작하기
-                    </div>
+                <section className="w-1/6 h-full flex justify-end items-center gap-2">
+                    {!auth.isAuthenticated ? (
+                        <div
+                            onClick={() => navi("/start")}
+                            className={`flex items-center font-maintheme text-maincolor border-2 cursor-pointer hover:bg-maincolor hover:text-white transition-all duration-300 ${
+                                isScrolled ? "px-1 text-lg rounded-lg" : "px-2 py-1 text-2xl rounded-xl"
+                            }`}
+                        >
+                            시작하기
+                        </div>
+                    ) : (
+                        <>
+                            <div
+                                onClick={() => navi("/mypage")}
+                                className={`flex items-center font-maintheme text-maincolor border-2 cursor-pointer hover:bg-maincolor hover:text-white transition-all duration-300 ${
+                                    isScrolled ? "px-1 text-lg rounded-lg" : "px-2 py-1 text-xl rounded-xl"
+                                }`}
+                            >
+                                {sessionStorage.getItem("nickname")}
+                            </div>
+                            <div
+                                onClick={logout}
+                                className={`flex items-center font-maintheme text-maincolor border-2 cursor-pointer hover:bg-maincolor hover:text-white transition-all duration-300 ${
+                                    isScrolled ? "px-1 text-lg rounded-lg" : "px-2 py-1 text-xl rounded-xl"
+                                }`}
+                            >
+                                로그아웃
+                            </div>
+                        </>
+                    )}
                 </section>
             </div>
         </header>
