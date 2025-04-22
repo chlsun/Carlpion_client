@@ -21,6 +21,8 @@ import ReportPage from "./components/page/reportpage/ReportPage";
 import DetailPage from "./components/page/DetailPage/DetailPage";
 import Login from "./components/page/user/Login/Login";
 import SignUp from "./components/page/user/SignUp/SignUp";
+import InquiryCheck from "./components/page/inquiryCheck/InquiryCheck";
+import ReviewCheck from "./components/page/reviewCheck/reviewCheck";
 function App() {
   return (
     <>
@@ -43,6 +45,8 @@ function App() {
         <Route path="/modify" element={<MainMyPage />} />
         <Route path="/point" element={<Point />} />
         <Route path="/reply" element={<Reply />} />
+        <Route path="/inquiryCheck" element={<InquiryCheck />} />
+        <Route path="/reviewCheck" element={<ReviewCheck />} />
       </Routes>
       <Footer />
     </>

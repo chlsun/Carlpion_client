@@ -241,8 +241,13 @@ const Body = () => {
       <GradeText>내 활동</GradeText>
       <Box>
         <Button onClick={() => navi("/reply")}>작성한 댓글 조회</Button>
-        <Button onClick={handleReport}>작성한 문의 게시글 조회</Button>
-        <Button onClick={handleReview}> 작성한 리뷰 게시글 조회</Button>
+        <Button onClick={() => navi("/inquiryCheck")}>
+          작성한 문의 게시글 조회
+        </Button>
+        <Button onClick={() => navi("/reviewCheck")}>
+          {" "}
+          작성한 리뷰 게시글 조회
+        </Button>
       </Box>
     </Container>
   );
