@@ -24,33 +24,54 @@ function NoticeDetail() {
 
   return (
     <>
-      <div className="pageTitle">공지사항</div>
+      <div className="communiteDetailWrapper">
+        <div className="pageTitle">커뮤니티 게시판</div>
 
-      <div className="container">
-        <h1 className="title">{post.title}</h1>
+        <div className="container">
+          <h1 className="title">{post.title}</h1>
 
-        <div className="infoRow">
-          <span className="meta">
-            {post.author.name} · {new Date(post.createdAt).toLocaleDateString()}
-          </span>
-        </div>
+          <div className="infoRow">
+            <span className="meta">
+              {post.author.name} ·{" "}
+              {new Date(post.createdAt).toLocaleDateString()}
+            </span>
 
-        <div className="content">
-          {post.content.split("\n").map((line, i) => (
-            <p key={i}>{line}</p>
-          ))}
-        </div>
-
-        {/* 수정/삭제 버튼 - 오른쪽 정렬 */}
-        {isAuthorOrAdmin && (
-          <div className="bottomButtonGroup">
-            <button className="editBtn">수정</button>
-            <button className="deleteBtn">삭제</button>
+            {/* 상단 추천 버튼 */}
+            <button
+              className={`likeBtn ${liked ? "liked" : ""}`}
+              onClick={handleLike}
+            >
+              👍 {likes}
+            </button>
           </div>
-        )}
 
-        <div className="commentPlaceholder">
-          <NoticeReply />
+          <div className="content">
+            {post.content.split("\n").map((line, i) => (
+              <p key={i}>{line}</p>
+            ))}
+          </div>
+
+          {/* 하단 추천 버튼 - 가운데 정렬 */}
+          <div className="likeButtonWrapper">
+            <button
+              className={`likeBtn ${liked ? "liked" : ""}`}
+              onClick={handleLike}
+            >
+              👍 {likes}
+            </button>
+          </div>
+
+          {/* 수정/삭제 버튼 - 오른쪽 정렬 */}
+          {isAuthorOrAdmin && (
+            <div className="bottomButtonGroup">
+              <button className="editBtn">수정</button>
+              <button className="deleteBtn">삭제</button>
+            </div>
+          )}
+
+          <div className="commentPlaceholder">
+            <CommuniteReply />
+          </div>
         </div>
       </div>
     </>

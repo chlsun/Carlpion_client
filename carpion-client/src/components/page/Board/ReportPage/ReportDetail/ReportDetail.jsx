@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import "./ReportDetail.css";
+import React from "react";
+import styles from "./ReportDetail.module.css";
 import img1 from "/img/cBoard/img1.jpg";
 import img2 from "/img/cBoard/img2.jpg";
 import img3 from "/img/cBoard/img3.jpg";
 import ReportReply from "../ReportReply/ReportReply";
+
 function ReportDetail() {
   const post = {
     title: "신고/문의 제목 예시입니다",
@@ -21,32 +22,31 @@ function ReportDetail() {
 
   return (
     <>
-      <div className="pageTitle">신고/문의 게시판</div>
+      <div className={styles.pageTitle}>신고/문의 게시판</div>
 
-      <div className="container">
-        <h1 className="title">{post.title}</h1>
+      <div className={styles.container}>
+        <h1 className={styles.title}>{post.title}</h1>
 
-        <div className="infoRow">
-          <span className="meta">
+        <div className={styles.infoRow}>
+          <span className={styles.meta}>
             {post.author.name} · {new Date(post.createdAt).toLocaleDateString()}
           </span>
         </div>
 
-        <div className="content">
+        <div className={styles.content}>
           {post.content.split("\n").map((line, i) => (
             <p key={i}>{line}</p>
           ))}
         </div>
 
-        {/* 수정/삭제 버튼 - 오른쪽 정렬 */}
         {isAuthorOrAdmin && (
-          <div className="bottomButtonGroup">
-            <button className="editBtn">수정</button>
-            <button className="deleteBtn">삭제</button>
+          <div className={styles.bottomButtonGroup}>
+            <button className={styles.editBtn}>수정</button>
+            <button className={styles.deleteBtn}>삭제</button>
           </div>
         )}
 
-        <div className="commentPlaceholder">
+        <div className={styles.commentPlaceholder}>
           <ReportReply />
         </div>
       </div>

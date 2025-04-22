@@ -1,3 +1,10 @@
+.communiteDetailWrapper {
+  all: unset;
+  width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
 .container {
   max-width: 800px;
   margin: 10px auto 40px;
@@ -118,4 +125,10 @@
 .likeBtn.liked {
   color: #e74c3c;
   font-weight: bold;
+}
+.communiteDetailWrapper {
+  all: unset;
+  width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
 }

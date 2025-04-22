@@ -45,30 +45,32 @@ function CommuniteReply() {
   };
 
   return (
-    <div className="comment-section">
-      <div className="comment-list">
-        {comments.map((comment) => (
-          <CommentItem
-            key={comment.id}
-            comment={comment}
-            onDelete={handleDelete}
-            onSaveEdit={handleEditSave}
-          />
-        ))}
-      </div>
+    <div className="comment-wrapper">
+      <div className="comment-section">
+        <div className="comment-list">
+          {comments.map((comment) => (
+            <CommentItem
+              key={comment.id}
+              comment={comment}
+              onDelete={handleDelete}
+              onSaveEdit={handleEditSave}
+            />
+          ))}
+        </div>
 
-      <div className="chat-input-area">
-        <input
-          type="text"
-          placeholder="댓글을 입력하세요..."
-          className="chat-input"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && handleSend()}
-        />
-        <button className="send-button" onClick={handleSend}>
-          전송
-        </button>
+        <div className="chat-input-area">
+          <input
+            type="text"
+            placeholder="댓글을 입력하세요..."
+            className="chat-input"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && handleSend()}
+          />
+          <button className="send-button" onClick={handleSend}>
+            전송
+          </button>
+        </div>
       </div>
     </div>
   );

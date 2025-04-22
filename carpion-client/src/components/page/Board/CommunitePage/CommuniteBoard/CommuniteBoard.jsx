@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import * as cm from "./CommuniteBoard.styles";
+import styles from "./CommuniteBoard.module.css";
 
 import img1 from "/img/cBoard/img1.jpg";
 import img2 from "/img/cBoard/img2.jpg";
@@ -92,10 +92,10 @@ const PostCard = ({
   if (type === "grid") {
     return (
       <Link to={`/cd/${id}`}>
-        <cm.GridCard>
-          <cm.GridImage src={mainImage} alt="preview" />
-          <cm.GridTitle>{title}</cm.GridTitle>
-        </cm.GridCard>
+        <div className={styles.GridCard}>
+          <img className={styles.GridImage} src={mainImage} alt="preview" />
+          <div className={styles.GridTitle}>{title}</div>
+        </div>
       </Link>
     );
   }
@@ -105,23 +105,27 @@ const PostCard = ({
       <Link to={`/cd/${id}`}>
         <table>
           <tbody>
-            <cm.PostRow>
-              <cm.PostCell colSpan={6}>
-                <cm.ThumbnailWrapper>
-                  <cm.ThumbnailImg src={mainImage} alt="thumb" />
-                  <cm.TextInfo>
+            <tr className={styles.PostRow}>
+              <td className={styles.PostCell} colSpan={6}>
+                <div className={styles.ThumbnailWrapper}>
+                  <img
+                    className={styles.ThumbnailImg}
+                    src={mainImage}
+                    alt="thumb"
+                  />
+                  <div className={styles.TextInfo}>
                     <h2>{title}</h2>
                     <p>{content}</p>
-                    <div className="thumbnail-meta">
+                    <div className={styles.ThumbnailMeta}>
                       <span>작성자: {NIKNAME}</span>
                       <span>작성일: {formatDate(date)}</span>
                       <span>조회수: {COUNT}</span>
                       <span>좋아요: {likes}</span>
                     </div>
-                  </cm.TextInfo>
-                </cm.ThumbnailWrapper>
-              </cm.PostCell>
-            </cm.PostRow>
+                  </div>
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
       </Link>
@@ -129,16 +133,16 @@ const PostCard = ({
   }
 
   return (
-    <cm.PostRow>
-      <cm.PostCell>{index + 1}</cm.PostCell>
-      <cm.PostCell>
+    <tr className={styles.PostRow}>
+      <td className={styles.PostCell}>{index + 1}</td>
+      <td className={styles.PostCell}>
         <Link to={`/cd/${id}`}>{title}</Link>
-      </cm.PostCell>
-      <cm.PostCell>{NIKNAME}</cm.PostCell>
-      <cm.PostCell>{formatDate(date)}</cm.PostCell>
-      <cm.PostCell>{COUNT}</cm.PostCell>
-      <cm.PostCell>{likes}</cm.PostCell>
-    </cm.PostRow>
+      </td>
+      <td className={styles.PostCell}>{NIKNAME}</td>
+      <td className={styles.PostCell}>{formatDate(date)}</td>
+      <td className={styles.PostCell}>{COUNT}</td>
+      <td className={styles.PostCell}>{likes}</td>
+    </tr>
   );
 };
 
@@ -166,34 +170,40 @@ const CommuniteBoard = () => {
   };
 
   return (
-    <cm.BoardContainer>
-      <cm.ActionWrapper>
-        <cm.WriteButton>작성하기</cm.WriteButton>
-      </cm.ActionWrapper>
+    <div className={styles.BoardContainer}>
+      <div className={styles.ActionWrapper}>
+        <button className={styles.WriteButton}>작성하기</button>
+      </div>
 
-      <cm.ButtonGroup>
-        <cm.ViewButton
-          active={viewType === "grid"}
+      <div className={styles.ButtonGroup}>
+        <button
+          className={`${styles.ViewButton} ${
+            viewType === "grid" ? styles.active : ""
+          }`}
           onClick={() => setViewType("grid")}
         >
           바둑판형
-        </cm.ViewButton>
-        <cm.ViewButton
-          active={viewType === "thumbnail"}
+        </button>
+        <button
+          className={`${styles.ViewButton} ${
+            viewType === "thumbnail" ? styles.active : ""
+          }`}
           onClick={() => setViewType("thumbnail")}
         >
           썸네일형
-        </cm.ViewButton>
-        <cm.ViewButton
-          active={viewType === "text"}
+        </button>
+        <button
+          className={`${styles.ViewButton} ${
+            viewType === "text" ? styles.active : ""
+          }`}
           onClick={() => setViewType("text")}
         >
           텍스트형
-        </cm.ViewButton>
-      </cm.ButtonGroup>
+        </button>
+      </div>
 
       {viewType === "grid" && (
-        <cm.GridContainer>
+        <div className={styles.GridContainer}>
           {currentPosts.map((post, idx) => (
             <PostCard
               key={post.id}
@@ -209,11 +219,11 @@ const CommuniteBoard = () => {
               images={post.images}
             />
           ))}
-        </cm.GridContainer>
+        </div>
       )}
 
       {viewType === "thumbnail" && (
-        <div className="thumbnail-container">
+        <div className={styles.ThumbnailContainer}>
           {currentPosts.map((post, idx) => (
             <PostCard
               key={post.id}
@@ -233,15 +243,15 @@ const CommuniteBoard = () => {
       )}
 
       {viewType === "text" && (
-        <cm.PostTable>
+        <table className={styles.PostTable}>
           <thead>
             <tr>
-              <cm.PostCell as="th">번호</cm.PostCell>
-              <cm.PostCell as="th">제목</cm.PostCell>
-              <cm.PostCell as="th">작성자</cm.PostCell>
-              <cm.PostCell as="th">작성일</cm.PostCell>
-              <cm.PostCell as="th">조회수</cm.PostCell>
-              <cm.PostCell as="th">좋아요</cm.PostCell>
+              <th className={styles.PostCell}>번호</th>
+              <th className={styles.PostCell}>제목</th>
+              <th className={styles.PostCell}>작성자</th>
+              <th className={styles.PostCell}>작성일</th>
+              <th className={styles.PostCell}>조회수</th>
+              <th className={styles.PostCell}>좋아요</th>
             </tr>
           </thead>
           <tbody>
@@ -261,10 +271,10 @@ const CommuniteBoard = () => {
               />
             ))}
           </tbody>
-        </cm.PostTable>
+        </table>
       )}
 
-      <cm.PaginationWrapper>
+      <div className={styles.PaginationWrapper}>
         <button
           onClick={() => handlePageChange(1)}
           disabled={currentPage === 1}
@@ -282,7 +292,7 @@ const CommuniteBoard = () => {
           ? Array.from({ length: totalPages }, (_, i) => (
               <button
                 key={i}
-                className={currentPage === i + 1 ? "active" : ""}
+                className={currentPage === i + 1 ? styles.active : ""}
                 onClick={() => handlePageChange(i + 1)}
               >
                 {i + 1}
@@ -317,7 +327,7 @@ const CommuniteBoard = () => {
               }
 
               elements.push(
-                <button key="current" className="active">
+                <button key="current" className={styles.active}>
                   {currentPage}
                 </button>
               );
@@ -365,30 +375,34 @@ const CommuniteBoard = () => {
         >
           ≫
         </button>
-      </cm.PaginationWrapper>
+      </div>
 
-      <cm.ActionWrapper>
-        <cm.WriteButton>작성하기</cm.WriteButton>
-      </cm.ActionWrapper>
+      <div className={styles.ActionWrapper}>
+        <button className={styles.WriteButton}>작성하기</button>
+      </div>
 
-      <cm.SearchWrapper>
-        <cm.SelectBox
+      <div className={styles.SearchWrapper}>
+        <select
+          className={styles.SelectBox}
           value={searchType}
           onChange={(e) => setSearchType(e.target.value)}
         >
           <option value="title">제목</option>
           <option value="NIKNAME">작성자</option>
           <option value="content">내용</option>
-        </cm.SelectBox>
-        <cm.SearchInput
+        </select>
+        <input
+          className={styles.SearchInput}
           type="text"
-          placeholder="검색어를 입력하세요..."
+          placeholder="검색"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <cm.SearchButton onClick={handleSearch}>검색</cm.SearchButton>
-      </cm.SearchWrapper>
-    </cm.BoardContainer>
+        <button className={styles.SearchButton} onClick={handleSearch}>
+          검색
+        </button>
+      </div>
+    </div>
   );
 };
 

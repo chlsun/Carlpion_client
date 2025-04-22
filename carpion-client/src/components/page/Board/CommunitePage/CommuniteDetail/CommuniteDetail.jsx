@@ -43,7 +43,6 @@ function CommuniteDetail() {
             {post.author.name} · {new Date(post.createdAt).toLocaleDateString()}
           </span>
 
-          {/* 상단 추천 버튼 */}
           <button
             className={`likeBtn ${liked ? "liked" : ""}`}
             onClick={handleLike}
@@ -58,7 +57,6 @@ function CommuniteDetail() {
           ))}
         </div>
 
-        {/* 하단 추천 버튼 - 가운데 정렬 */}
         <div className="likeButtonWrapper">
           <button
             className={`likeBtn ${liked ? "liked" : ""}`}
@@ -68,7 +66,6 @@ function CommuniteDetail() {
           </button>
         </div>
 
-        {/* 수정/삭제 버튼 - 오른쪽 정렬 */}
         {isAuthorOrAdmin && (
           <div className="bottomButtonGroup">
             <button className="editBtn">수정</button>
