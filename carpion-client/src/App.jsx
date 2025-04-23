@@ -19,6 +19,8 @@ import ReportPage from "./components/page/reportpage/ReportPage";
 import DetailPage from "./components/page/DetailPage/DetailPage";
 import Login from "./components/page/user/Login/Login";
 import SignUp from "./components/page/user/SignUp/SignUp";
+import InquiryCheck from "./components/page/inquiryCheck/inquiryCheck";
+import ReviewCheck from "./components/page/reviewCheck/reviewCheck";
 import RentalReservation from "./components/page/rentalReservation/RentalReservation";
 import { AuthProvider } from "./components/page/Context/AuthContext";
 import NoticeBoard from "./components/page/Board/NoticePage/NoticeBoard/NoticeBoard";
@@ -58,6 +60,8 @@ function App() {
           <Route path="/cd/:id" element={<CommuniteDetail />} />
           <Route path="/rb" element={<ReportBoard />} />
           <Route path="/rd/:id" element={<ReportDetail />} />
+          <Route path="/inquiryCheck" element={<InquiryCheck />} />
+          <Route path="/reviewCheck" element={<ReviewCheck />} />
         </Routes>
         <Footer />
       </AuthProvider>

@@ -17,16 +17,19 @@ const Reply = () => {
       <Container>
         <Header>댓글 조회</Header>
         <Box>
+          <div>공지사항</div>
           <ReplyTitle>게시물제목</ReplyTitle>
           <ReplyTime>시간</ReplyTime>
           <ReplyContent>댓글</ReplyContent>
         </Box>
         <Box>
+          <div>문의 게시판</div>
           <ReplyTitle>게시물제목</ReplyTitle>
           <ReplyTime>시간</ReplyTime>
           <ReplyContent>댓글</ReplyContent>
         </Box>
         <Box>
+          <div>리뷰 게시판</div>
           <ReplyTitle>게시물제목</ReplyTitle>
           <ReplyTime>시간</ReplyTime>
           <ReplyContent>댓글</ReplyContent>
