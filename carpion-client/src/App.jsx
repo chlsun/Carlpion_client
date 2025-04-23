@@ -15,8 +15,6 @@ import FindPw from "./components/page/user/FindPw/FindPw";
 import FindPwCompleted from "./components/page/user/FindPw/FindPwCompleted";
 import SignUpCompleted from "./components/page/user/SignUp/SignUpCompleted";
 import Reply from "./components/page/reply/reply";
-import ReportPage from "./components/page/reportpage/ReportPage";
-import DetailPage from "./components/page/DetailPage/DetailPage";
 import Login from "./components/page/user/Login/Login";
 import SignUp from "./components/page/user/SignUp/SignUp";
 import InquiryCheck from "./components/page/inquiryCheck/inquiryCheck";
@@ -55,9 +53,9 @@ function App() {
           <Route path="/point" element={<Point />} />
           <Route path="/reply" element={<Reply />} />
           <Route path="/nb" element={<NoticeBoard />} />
-          <Route path="/nd/:id" element={<NoticeDetail />} />
+          <Route path="/nd/:noticeNo" element={<NoticeDetail />} />
           <Route path="/cb" element={<CommuniteBoard />} />
-          <Route path="/cd/:id" element={<CommuniteDetail />} />
+          <Route path="/cd/:reviewNo" element={<CommuniteDetail />} />
           <Route path="/rb" element={<ReportBoard />} />
           <Route path="/rd/:id" element={<ReportDetail />} />
           <Route path="/inquiryCheck" element={<InquiryCheck />} />

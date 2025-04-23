@@ -1,30 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios"; // axios 임포트 추가
 import styles from "./NoticeBoard.module.css";
 import CustomerBanner from "/img/notice/안내.jpg";
 
-const notices = [
-  {
-    id: 1,
-    title: "📌 서버 점검 안내",
-    date: "2025-04-10",
-    content: "4월 12일 오전 2시부터 4시까지 서버 점검이 있습니다.",
-  },
-  {
-    id: 2,
-    title: "🎉 신규 기능 업데이트",
-    date: "2025-04-09",
-    content: "공지사항에 아코디언 UI가 추가되었습니다!",
-  },
-];
-
 const NoticeItem = ({ notice }) => (
   <li className={styles.item}>
-    <Link to={`/nd/${notice.id}`} className={styles.itemLink}>
+    <Link to={`/nd/${notice.noticeNo}`} className={styles.itemLink}>
       <div className={styles.itemHeader}>
         <span className={styles.itemTitle}>{notice.title}</span>
         <div className={styles.rightBox}>
-          <span className={styles.itemDate}>{notice.date}</span>
+          <span className={styles.itemDate}>{notice.createDate}</span>
         </div>
       </div>
     </Link>
@@ -32,7 +18,21 @@ const NoticeItem = ({ notice }) => (
 );
 
 const NoticeBoard = () => {
+  const [notices, setNotices] = useState([]);
   const isAdmin = true;
+
+  useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        const response = await axios.get("http://localhost:80/notice");
+        setNotices(response.data);
+      } catch (error) {
+        console.error("데이터 로딩 실패:", error);
+      }
+    };
+
+    fetchNotices();
+  }, []);
 
   return (
     <div className={styles.noticeBoard}>
@@ -53,9 +53,13 @@ const NoticeBoard = () => {
         </div>
 
         <ul className={styles.list}>
-          {notices.map((notice) => (
-            <NoticeItem key={notice.id} notice={notice} />
-          ))}
+          {notices.length === 0 ? (
+            <li className={styles.item}>게시글이 없습니다.</li>
+          ) : (
+            notices.map((notice) => (
+              <NoticeItem key={notice.noticeNo} notice={notice} />
+            ))
+          )}
         </ul>
       </div>
     </div>

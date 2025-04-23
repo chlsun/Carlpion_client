@@ -24,6 +24,19 @@
   margin-bottom: 12px;
 }
 
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.views {
+  font-size: 12px;
+  font-weight: 600;
+  color: #888;
+}
+
 .infoRow {
   display: flex;
   justify-content: space-between;
