@@ -112,6 +112,12 @@ const SignUp = () => {
 
     const [exceptionMessage, setExceptionMessage] = useState(null);
 
+    const [isSendVerifyEmail, setIsSendVerifyEmail] = useState(false);
+
+    const [sendVerifyEmailMessage, setSendVerifyEmailMessage] = useState(null);
+
+    const [verifyCode, setVerifyCode] = useState(null);
+
     const handleChange = (e) => {
         const { id, value } = e.target;
         setInputValues({ ...inputValues, [id]: value });
@@ -138,6 +144,10 @@ const SignUp = () => {
             setIsValid({ ...isValid, [id]: true });
             setFieldMessages({ ...fieldMessages, [id]: validation.successMessage });
         }
+    };
+
+    const handleCodeChange = (e) => {
+        setVerifyCode(e.target.value);
     };
 
     const validateForm = () => {
@@ -193,16 +203,28 @@ const SignUp = () => {
         return isValid;
     };
 
-    const handleEmailValidate = () => {
-        if (!validateForm()) return;
-        // axios.post(`http://localhost:80/users`, { email: inputValues.email });
+    const handleSendVerifyEmail = () => {
+        if (!isValid.email) {
+            document.getElementById("email").focus;
+            return;
+        }
+        axios
+            .post(`http://localhost:80/auth/send-email`, { email: inputValues.email })
+            .then(() => {
+                setIsSendVerifyEmail(true);
+                setSendVerifyEmailMessage("인증 메일이 전송 되었습니다.");
+            })
+            .catch((error) => {
+                setIsSendVerifyEmail(false);
+                setSendVerifyEmailMessage(error.response.data.cause);
+            });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!validateForm()) return;
         axios
-            .post(`http://localhost:80/users`, inputValues)
+            .post(`http://localhost:80/users`, { ...inputValues, code: verifyCode })
             .then(() => {
                 navi("/sign-up-done");
             })
@@ -232,22 +254,29 @@ const SignUp = () => {
                                         className="p-2 mt-1 border-2 border-gray-300 rounded-md font-Pretendard text-lg"
                                     />
                                     {field.id === "email" ? (
-                                        <div className="w-full mt-2 flex justify-between">
-                                            <button
-                                                type="button"
-                                                onClick={handleEmailValidate}
-                                                className="px-2 py-1 border-2 border-maincolor rounded-md font-maintheme text-md text-maincolor tracking-wider cursor-pointer hover:underline hover:decoration-2 hover:underline-offset-3 active:bg-maincolor active:text-white"
-                                            >
-                                                이메일 인증
-                                            </button>
-                                            <input
-                                                type="text"
-                                                placeholder="메일로 발송된 인증번호를 입력하세요."
-                                                className="w-68 px-2 py-1 border-2 border-gray-300 rounded-md font-Pretendard text-md"
-                                            />
-                                        </div>
+                                        <>
+                                            <div className="w-full mt-2 flex justify-between">
+                                                <button
+                                                    type="button"
+                                                    onClick={handleSendVerifyEmail}
+                                                    className="px-2 py-1 border-2 border-maincolor rounded-md font-maintheme text-md text-maincolor tracking-wider cursor-pointer hover:underline hover:decoration-2 hover:underline-offset-3 active:bg-maincolor active:text-white"
+                                                >
+                                                    이메일 인증
+                                                </button>
+                                                <input
+                                                    id="code"
+                                                    type="text"
+                                                    onChange={handleCodeChange}
+                                                    placeholder="메일로 발송된 인증번호를 입력하세요."
+                                                    className="w-68 px-2 py-1 border-2 border-gray-300 rounded-md font-Pretendard text-md"
+                                                />
+                                            </div>
+                                            {sendVerifyEmailMessage && (
+                                                <p className={`mt-1 ml-1 font-Pretendard text-lg ${isSendVerifyEmail ? "text-green-500" : "text-red-500"}`}>{sendVerifyEmailMessage}</p>
+                                            )}
+                                        </>
                                     ) : (
-                                        ""
+                                        <></>
                                     )}
                                     {isEmptyMessage[field.id] && <p className="mt-1 ml-1 text-red-500 font-Pretendard text-lg">{isEmptyMessage[field.id]}</p>}
                                     {fieldMessages[field.id] && (
