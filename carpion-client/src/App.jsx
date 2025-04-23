@@ -18,6 +18,7 @@ import FindPw from "./components/page/user/FindPw/FindPw";
 import FindPwCompleted from "./components/page/user/FindPw/FindPwCompleted";
 
 import Reply from "./components/page/reply/reply";
+import RentalReservation from "./components/page/rentalReservation/RentalReservation";
 function App() {
    return (
       <>
@@ -32,6 +33,7 @@ function App() {
             </Route>
 
             <Route path="/rent" element={<CarRentPage />} />
+            <Route path="/rent/:id" element={<RentalReservation />} />
 
             <Route path="/mypage" element={<Body />} />
             <Route path="/modify" element={<MainMyPage />} />
