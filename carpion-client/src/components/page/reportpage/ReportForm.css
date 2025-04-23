@@ -1,8 +1,29 @@
 /* FileUpload.css */
 
+<<<<<<< HEAD
+.write-page-container {
+  max-width: 800px;
+  margin-top: 100px;
+
+  padding: 40px 20px;
+}
+
+.write-page-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.post-title-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 1.1rem;
+  border: 1px solid #ccc;
+=======
 .file-upload-section {
   padding: 20px 0;
   border: 1px solid #eee;
+>>>>>>> 54c644a62249878124ce0830c416d79b650137a3
   border-radius: 6px;
   background-color: #f9f9f9;
 }
@@ -26,8 +47,13 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
+<<<<<<< HEAD
+  transition: background-color 0.2s;
+  margin-left: 10px;
+=======
   transition: background-color 0.2s ease;
   flex-shrink: 0;
+>>>>>>> 54c644a62249878124ce0830c416d79b650137a3
 }
 
 .file-upload-button:hover {

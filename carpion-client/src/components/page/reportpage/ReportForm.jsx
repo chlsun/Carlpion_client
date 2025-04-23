@@ -5,14 +5,14 @@ import React from "react";
 import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/i18n/ko-kr";
-import "./ReportPage.css";
+import "./ReportForm.css";
 import FileUpload from "../FileUpload/FileUpload";
 
 const ReportForm = () => {
   const navi = useNavigate();
   const editorRef = useRef();
   const [accessToken, setAccessToken] = useState("");
-  const [selectedFiles, setSelectedFiles] = useState([]); 
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   // useEffect(() => {
   //   const token = localStorage.getItem("accessToken");
@@ -29,7 +29,7 @@ const ReportForm = () => {
   };
 
   const handleFilesCleared = () => {
-      setSelectedFiles([]);
+    setSelectedFiles([]);
   };
 
   const handleSubmit = () => {
@@ -37,26 +37,26 @@ const ReportForm = () => {
     const title = titleInput ? titleInput.value : "";
     const content = editorRef.current?.getInstance().getMarkdown() || "";
 
-    if( !title.trim()) {
+    if (!title.trim()) {
       alert("제목을 입력해주세요.");
       titleInput?.focus();
       return;
     }
-    if( !content.trim()) {
+    if (!content.trim()) {
       alert("내용을 입력해주세요.");
       editorRef.current?.getInstance().focus();
       return;
     }
 
-    const formData = new FormData();  
-    formData.append("title", title); 
-    formData.append("content", content); 
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("content", content);
     selectedFiles.forEach((file) => {
-      formData.append("files", file); 
+      formData.append("files", file);
     });
 
     axios
-      .post(`http://localhost/reports`, formData, { 
+      .post(`http://localhost/reports`, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "multipart/form-data",
@@ -64,7 +64,7 @@ const ReportForm = () => {
       })
       .then((result) => {
         console.log(result);
-        if(result.status === 201 || result.status === 200) {
+        if (result.status === 201 || result.status === 200) {
           alert("게시글이 성공적으로 등록되었고 파일이 저장되었습니다!");
           navi("/reports");
         }
@@ -91,26 +91,24 @@ const ReportForm = () => {
         initialEditType="wysiwyg"
         useCommandShortcut={true}
         toolbarItems={[
-          ['heading', 'bold', 'italic', 'strike'],
-          ['hr'],
-          ['ul', 'ol', 'task'],
-          ['indent', 'outdent'],
-          ['link'],
-          ['scrollSync'],
+          ["heading", "bold", "italic", "strike"],
+          ["hr"],
+          ["ul", "ol", "task"],
+          ["indent", "outdent"],
+          ["link"],
+          ["image"],
+          ["scrollSync"],
         ]}
       />
       <FileUpload
         onFilesSelected={handleFilesSelected}
         onFilesCleared={handleFilesCleared}
       />
-      <button 
-        className="submit-button" 
-        onClick={handleSubmit}
-      >
+      <button className="submit-button" onClick={handleSubmit}>
         등록
-      </button>   
+      </button>
     </div>
-  )
+  );
 };
 
 export default ReportForm;

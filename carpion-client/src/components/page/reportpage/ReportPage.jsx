@@ -26,14 +26,11 @@ const ReportPage = () => {
   return (
     <>
       <h3>문의 / 신고 게시판</h3>
-      <div>
-        <button onClick={() => navi("/reportForm")}>
-          글 작성
-        </button>
-
-      </div>     
-    </> 
+      <div style={{ marginTop: "100px" }}>
+        <button onClick={() => navi("/rp")}>글 작성</button>
+      </div>
+    </>
   );
-}
+};
 
 export default ReportPage;

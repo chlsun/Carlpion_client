@@ -1,0 +1,167 @@
+.reportListWrapper {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  margin: 0 auto;
+  margin-top: 100px;
+  width: 90%;
+}
+
+.reportHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.roleSwitch {
+  display: flex;
+  gap: 20px;
+}
+
+.roleSwitch span {
+  cursor: pointer;
+}
+
+.roleSwitch .active {
+  font-weight: bold;
+  color: #2f8ef7;
+}
+
+.reportTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.reportTable th,
+.reportTable td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.reportTable th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.reportTable td {
+  text-align: center;
+}
+
+.reportTable th:nth-child(1),
+.reportTable td:nth-child(1) {
+  width: 5%;
+  font-size: 12px;
+  text-align: center;
+}
+
+.reportTable th:nth-child(2),
+.reportTable td:nth-child(2) {
+  width: 70%;
+  text-align: left;
+}
+
+.reportTable th:nth-child(3),
+.reportTable td:nth-child(3) {
+  width: 12%;
+}
+
+.reportTable th:nth-child(4),
+.reportTable td:nth-child(4) {
+  width: 8%;
+  font-size: 12px;
+}
+
+.reportTable th:nth-child(5),
+.reportTable td:nth-child(5) {
+  width: 5%;
+  font-size: 12px;
+}
+
+.empty {
+  text-align: center;
+  font-style: italic;
+}
+
+.paginationWrapper {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.paginationButton {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.paginationButton:hover {
+  background-color: #f0f0f0;
+}
+
+.paginationButton.active {
+  background-color: #3498db;
+  color: white;
+}
+
+.paginationButton:disabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
+.footerControls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.actionWrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin: 16px 0;
+}
+
+.writeButton {
+  background-color: #3498db;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.searchWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.selectBox {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.searchInput {
+  flex: 0 1 300px;
+  max-width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.searchButton {
+  padding: 8px 16px;
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+}

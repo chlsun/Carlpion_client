@@ -4,8 +4,6 @@ import MainPage from "./components/page/mainpage/MainPage";
 import AdminPage from "./components/page/adminpage/AdminPage";
 import ModelPage from "./components/page/adminpage/ModelPage/ModelPage";
 import CarPage from "./components/page/adminpage/CarPage/CarPage";
-import PostBoard from "./components/page/CommunitePage/PostBoard";
-import NoticePage from "./components/page/NotionPage/NoticePage";
 import Header from "./components/include/Header/Header";
 import Footer from "./components/include/Footer/Footer";
 import CarRentPage from "./components/page/carrentpage/CarRentPage";
@@ -25,6 +23,12 @@ import InquiryCheck from "./components/page/inquiryCheck/inquiryCheck";
 import ReviewCheck from "./components/page/reviewCheck/reviewCheck";
 import RentalReservation from "./components/page/rentalReservation/RentalReservation";
 import { AuthProvider } from "./components/page/Context/AuthContext";
+import NoticeBoard from "./components/page/Board/NoticePage/NoticeBoard/NoticeBoard";
+import NoticeDetail from "./components/page/Board/NoticePage/NoticeDetail/NoticeDetail";
+import CommuniteBoard from "./components/page/Board/CommunitePage/CommuniteBoard/CommuniteBoard";
+import CommuniteDetail from "./components/page/Board/CommunitePage/CommuniteDetail/CommuniteDetail";
+import ReportBoard from "./components/page/Board/ReportPage/ReportBoard/ReportBoard";
+import ReportDetail from "./components/page/Board/ReportPage/ReportDetail/ReportDetail";
 
 function App() {
   return (
@@ -50,6 +54,12 @@ function App() {
           <Route path="/modify" element={<MainMyPage />} />
           <Route path="/point" element={<Point />} />
           <Route path="/reply" element={<Reply />} />
+          <Route path="/nb" element={<NoticeBoard />} />
+          <Route path="/nd/:id" element={<NoticeDetail />} />
+          <Route path="/cb" element={<CommuniteBoard />} />
+          <Route path="/cd/:id" element={<CommuniteDetail />} />
+          <Route path="/rb" element={<ReportBoard />} />
+          <Route path="/rd/:id" element={<ReportDetail />} />
           <Route path="/inquiryCheck" element={<InquiryCheck />} />
           <Route path="/reviewCheck" element={<ReviewCheck />} />
         </Routes>
