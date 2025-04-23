@@ -15,44 +15,52 @@ import FindPw from "./components/page/user/FindPw/FindPw";
 import FindPwCompleted from "./components/page/user/FindPw/FindPwCompleted";
 import SignUpCompleted from "./components/page/user/SignUp/SignUpCompleted";
 import Reply from "./components/page/reply/reply";
+import ReportPage from "./components/page/reportpage/ReportPage";
+import DetailPage from "./components/page/DetailPage/DetailPage";
+import Login from "./components/page/user/Login/Login";
+import SignUp from "./components/page/user/SignUp/SignUp";
+import RentalReservation from "./components/page/rentalReservation/RentalReservation";
+import { AuthProvider } from "./components/page/Context/AuthContext";
 import NoticeBoard from "./components/page/Board/NoticePage/NoticeBoard/NoticeBoard";
 import NoticeDetail from "./components/page/Board/NoticePage/NoticeDetail/NoticeDetail";
 import CommuniteBoard from "./components/page/Board/CommunitePage/CommuniteBoard/CommuniteBoard";
 import CommuniteDetail from "./components/page/Board/CommunitePage/CommuniteDetail/CommuniteDetail";
-import ReportDetail from "./components/page/Board/ReportPage/ReportDetail/ReportDetail";
-import Login from "./components/page/user/Login/Login";
-import SignUp from "./components/page/user/SignUp/SignUp";
 import ReportBoard from "./components/page/Board/ReportPage/ReportBoard/ReportBoard";
+import ReportDetail from "./components/page/Board/ReportPage/ReportDetail/ReportDetail";
+
 function App() {
   return (
     <>
-      <Header />
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/start" element={<Login />} />
-        <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/sign-up-done" element={<SignUpCompleted />} />
-        <Route path="/find-id" element={<FindId />} />
-        <Route path="/find-pw" element={<FindPw />} />
-        <Route path="/find-pw-done" element={<FindPwCompleted />} />
-        <Route path="/admin" element={<AdminPage />}>
-          <Route index element={<Navigate to="model" replace />} />
-          <Route path="model" element={<ModelPage />} />
-          <Route path="car" element={<CarPage />} />
-        </Route>
-        <Route path="/rent" element={<CarRentPage />} />
-        <Route path="/mypage" element={<Body />} />
-        <Route path="/modify" element={<MainMyPage />} />
-        <Route path="/point" element={<Point />} />
-        <Route path="/reply" element={<Reply />} />
-        <Route path="/nb" element={<NoticeBoard />} />
-        <Route path="/nd/:id" element={<NoticeDetail />} />
-        <Route path="/cb" element={<CommuniteBoard />} />
-        <Route path="/cd/:id" element={<CommuniteDetail />} />
-        <Route path="/rb" element={<ReportBoard />} />
-        <Route path="/rd/:id" element={<ReportDetail />} />
-      </Routes>
-      <Footer />
+      <AuthProvider>
+        <Header />
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/start" element={<Login />} />
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/sign-up-done" element={<SignUpCompleted />} />
+          <Route path="/find-id" element={<FindId />} />
+          <Route path="/find-pw" element={<FindPw />} />
+          <Route path="/find-pw-done" element={<FindPwCompleted />} />
+          <Route path="/admin" element={<AdminPage />}>
+            <Route index element={<Navigate to="model" replace />} />
+            <Route path="model" element={<ModelPage />} />
+            <Route path="car" element={<CarPage />} />
+          </Route>
+          <Route path="/rent" element={<CarRentPage />} />
+          <Route path="/rent/:id" element={<RentalReservation />} />
+          <Route path="/mypage" element={<Body />} />
+          <Route path="/modify" element={<MainMyPage />} />
+          <Route path="/point" element={<Point />} />
+          <Route path="/reply" element={<Reply />} />
+          <Route path="/nb" element={<NoticeBoard />} />
+          <Route path="/nd/:id" element={<NoticeDetail />} />
+          <Route path="/cb" element={<CommuniteBoard />} />
+          <Route path="/cd/:id" element={<CommuniteDetail />} />
+          <Route path="/rb" element={<ReportBoard />} />
+          <Route path="/rd/:id" element={<ReportDetail />} />
+        </Routes>
+        <Footer />
+      </AuthProvider>
     </>
   );
 }
