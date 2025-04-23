@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./NoticeReply.css";
+import styles from "./NoticeReply.module.css";
 
 function NoticeReply() {
   const [comments, setComments] = useState([
@@ -20,14 +20,12 @@ function NoticeReply() {
 
   const handleSend = () => {
     if (message.trim() === "") return;
-
     const newComment = {
       id: Date.now(),
-      nickname: "사용자", // 나중에 유저 정보와 연결 가능
+      nickname: "사용자",
       content: message,
       time: new Date().toLocaleString(),
     };
-
     setComments([...comments, newComment]);
     setMessage("");
   };
@@ -45,8 +43,8 @@ function NoticeReply() {
   };
 
   return (
-    <div className="comment-section">
-      <div className="comment-list">
+    <div className={styles.commentSection}>
+      <div className={styles.commentList}>
         {comments.map((comment) => (
           <CommentItem
             key={comment.id}
@@ -57,16 +55,16 @@ function NoticeReply() {
         ))}
       </div>
 
-      <div className="chat-input-area">
+      <div className={styles.chatInputArea}>
         <input
           type="text"
           placeholder="댓글을 입력하세요..."
-          className="chat-input"
+          className={styles.chatInput}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && handleSend()}
+          onKeyDown={(e) => e.key === "Enter" && handleSend()}
         />
-        <button className="send-button" onClick={handleSend}>
+        <button className={styles.sendButton} onClick={handleSend}>
           전송
         </button>
       </div>
@@ -81,42 +79,41 @@ function CommentItem({ comment, onDelete, onSaveEdit }) {
 
   const handleEditClick = () => {
     setIsEditing(true);
-    setMenuOpen(false); // 수정할 때 메뉴 닫기
+    setMenuOpen(false);
   };
 
   const handleCancelEdit = () => {
     setIsEditing(false);
-    setNewContent(comment.content); // 원래 내용으로 되돌리기
-    setMenuOpen(false); // 취소 시 메뉴 닫기
+    setNewContent(comment.content);
+    setMenuOpen(false);
   };
 
   const handleSaveEdit = () => {
     onSaveEdit(comment.id, newContent);
-    setIsEditing(false); // 수정 후 종료
-    setMenuOpen(false); // 저장 후 메뉴 닫기
-  };
-
-  const handleMenuToggle = () => {
-    setMenuOpen(!menuOpen); // 메뉴 열기/닫기
+    setIsEditing(false);
+    setMenuOpen(false);
   };
 
   return (
-    <div className="comment">
-      <div className="comment-header">
-        <span className="nickname">{comment.nickname}</span>
-        <div className="right-top">
-          <span className="comment-time">{comment.time}</span>
-          <div className="menu-container">
-            <button className="menu-button" onClick={handleMenuToggle}>
+    <div className={styles.comment}>
+      <div className={styles.commentHeader}>
+        <span className={styles.nickname}>{comment.nickname}</span>
+        <div className={styles.rightTop}>
+          <span className={styles.commentTime}>{comment.time}</span>
+          <div className={styles.menuContainer}>
+            <button
+              className={styles.menuButton}
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
               &#x22EE;
             </button>
             {menuOpen && (
-              <div className="menu-dropdown">
-                <button className="menu-item" onClick={handleEditClick}>
+              <div className={styles.menuDropdown}>
+                <button className={styles.menuItem} onClick={handleEditClick}>
                   수정
                 </button>
                 <button
-                  className="menu-item delete"
+                  className={`${styles.menuItem} ${styles.delete}`}
                   onClick={() => onDelete(comment.id)}
                 >
                   삭제
@@ -128,23 +125,23 @@ function CommentItem({ comment, onDelete, onSaveEdit }) {
       </div>
 
       {isEditing ? (
-        <div className="edit-section">
+        <div className={styles.editSection}>
           <textarea
-            className="edit-input"
+            className={styles.editInput}
             value={newContent}
             onChange={(e) => setNewContent(e.target.value)}
           />
-          <div className="edit-buttons">
-            <button className="save-button" onClick={handleSaveEdit}>
+          <div className={styles.editButtons}>
+            <button className={styles.saveButton} onClick={handleSaveEdit}>
               저장
             </button>
-            <button className="cancel-button" onClick={handleCancelEdit}>
+            <button className={styles.cancelButton} onClick={handleCancelEdit}>
               취소
             </button>
           </div>
         </div>
       ) : (
-        <div className="comment-content">{comment.content}</div>
+        <div className={styles.commentContent}>{comment.content}</div>
       )}
     </div>
   );

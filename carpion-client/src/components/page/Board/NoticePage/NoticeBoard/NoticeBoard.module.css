@@ -1,19 +1,18 @@
-#notice-board .banner {
+.banner {
   width: 1200px;
   height: 300px;
   margin: 0 auto;
-
   position: relative;
 }
 
-#notice-board .banner img {
+.banner img {
   width: 100%;
   height: 100%;
   object-fit: fill;
   display: block;
 }
 
-#notice-board .bannerText {
+.bannerText {
   position: absolute;
   bottom: 32px;
   left: 40px;
@@ -23,7 +22,7 @@
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
-#notice-board .container {
+.container {
   max-width: 900px;
   margin: 0 auto 0;
   padding: 60px 32px;
@@ -32,25 +31,25 @@
   border-radius: 12px;
 }
 
-#notice-board .titleRow {
+.titleRow {
   display: flex;
   align-items: center;
   gap: 16px;
   margin-bottom: 32px;
 }
 
-#notice-board .titleIcon {
+.titleIcon {
   width: 32px;
   height: 32px;
 }
 
-#notice-board .title {
+.title {
   font-size: 28px;
   font-weight: 700;
   flex-grow: 1;
 }
 
-#notice-board .writeButton {
+.writeButton {
   padding: 12px 24px;
   font-size: 16px;
   background-color: #007bff;
@@ -61,17 +60,17 @@
   transition: background-color 0.2s;
 }
 
-#notice-board .writeButton:hover {
+.writeButton:hover {
   background-color: #0062cc;
 }
 
-#notice-board .list {
+.list {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-#notice-board .item {
+.item {
   border: 1px solid #e0e0e0;
   border-radius: 12px;
   padding: 20px 24px;
@@ -80,47 +79,30 @@
   list-style: none;
 }
 
-#notice-board .item:hover {
+.item:hover {
   background-color: #f9f9f9;
 }
 
-#notice-board .itemHeader {
+.itemHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
 }
 
-#notice-board .itemTitle {
+.itemTitle {
   font-size: 16px;
   font-weight: 500;
   color: #333;
 }
 
-#notice-board .rightBox {
+.rightBox {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-#notice-board .itemDate {
+.itemDate {
   font-size: 14px;
   color: #888;
-}
-
-#notice-board .toggleIcon {
-  font-size: 20px;
-  font-weight: bold;
-  color: #666;
-  width: 20px;
-  display: inline-block;
-}
-
-#notice-board .itemContent {
-  margin-top: 12px;
-  padding-top: 8px;
-  border-top: 1px solid #eee;
-  font-size: 16px;
-  color: #444;
-  line-height: 1.6;
 }

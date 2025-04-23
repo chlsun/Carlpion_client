@@ -1,15 +1,13 @@
-/* 전체 가운데 정렬 및 전체 화면 높이 확보 */
-.chat-container {
+.chatContainer {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  padding-bottom: 60px; /* 입력창 높이만큼 여유 */
+  padding-bottom: 60px;
 }
 
-/* 대화창 스타일 */
-.chat-thread {
+.chatThread {
   width: 800px;
   padding: 16px;
   background-color: #f9f9f9;
@@ -17,24 +15,22 @@
   overflow-y: auto;
   border-radius: 10px;
   border: 1px solid #ddd;
+  max-height: 75vh;
 }
-
-/* 버블 래퍼 */
-.chat-bubble-wrapper {
+.chatBubbleWrapper {
   display: flex;
   margin-bottom: 12px;
 }
 
-.chat-bubble-wrapper.left {
+.chatBubbleWrapper.left {
   justify-content: flex-start;
 }
 
-.chat-bubble-wrapper.right {
+.chatBubbleWrapper.right {
   justify-content: flex-end;
 }
 
-/* 공통 말풍선 스타일 */
-.chat-bubble {
+.chatBubble {
   max-width: 500px;
   min-width: 250px;
   padding: 12px 16px;
@@ -43,8 +39,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* 말풍선 꼬리 공통 */
-.chat-bubble::after {
+.chatBubble::after {
   content: "";
   position: absolute;
   width: 0;
@@ -52,56 +47,50 @@
   border: 8px solid transparent;
 }
 
-/* 질문(Q) - 오른쪽 말풍선 */
-.chat-bubble.question {
+.chatBubble.question {
   background-color: #d2f1ff;
   border-bottom-right-radius: 20px;
   font-size: 16px;
 }
 
-.chat-bubble.question::after {
+.chatBubble.question::after {
   border-left-color: #d2f1ff;
   top: 50%;
   right: -16px;
   transform: translateY(-50%);
 }
 
-/* 답변(A) - 왼쪽 말풍선 */
-.chat-bubble.answer {
+.chatBubble.answer {
   background-color: #eeeeee;
   border-bottom-left-radius: 20px;
   font-size: 16px;
 }
 
-.chat-bubble.answer::after {
+.chatBubble.answer::after {
   border-right-color: #eeeeee;
   top: 50%;
   left: -16px;
   transform: translateY(-50%);
 }
 
-/* 메시지 내용 */
-.chat-message {
+.chatMessage {
   margin: 0;
   color: #333;
 }
 
-/* Q. A. 구분 추가 */
-.chat-prefix {
+.chatPrefix {
   font-weight: bold;
   margin-right: 8px;
   color: #444;
 }
 
-/* 이미지 첨부 */
-.chat-image {
+.chatImage {
   margin-top: 8px;
   max-width: 100%;
   border-radius: 8px;
 }
 
-/* 타임스탬프 */
-.chat-timestamp {
+.chatTimestamp {
   display: block;
   margin-top: 6px;
   font-size: 11px;
@@ -109,8 +98,7 @@
   text-align: right;
 }
 
-/* 입력창 */
-.chat-input-area {
+.chatInputArea {
   width: 800px;
   display: flex;
   justify-content: space-between;
@@ -123,7 +111,7 @@
   margin-top: 16px;
 }
 
-.chat-input {
+.chatInput {
   flex: 1;
   padding: 10px 14px;
   border: 1px solid #ccc;
@@ -133,7 +121,7 @@
   margin-right: 8px;
 }
 
-.send-button {
+.sendButton {
   background-color: #2d88ff;
   color: #fff;
   border: none;
@@ -144,6 +132,6 @@
   transition: background-color 0.2s;
 }
 
-.send-button:hover {
+.sendButton:hover {
   background-color: #1c6eea;
 }

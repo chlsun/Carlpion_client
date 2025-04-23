@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./NoticeBoard.css";
+import styles from "./NoticeBoard.module.css";
 import CustomerBanner from "/img/notice/안내.jpg";
 
 const notices = [
@@ -19,12 +19,12 @@ const notices = [
 ];
 
 const NoticeItem = ({ notice }) => (
-  <li className="item">
-    <Link to={`/nd/${notice.id}`} className="itemLink">
-      <div className="itemHeader">
-        <span className="itemTitle">{notice.title}</span>
-        <div className="rightBox">
-          <span className="itemDate">{notice.date}</span>
+  <li className={styles.item}>
+    <Link to={`/nd/${notice.id}`} className={styles.itemLink}>
+      <div className={styles.itemHeader}>
+        <span className={styles.itemTitle}>{notice.title}</span>
+        <div className={styles.rightBox}>
+          <span className={styles.itemDate}>{notice.date}</span>
         </div>
       </div>
     </Link>
@@ -35,32 +35,30 @@ const NoticeBoard = () => {
   const isAdmin = true;
 
   return (
-    <>
-      <div id="notice-board">
-        <div className="banner">
-          <img src={CustomerBanner} alt="고객센터 배너" />
-          <div className="bannerText">고객센터</div>
-        </div>
-
-        <div className="container">
-          <div className="titleRow">
-            <img
-              src="/img/notice/사이렌.png"
-              alt="공지 아이콘"
-              className="titleIcon"
-            />
-            <h2 className="title">공지사항</h2>
-            {isAdmin && <button className="writeButton">작성</button>}
-          </div>
-
-          <ul className="list">
-            {notices.map((notice) => (
-              <NoticeItem key={notice.id} notice={notice} />
-            ))}
-          </ul>
-        </div>
+    <div className={styles.noticeBoard}>
+      <div className={styles.banner}>
+        <img src={CustomerBanner} alt="고객센터 배너" />
+        <div className={styles.bannerText}>고객센터</div>
       </div>
-    </>
+
+      <div className={styles.container}>
+        <div className={styles.titleRow}>
+          <img
+            src="/img/notice/사이렌.png"
+            alt="공지 아이콘"
+            className={styles.titleIcon}
+          />
+          <h2 className={styles.title}>공지사항</h2>
+          {isAdmin && <button className={styles.writeButton}>작성</button>}
+        </div>
+
+        <ul className={styles.list}>
+          {notices.map((notice) => (
+            <NoticeItem key={notice.id} notice={notice} />
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 };
 

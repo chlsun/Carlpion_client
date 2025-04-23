@@ -1,74 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import styles from "./CommuniteBoard.module.css";
 
-import img1 from "/img/cBoard/img1.jpg";
-import img2 from "/img/cBoard/img2.jpg";
-import img3 from "/img/cBoard/img3.jpg";
 import defaultImg from "/img/cBoard/noImage.png";
-
-const posts = [
-  {
-    id: 1,
-    title: "풍경 사진 모음",
-    content: "여기저기 여행 다녀왔어요.",
-    NIKNAME: "홍길동",
-    date: "2025-04-11",
-    COUNT: 123,
-    likes: 45,
-    images: [img1, img2, img3],
-  },
-  {
-    id: 2,
-    title: "차 후기",
-    content: "조용하고 분위기 좋은 곳이었어요.",
-    NIKNAME: "김철수",
-    date: "2025-04-12",
-    COUNT: 78,
-    likes: 30,
-    images: [img2],
-  },
-  {
-    id: 3,
-    title: "공지사항",
-    content: "5월 1일은 근로자의 날입니다.",
-    NIKNAME: "관리자",
-    date: "2025-04-10",
-    COUNT: 200,
-    likes: 80,
-    images: [],
-  },
-  {
-    id: 4,
-    title: "풍경 사진 모음",
-    content: "여기저기 여행 다녀왔어요.",
-    NIKNAME: "홍길동",
-    date: "2025-04-11",
-    COUNT: 123,
-    likes: 45,
-    images: [img3, img1, img2],
-  },
-  {
-    id: 5,
-    title: "카페 방문기",
-    content: "조용하고 분위기 좋은 곳이었어요.",
-    NIKNAME: "김철수",
-    date: "2025-04-12",
-    COUNT: 78,
-    likes: 30,
-    images: [img2],
-  },
-  {
-    id: 6,
-    title: "공지사항",
-    content: "5월 1일은 근로자의 날입니다.",
-    NIKNAME: "관리자",
-    date: "2025-04-10",
-    COUNT: 200,
-    likes: 80,
-    images: [],
-  },
-];
 
 const formatDate = (dateString) => {
   const [year, month, day] = dateString.split("-");
@@ -147,6 +82,8 @@ const PostCard = ({
 };
 
 const CommuniteBoard = () => {
+  const [posts, setPosts] = useState([]);
+  const [filteredPosts, setFilteredPosts] = useState([]);
   const [viewType, setViewType] = useState("grid");
   const [currentPage, setCurrentPage] = useState(1);
   const [searchType, setSearchType] = useState("title");
@@ -155,18 +92,49 @@ const CommuniteBoard = () => {
   const itemsPerPage =
     viewType === "grid" ? 16 : viewType === "thumbnail" ? 5 : 10;
 
-  const totalPages = Math.ceil(posts.length / itemsPerPage);
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get("/reviews");
+      const data = response.data.map((item, index) => ({
+        id: index + 1,
+        title: item.TITLE,
+        content: item.CONTENT,
+        NIKNAME: item.NICKNAME,
+        date: item.CREATE_DATE,
+        COUNT: item.COUNT,
+        likes: item.LIKES ?? 0,
+        images: item.IMAGES || [],
+      }));
+      setPosts(data);
+      setFilteredPosts(data);
+    } catch (error) {
+      console.error("데이터 로딩 실패:", error);
+    }
   };
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, posts.length);
-  const currentPosts = posts.slice(startIndex, endIndex);
+  useEffect(() => {
+    fetchPosts();
+  }, []);
 
   const handleSearch = () => {
-    console.log(`검색: ${searchType} - ${searchTerm}`);
+    const filtered = posts.filter((post) => {
+      const field = post[searchType] || "";
+      return field.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+    setFilteredPosts(filtered);
+    setCurrentPage(1);
+  };
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredPosts.length / itemsPerPage)
+  );
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentPosts = filteredPosts.slice(startIndex, endIndex);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -204,41 +172,35 @@ const CommuniteBoard = () => {
 
       {viewType === "grid" && (
         <div className={styles.GridContainer}>
-          {currentPosts.map((post, idx) => (
-            <PostCard
-              key={post.id}
-              id={post.id}
-              type="grid"
-              index={startIndex + idx}
-              title={post.title}
-              content={post.content}
-              NIKNAME={post.NIKNAME}
-              date={post.date}
-              COUNT={post.COUNT}
-              likes={post.likes}
-              images={post.images}
-            />
-          ))}
+          {currentPosts.length === 0 ? (
+            <div className={styles.NoPosts}>게시글이 없습니다.</div>
+          ) : (
+            currentPosts.map((post, idx) => (
+              <PostCard
+                key={post.id}
+                {...post}
+                type="grid"
+                index={startIndex + idx}
+              />
+            ))
+          )}
         </div>
       )}
 
       {viewType === "thumbnail" && (
         <div className={styles.ThumbnailContainer}>
-          {currentPosts.map((post, idx) => (
-            <PostCard
-              key={post.id}
-              id={post.id}
-              type="thumbnail"
-              index={startIndex + idx}
-              title={post.title}
-              content={post.content}
-              NIKNAME={post.NIKNAME}
-              date={post.date}
-              COUNT={post.COUNT}
-              likes={post.likes}
-              images={post.images}
-            />
-          ))}
+          {currentPosts.length === 0 ? (
+            <div className={styles.NoPosts}>게시글이 없습니다.</div>
+          ) : (
+            currentPosts.map((post, idx) => (
+              <PostCard
+                key={post.id}
+                {...post}
+                type="thumbnail"
+                index={startIndex + idx}
+              />
+            ))
+          )}
         </div>
       )}
 
@@ -255,32 +217,36 @@ const CommuniteBoard = () => {
             </tr>
           </thead>
           <tbody>
-            {currentPosts.map((post, idx) => (
-              <PostCard
-                key={post.id}
-                id={post.id}
-                type="text"
-                index={startIndex + idx}
-                title={post.title}
-                content={post.content}
-                NIKNAME={post.NIKNAME}
-                date={post.date}
-                COUNT={post.COUNT}
-                likes={post.likes}
-                images={post.images}
-              />
-            ))}
+            {currentPosts.length === 0 ? (
+              <tr>
+                <td colSpan={6} className={styles.NoPosts}>
+                  게시글이 없습니다.
+                </td>
+              </tr>
+            ) : (
+              currentPosts.map((post, idx) => (
+                <PostCard
+                  key={post.id}
+                  {...post}
+                  type="text"
+                  index={startIndex + idx}
+                />
+              ))
+            )}
           </tbody>
         </table>
       )}
 
       <div className={styles.PaginationWrapper}>
-        <button
-          onClick={() => handlePageChange(1)}
-          disabled={currentPage === 1}
-        >
-          ≪
-        </button>
+        {totalPages > 5 && (
+          <button
+            onClick={() => handlePageChange(1)}
+            disabled={currentPage === 1}
+          >
+            ≪
+          </button>
+        )}
+
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
@@ -306,16 +272,13 @@ const CommuniteBoard = () => {
                   <button key="first" onClick={() => handlePageChange(1)}>
                     1
                   </button>,
-                  <span
-                    key="dots1"
-                    style={{ padding: "6px 4px", color: "#888" }}
-                  >
+                  <span key="dots1" className={styles.Dots}>
                     ...
                   </span>
                 );
               }
 
-              if (currentPage - 1 > 0) {
+              if (currentPage > 1) {
                 elements.push(
                   <button
                     key="prev"
@@ -332,7 +295,7 @@ const CommuniteBoard = () => {
                 </button>
               );
 
-              if (currentPage + 1 <= totalPages) {
+              if (currentPage < totalPages) {
                 elements.push(
                   <button
                     key="next"
@@ -345,10 +308,7 @@ const CommuniteBoard = () => {
 
               if (currentPage < totalPages - 1) {
                 elements.push(
-                  <span
-                    key="dots2"
-                    style={{ padding: "6px 4px", color: "#888" }}
-                  >
+                  <span key="dots2" className={styles.Dots}>
                     ...
                   </span>,
                   <button
@@ -369,12 +329,15 @@ const CommuniteBoard = () => {
         >
           {">"}
         </button>
-        <button
-          onClick={() => handlePageChange(totalPages)}
-          disabled={currentPage === totalPages}
-        >
-          ≫
-        </button>
+
+        {totalPages > 5 && (
+          <button
+            onClick={() => handlePageChange(totalPages)}
+            disabled={currentPage === totalPages}
+          >
+            ≫
+          </button>
+        )}
       </div>
 
       <div className={styles.ActionWrapper}>

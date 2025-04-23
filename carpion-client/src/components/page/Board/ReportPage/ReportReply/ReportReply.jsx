@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import "./ReportReply.css";
+import styles from "./ReportReply.module.css";
 
 function ReportReply() {
-  // 관리자 여부 (나중에 props 또는 context로 연결 가능)
   const isAdmin = true;
 
   const [messages, setMessages] = useState([
@@ -48,35 +47,35 @@ function ReportReply() {
   };
 
   return (
-    <div className="chat-container">
-      <div className="chat-thread">
+    <div className={styles.chatContainer}>
+      <div className={styles.chatThread}>
         {messages.map((msg, idx) => (
           <div
             key={idx}
-            className={`chat-bubble-wrapper ${
-              msg.type === "question" ? "right" : "left"
+            className={`${styles.chatBubbleWrapper} ${
+              msg.type === "question" ? styles.right : styles.left
             }`}
           >
-            <div className={`chat-bubble ${msg.type}`}>
-              <span className="chat-prefix">
+            <div className={`${styles.chatBubble} ${styles[msg.type]}`}>
+              <span className={styles.chatPrefix}>
                 {msg.type === "question" ? "Q." : "A."}
               </span>
-              <p className="chat-message">{msg.message}</p>
-              <span className="chat-timestamp">{msg.timestamp}</span>
+              <p className={styles.chatMessage}>{msg.message}</p>
+              <span className={styles.chatTimestamp}>{msg.timestamp}</span>
             </div>
           </div>
         ))}
       </div>
-      <div className="chat-input-area">
+      <div className={styles.chatInputArea}>
         <input
           type="text"
           placeholder="메시지를 입력하세요..."
-          className="chat-input"
+          className={styles.chatInput}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyPress={handleKeyPress}
         />
-        <button className="send-button" onClick={handleSend}>
+        <button className={styles.sendButton} onClick={handleSend}>
           전송
         </button>
       </div>

@@ -1,4 +1,4 @@
-.report-list-wrapper {
+.reportListWrapper {
   padding: 20px;
   font-family: Arial, sans-serif;
   margin: 0 auto;
@@ -6,74 +6,74 @@
   width: 90%;
 }
 
-.report-header {
+.reportHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.role-switch {
+.roleSwitch {
   display: flex;
   gap: 20px;
 }
 
-.role-switch span {
+.roleSwitch span {
   cursor: pointer;
 }
 
-.role-switch .active {
+.roleSwitch .active {
   font-weight: bold;
   color: #2f8ef7;
 }
 
-.report-table {
+.reportTable {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
 }
 
-.report-table th,
-.report-table td {
+.reportTable th,
+.reportTable td {
   padding: 10px;
   border: 1px solid #ddd;
 }
 
-.report-table th {
+.reportTable th {
   background-color: #f4f4f4;
   font-weight: bold;
 }
 
-.report-table td {
+.reportTable td {
   text-align: center;
 }
 
-.report-table th:nth-child(1),
-.report-table td:nth-child(1) {
+.reportTable th:nth-child(1),
+.reportTable td:nth-child(1) {
   width: 5%;
   font-size: 12px;
   text-align: center;
 }
 
-.report-table th:nth-child(2),
-.report-table td:nth-child(2) {
+.reportTable th:nth-child(2),
+.reportTable td:nth-child(2) {
   width: 70%;
   text-align: left;
 }
 
-.report-table th:nth-child(3),
-.report-table td:nth-child(3) {
+.reportTable th:nth-child(3),
+.reportTable td:nth-child(3) {
   width: 12%;
 }
 
-.report-table th:nth-child(4),
-.report-table td:nth-child(4) {
+.reportTable th:nth-child(4),
+.reportTable td:nth-child(4) {
   width: 8%;
   font-size: 12px;
 }
 
-.report-table th:nth-child(5),
-.report-table td:nth-child(5) {
+.reportTable th:nth-child(5),
+.reportTable td:nth-child(5) {
   width: 5%;
   font-size: 12px;
 }
@@ -83,14 +83,14 @@
   font-style: italic;
 }
 
-.pagination-wrapper {
+.paginationWrapper {
   display: flex;
   justify-content: center;
   gap: 8px;
   margin-top: 24px;
 }
 
-.pagination-button {
+.paginationButton {
   padding: 6px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -100,33 +100,34 @@
   transition: background-color 0.3s ease;
 }
 
-.pagination-button:hover {
+.paginationButton:hover {
   background-color: #f0f0f0;
 }
 
-.pagination-button.active {
+.paginationButton.active {
   background-color: #3498db;
   color: white;
 }
 
-.pagination-button:disabled {
+.paginationButton:disabled {
   background-color: #f0f0f0;
   cursor: not-allowed;
 }
-.footer-controls {
+
+.footerControls {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 20px;
 }
 
-.ActionWrapper {
+.actionWrapper {
   display: flex;
   justify-content: flex-end;
   margin: 16px 0;
 }
 
-.WriteButton {
+.writeButton {
   background-color: #3498db;
   color: white;
   padding: 10px 16px;
@@ -136,20 +137,20 @@
   cursor: pointer;
 }
 
-.SearchWrapper {
+.searchWrapper {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 24px;
 }
 
-.SelectBox {
+.selectBox {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 6px;
 }
 
-.SearchInput {
+.searchInput {
   flex: 0 1 300px;
   max-width: 100%;
   padding: 8px;
@@ -157,7 +158,7 @@
   border-radius: 6px;
 }
 
-.SearchButton {
+.searchButton {
   padding: 8px 16px;
   background-color: #2c3e50;
   color: white;

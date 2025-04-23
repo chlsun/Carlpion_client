@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import "./NoticeDetail.css";
+import styles from "./NoticeDetail.module.css";
 import img1 from "/img/cBoard/img1.jpg";
 import img2 from "/img/cBoard/img2.jpg";
 import img3 from "/img/cBoard/img3.jpg";
 import NoticeReply from "../NoticeReply/NoticeReply";
+
 function NoticeDetail() {
   const post = {
     title: "공지사항 제목 예시입니다",
@@ -24,54 +25,32 @@ function NoticeDetail() {
 
   return (
     <>
-      <div className="communiteDetailWrapper">
-        <div className="pageTitle">커뮤니티 게시판</div>
+      <div className={styles.pageTitle}>공지사항</div>
 
-        <div className="container">
-          <h1 className="title">{post.title}</h1>
+      <div className={styles.container}>
+        <h1 className={styles.title}>{post.title}</h1>
 
-          <div className="infoRow">
-            <span className="meta">
-              {post.author.name} ·{" "}
-              {new Date(post.createdAt).toLocaleDateString()}
-            </span>
+        <div className={styles.infoRow}>
+          <span className={styles.meta}>
+            {post.author.name} · {new Date(post.createdAt).toLocaleDateString()}
+          </span>
+        </div>
 
-            {/* 상단 추천 버튼 */}
-            <button
-              className={`likeBtn ${liked ? "liked" : ""}`}
-              onClick={handleLike}
-            >
-              👍 {likes}
-            </button>
+        <div className={styles.content}>
+          {post.content.split("\n").map((line, i) => (
+            <p key={i}>{line}</p>
+          ))}
+        </div>
+
+        {isAuthorOrAdmin && (
+          <div className={styles.bottomButtonGroup}>
+            <button className={styles.editBtn}>수정</button>
+            <button className={styles.deleteBtn}>삭제</button>
           </div>
+        )}
 
-          <div className="content">
-            {post.content.split("\n").map((line, i) => (
-              <p key={i}>{line}</p>
-            ))}
-          </div>
-
-          {/* 하단 추천 버튼 - 가운데 정렬 */}
-          <div className="likeButtonWrapper">
-            <button
-              className={`likeBtn ${liked ? "liked" : ""}`}
-              onClick={handleLike}
-            >
-              👍 {likes}
-            </button>
-          </div>
-
-          {/* 수정/삭제 버튼 - 오른쪽 정렬 */}
-          {isAuthorOrAdmin && (
-            <div className="bottomButtonGroup">
-              <button className="editBtn">수정</button>
-              <button className="deleteBtn">삭제</button>
-            </div>
-          )}
-
-          <div className="commentPlaceholder">
-            <CommuniteReply />
-          </div>
+        <div className={styles.commentPlaceholder}>
+          <NoticeReply />
         </div>
       </div>
     </>

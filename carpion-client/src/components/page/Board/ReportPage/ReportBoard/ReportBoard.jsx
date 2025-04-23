@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "./ReportBoard.css";
+import styles from "./ReportBoard.module.css";
 
 const ReportBoard = () => {
   const role = "admin";
@@ -87,10 +87,10 @@ const ReportBoard = () => {
   };
 
   const ReportItem = ({ report }) => (
-    <tr className="item">
+    <tr className={styles.item}>
       <td>{startIndex + report.id}</td>
       <td>
-        <Link to={`/rd/${report.id}`} className="itemLink">
+        <Link to={`/rd/${report.id}`} className={styles.itemLink}>
           {report.title}
         </Link>
       </td>
@@ -101,12 +101,12 @@ const ReportBoard = () => {
   );
 
   return (
-    <div className="report-list-wrapper">
-      <div className="report-header">
+    <div className={styles.reportListWrapper}>
+      <div className={styles.reportHeader}>
         <h2>신고 목록</h2>
       </div>
 
-      <table className="report-table">
+      <table className={styles.reportTable}>
         <thead>
           <tr>
             <th>번호</th>
@@ -119,7 +119,7 @@ const ReportBoard = () => {
         <tbody>
           {currentReports.length === 0 ? (
             <tr>
-              <td colSpan={5} className="empty">
+              <td colSpan={5} className={styles.empty}>
                 신고 내역이 없습니다.
               </td>
             </tr>
@@ -129,11 +129,11 @@ const ReportBoard = () => {
         </tbody>
       </table>
 
-      <div className="pagination-wrapper">
+      <div className={styles.paginationWrapper}>
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="pagination-button"
+          className={styles.paginationButton}
         >
           {"<"}
         </button>
@@ -142,8 +142,8 @@ const ReportBoard = () => {
           <button
             key={i}
             onClick={() => handlePageChange(i + 1)}
-            className={`pagination-button ${
-              currentPage === i + 1 ? "active" : ""
+            className={`${styles.paginationButton} ${
+              currentPage === i + 1 ? styles.active : ""
             }`}
           >
             {i + 1}
@@ -153,17 +153,17 @@ const ReportBoard = () => {
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="pagination-button"
+          className={styles.paginationButton}
         >
           {">"}
         </button>
       </div>
 
-      <div className="SearchWrapper">
+      <div className={styles.searchWrapper}>
         <select
           value={searchOption}
           onChange={handleSearchOptionChange}
-          className="SearchSelect"
+          className={styles.searchSelect}
         >
           <option value="title">제목</option>
           <option value="user">작성자</option>
@@ -175,15 +175,15 @@ const ReportBoard = () => {
           placeholder="검색"
           value={searchTerm}
           onChange={handleSearchChange}
-          className="SearchInput"
+          className={styles.searchInput}
         />
-        <button className="SearchButton" onClick={handleSearchSubmit}>
+        <button className={styles.searchButton} onClick={handleSearchSubmit}>
           검색
         </button>
       </div>
 
-      <div className="ActionWrapper">
-        <button className="WriteButton">신고 작성</button>
+      <div className={styles.actionWrapper}>
+        <button className={styles.writeButton}>신고 작성</button>
       </div>
     </div>
   );

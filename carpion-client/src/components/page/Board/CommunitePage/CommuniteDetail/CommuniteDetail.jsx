@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import "./CommuniteDetail.css";
+import styles from "./CommuniteDetail.module.css"; // CSS 모듈 import
 import img1 from "/img/cBoard/img1.jpg";
 import img2 from "/img/cBoard/img2.jpg";
 import img3 from "/img/cBoard/img3.jpg";
 import CommuniteReply from "../CommuniteReply/CommuniteReply";
+
 function CommuniteDetail() {
   const post = {
     title: "커뮤니티 글 제목 예시입니다",
@@ -33,33 +34,43 @@ function CommuniteDetail() {
 
   return (
     <>
-      <div className="pageTitle">커뮤니티 게시판</div>
+      <div className={styles.pageTitle}>커뮤니티 게시판</div>
 
-      <div className="container">
-        <h1 className="title">{post.title}</h1>
+      <div className={styles.container}>
+        <h1 className={styles.title}>{post.title}</h1>
 
-        <div className="infoRow">
-          <span className="meta">
+        <div className={styles.infoRow}>
+          <span className={styles.meta}>
             {post.author.name} · {new Date(post.createdAt).toLocaleDateString()}
           </span>
 
           <button
-            className={`likeBtn ${liked ? "liked" : ""}`}
+            className={`${styles.likeBtn} ${liked ? styles.liked : ""}`}
             onClick={handleLike}
           >
             👍 {likes}
           </button>
         </div>
 
-        <div className="content">
+        <div className={styles.content}>
           {post.content.split("\n").map((line, i) => (
             <p key={i}>{line}</p>
           ))}
+          <div className={styles.imageGallery}>
+            {post.images.map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt={`이미지 ${index + 1}`}
+                className={styles.image}
+              />
+            ))}
+          </div>
         </div>
 
-        <div className="likeButtonWrapper">
+        <div className={styles.likeButtonWrapper}>
           <button
-            className={`likeBtn ${liked ? "liked" : ""}`}
+            className={`${styles.likeBtn} ${liked ? styles.liked : ""}`}
             onClick={handleLike}
           >
             👍 {likes}
@@ -67,13 +78,13 @@ function CommuniteDetail() {
         </div>
 
         {isAuthorOrAdmin && (
-          <div className="bottomButtonGroup">
-            <button className="editBtn">수정</button>
-            <button className="deleteBtn">삭제</button>
+          <div className={styles.bottomButtonGroup}>
+            <button className={styles.editBtn}>수정</button>
+            <button className={styles.deleteBtn}>삭제</button>
           </div>
         )}
 
-        <div className="commentPlaceholder">
+        <div className={styles.commentPlaceholder}>
           <CommuniteReply />
         </div>
       </div>
