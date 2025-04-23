@@ -122,8 +122,8 @@ const MainMyPage = () => {
           <RightBox>
             <div>
               <Font>이름 : {modifyName}</Font>
+              <Font>닉네임 : </Font>
               <Font>아이디 :</Font>
-              <Font>연락처 : </Font>
               <Font>이메일 : {modifyEmail}</Font>
               <div>
                 <Button onClick={() => setActiveForm("info")}>
