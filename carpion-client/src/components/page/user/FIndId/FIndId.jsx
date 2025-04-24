@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const FindId = () => {
     const inputFields = [
@@ -27,6 +28,8 @@ const FindId = () => {
             errorMessage: "잘못된 이메일 형식 입니다.",
         },
     };
+
+    const navi = useNavigate();
 
     const [inputValues, setInputValues] = useState({
         realname: "",
@@ -135,7 +138,7 @@ const FindId = () => {
 
     return (
         <>
-            <div className="size-full bg-gray-100 flex justify-center select-none">
+            <div className="size-full min-h-screen bg-gray-100 flex justify-center select-none">
                 <div className="w-xl px-24 my-48 bg-white border-2 border-maincolor rounded-2xl flex flex-col justify-center items-center">
                     <section className="mt-24 mb-16 font-maintheme text-5xl text-maincolor">아이디 찾기</section>
                     <section className="w-full h-auto">
@@ -178,7 +181,10 @@ const FindId = () => {
                         <div className="w-full pl-1 py-2 mt-1 bg-gray-100 border-2 border-gray-200 rounded-md">
                             <div className="font-Pretendard text-lg select-all">abcd1234</div>
                         </div>
-                        <div className="w-fit ml-1 mt-2 font-maintheme text-xl text-maincolor tracking-wider hover:underline hover:decoration-2 hover:underline-offset-3 cursor-pointer">
+                        <div
+                            onClick={() => navi("/find-pw")}
+                            className="w-fit ml-1 mt-2 font-maintheme text-xl text-maincolor tracking-wider hover:underline hover:decoration-2 hover:underline-offset-3 cursor-pointer"
+                        >
                             비밀번호 찾기
                         </div>
                     </section>

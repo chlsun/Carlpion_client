@@ -22,9 +22,7 @@ import { useEffect } from "react";
 
 const Body = () => {
   const [activeForm, setActiveForm] = useState("");
-  const [selectedImage, setSelectedImage] = useState(
-    "/img/mypage/profile.logo.png/"
-  );
+  const [selectedImage, setSelectedImage] = useState(null);
   const [tempImage, setTempImage] = useState("");
   const [nickName, setNickName] = useState("");
   const [tempNick, setTempNick] = useState("");
@@ -42,7 +40,11 @@ const Body = () => {
   useEffect(() => {
     setSelectedImage("/img/mypage/profile.logo.png");
   }, []);
-
+  useEffect(() => {
+    if (activeForm === "profile") {
+      setTempImage(null);
+    }
+  }, [activeForm]);
   const handleReport = () => {
     console.log("문의게시판 수정 클릭됨");
   };
@@ -86,13 +88,46 @@ const Body = () => {
   };
   const handleProfileSubmit = () => {
     if (tempImage) {
-      selectedImage(tempImage);
+      setSelectedImage(tempImage);
     }
+    setTempImage(null);
     setActiveForm(null);
   };
   const handleCancel = () => {
     setActiveForm(null);
   };
+
+  /*   axios
+    .put("http:/localhost:80/users/update-nickname", {
+      userNo: 1,
+      currentNickname: "가나다",
+      newCurrentNickname: "가나다라",
+    })
+    .then((response) => {
+      console.log("성공: ", response.data);
+      alert("닉네임 변경 성공!");
+    })
+    .catch((err) => {
+      console.error("실패", err);
+      alert("에러발생");
+    });
+
+  axios.put("http://localhost:80/users/update-pw", {
+    userNo: 1,
+    currentPassword: 1234,
+    newPassword: 1234,
+  });
+  .then(()=>{})
+
+  axios.put("http:/localhost:80/users/update-email", {
+    userNo: 1,
+    email: "kh@123.com",
+    newEmail: "kh@12345.com",
+  });
+
+  const formData = new FormData();
+  formData.append("file", selectedImage);
+  formData.append("userNo", 1); */
 
   return (
     <Container>
@@ -157,7 +192,7 @@ const Body = () => {
                 <Input type="file" onChange={handleFileChange} />
                 {selectedImage && (
                   <div>
-                    <img src={selectedImage} alt="나오나" />
+                    <img src={tempImage || selectedImage} alt="나오나" />
                   </div>
                 )}
                 <ButtonWrapper>
@@ -206,8 +241,13 @@ const Body = () => {
       <GradeText>내 활동</GradeText>
       <Box>
         <Button onClick={() => navi("/reply")}>작성한 댓글 조회</Button>
-        <Button onClick={handleReport}>작성한 문의 게시글 조회</Button>
-        <Button onClick={handleReview}> 작성한 리뷰 게시글 조회</Button>
+        <Button onClick={() => navi("/inquiryCheck")}>
+          작성한 문의 게시글 조회
+        </Button>
+        <Button onClick={() => navi("/reviewCheck")}>
+          {" "}
+          작성한 리뷰 게시글 조회
+        </Button>
       </Box>
     </Container>
   );

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
     const inputFields = [
@@ -43,7 +44,7 @@ const SignUp = () => {
             helpMessage: "8 ~ 20자, 영어 소문자로 시작해서 숫자로 끝나야 합니다.",
         },
         password: {
-            regExp: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]).{8,30}$/,
+            regExp: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]).\S{8,30}$/,
             successMessage: "사용 가능한 비밀번호 입니다.",
             errorMessage: "사용 불가능한 비밀번호 입니다.",
             helpMessage: "8 ~ 30자, 영어 알파벳과 숫자, 특수문자가 포함되어야 합니다.",
@@ -66,6 +67,8 @@ const SignUp = () => {
             helpMessage: "이메일 형식을 확인해 주세요. (예: example@email.com)",
         },
     };
+
+    const navi = useNavigate();
 
     const [inputValues, setInputValues] = useState({
         username: "",
@@ -106,6 +109,8 @@ const SignUp = () => {
         realname: null,
         email: null,
     });
+
+    const [exceptionMessage, setExceptionMessage] = useState(null);
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -188,23 +193,27 @@ const SignUp = () => {
         return isValid;
     };
 
+    const handleEmailValidate = () => {
+        if (!validateForm()) return;
+        // axios.post(`http://localhost:80/users`, { email: inputValues.email });
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!validateForm()) return;
         axios
-            .post(``, inputValues)
-            .then((result) => {
-                console.log(result);
+            .post(`http://localhost:80/users`, inputValues)
+            .then(() => {
+                navi("/sign-up-done");
             })
             .catch((error) => {
-                console.log(error);
+                setExceptionMessage(error.response.data.cause);
             });
-        console.log("회원가입 완료:", inputValues);
     };
 
     return (
         <>
-            <div className="size-full bg-gray-100 flex justify-center select-none">
+            <div className="size-full min-h-screen bg-gray-100 flex justify-center select-none">
                 <div className="w-xl px-24 my-48 bg-white border-2 border-maincolor rounded-2xl flex flex-col justify-center items-center">
                     <section className="mt-24 mb-16 font-maintheme text-5xl text-maincolor">회원가입</section>
                     <section className="w-full h-auto">
@@ -224,7 +233,11 @@ const SignUp = () => {
                                     />
                                     {field.id === "email" ? (
                                         <div className="w-full mt-2 flex justify-between">
-                                            <button className="px-2 py-1 border-2 border-maincolor rounded-md font-maintheme text-md text-maincolor tracking-wider cursor-pointer hover:underline hover:decoration-2 hover:underline-offset-3 active:bg-maincolor active:text-white">
+                                            <button
+                                                type="button"
+                                                onClick={handleEmailValidate}
+                                                className="px-2 py-1 border-2 border-maincolor rounded-md font-maintheme text-md text-maincolor tracking-wider cursor-pointer hover:underline hover:decoration-2 hover:underline-offset-3 active:bg-maincolor active:text-white"
+                                            >
                                                 이메일 인증
                                             </button>
                                             <input
@@ -245,6 +258,11 @@ const SignUp = () => {
                             ))}
                         </ul>
                     </section>
+                    {exceptionMessage && (
+                        <section className="mt-12 flex justify-center">
+                            <p className="font-Pretendard text-lg text-red-500">{exceptionMessage}</p>
+                        </section>
+                    )}
                     <section className="w-full h-auto flex justify-center">
                         <button
                             onClick={handleSubmit}
