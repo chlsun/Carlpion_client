@@ -1,25 +1,25 @@
 import styled from "styled-components";
-export const Wrapper = styled.div`
-  width: 60%;
+export const Container = styled.div`
+  padding: 40px;
+  max-width: 800px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
 `;
 
-export const Title = styled.h2`
-  font-size: 2rem;
-  margin-bottom: 2rem;
-  font-weight: bold;
-`;
-
-export const InquiryBox = styled.div`
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  margin-bottom: 1.5rem;
-  padding: 1.5rem;
+export const ReviewBox = styled.div`
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
   background-color: #f9f9f9;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  text-align: left;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+`;
+
+export const Field = styled.div`
+  margin-bottom: 8px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 `;
 
 export const InquiryTitle = styled.div`
