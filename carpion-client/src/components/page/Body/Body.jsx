@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   Container,
   Box,
@@ -23,13 +23,17 @@ import {
 } from "./Body.styles";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import axios from "axios";
+import { AuthContext } from "../Context/AuthContext";
 
 const Body = () => {
+  const { auth } = useContext(AuthContext);
   const [activeForm, setActiveForm] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [tempImage, setTempImage] = useState("");
   const [nickName, setNickName] = useState("");
   const [tempNick, setTempNick] = useState("");
+
   const navi = useNavigate();
 
   useEffect(() => {
@@ -132,6 +136,25 @@ const Body = () => {
   const formData = new FormData();
   formData.append("file", selectedImage);
   formData.append("userNo", 1); */
+  const [reservations, setReservations] = useState([]);
+
+  useEffect(() => {
+    if (auth.accessToken) {
+      axios
+        .get("http://localhost/mypage/reservations", {
+          headers: {
+            Authorization: `Bearer ${auth.accessToken}`,
+          },
+        })
+        .then((response) => {
+          console.log("받아온 데이터:", response.data);
+          setReservations(response.data);
+        })
+        .catch((error) => {
+          console.error("예약조회 실패 : ", error);
+        });
+    }
+  }, [auth.accessToken]);
 
   return (
     <Container>
@@ -224,35 +247,45 @@ const Body = () => {
       <ReservationContainer>
         <ReservationBox>
           <ReservationTitle>예약 현황</ReservationTitle>
-
-          <ReservationRow>
-            <ReservationLabel>예약 ID</ReservationLabel>
-            <ReservationValue>RV123456</ReservationValue>
-          </ReservationRow>
-          <ReservationRow>
-            <ReservationLabel>차량번호 / 모델</ReservationLabel>
-            <ReservationValue>23허1234 / K5</ReservationValue>
-          </ReservationRow>
-          <ReservationRow>
-            <ReservationLabel>대여일 ~ 반납일</ReservationLabel>
-            <ReservationValue>2025-04-01 ~ 2025-04-03</ReservationValue>
-          </ReservationRow>
-          <ReservationRow>
-            <ReservationLabel>결제금액</ReservationLabel>
-            <ReservationValue>150,000원</ReservationValue>
-          </ReservationRow>
-          <ReservationRow>
-            <ReservationLabel>결제완료</ReservationLabel>
-            <ReservationValue>2025-04-01 13:00</ReservationValue>
-          </ReservationRow>
-          <ReservationRow>
-            <ReservationLabel>주차장</ReservationLabel>
-            <ReservationValue>강남주차장 (서울 강남구)</ReservationValue>
-          </ReservationRow>
+          {reservations.map((item) => (
+            <div key={item.reservationNo}>
+              <ReservationRow>
+                <ReservationLabel>예약 ID</ReservationLabel>
+                <ReservationValue>{item.reservationNo}</ReservationValue>
+              </ReservationRow>
+              <ReservationRow>
+                <ReservationLabel>차량번호 / 모델</ReservationLabel>
+                <ReservationValue>
+                  {item.carId} / {item.carModel}
+                </ReservationValue>
+              </ReservationRow>
+              <ReservationRow>
+                <ReservationLabel>대여일 ~ 반납일</ReservationLabel>
+                <ReservationValue>
+                  {item.rentalDate} ~ {item.returnDate}
+                </ReservationValue>
+              </ReservationRow>
+              <ReservationRow>
+                <ReservationLabel>결제금액</ReservationLabel>
+                <ReservationValue>{item.totalPrice}</ReservationValue>
+              </ReservationRow>
+              <ReservationRow>
+                <ReservationLabel>결제완료</ReservationLabel>
+                <ReservationValue>{item.paymentCompletedAt}</ReservationValue>
+              </ReservationRow>
+              <ReservationRow>
+                <ReservationLabel>주차장</ReservationLabel>
+                <ReservationValue>
+                  {item.parkingTitle} ({item.parkingAddr})
+                </ReservationValue>
+              </ReservationRow>
+            </div>
+          ))}
 
           <ReservationMoreButton>더보기</ReservationMoreButton>
         </ReservationBox>
       </ReservationContainer>
+
       <GradeText>사용 내역</GradeText>
 
       <ReservationBox>
