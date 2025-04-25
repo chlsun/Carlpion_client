@@ -1,34 +1,34 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   Container,
   ReplyBox,
   Field,
-  ReplyTitle,
-  ReplyContent,
-  ReplyTime,
   PaginationWrapper,
   PageButton,
 } from "./Reply.style";
 import axios from "axios";
+import { AuthContext } from "../Context/AuthContext";
 const Reply = () => {
-  const handleSwitch = () => {};
-  /*  const [replyList, setReplyList] = useState([]);
+  const { auth } = useContext(AuthContext);
+  const [replyList, setReplyList] = useState([]);
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-
-    axios.get("http://localhost:80/mypage/comments", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  })
-    .then((response) => {
-      setReplyList(response.data);
-    })
-    .catch((error) => {
-      console.log("댓글가져오기실패 : ", error);
-    }); */
+    if (auth.accessToken) {
+      alert(2);
+      axios
+        .get("http://localhost/mypage/comments", {
+          headers: {
+            Authorization: `Bearer ${auth.accessToken}`,
+          },
+        })
+        .then((response) => {
+          setReplyList(response.data);
+        })
+        .catch((error) => {
+          console.log("댓글 가져오기실패 : ", error);
+        });
+    }
+  }, [auth.accessToken]);
   return (
     <>
       <Container>

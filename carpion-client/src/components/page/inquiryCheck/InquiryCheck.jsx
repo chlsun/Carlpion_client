@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   Container,
   Field,
@@ -5,7 +6,31 @@ import {
   PaginationWrapper,
   PageButton,
 } from "./InquiryCheck.styles";
+import { useState, useEffect, useContext } from "react";
+import { AuthContext } from "../Context/AuthContext";
 const InquiryCheck = () => {
+  const { auth } = useContext(AuthContext);
+  const [inquiries, setInquiries] = useState([]);
+
+  useEffect(() => {
+    if (auth.accessToken) {
+      alert(1);
+      axios
+        .get("http://localhost/mypage/reports", {
+          headers: {
+            Authorization: `Bearer ${auth.accessToken}`,
+          },
+        })
+        .then((response) => {
+          console.log("받아온 데이터:", response.data);
+          setInquiries(response.data);
+        })
+        .catch((error) => {
+          console.error("문의글 조회 실패: ", error);
+        });
+    }
+  }, [auth.accessToken]);
+
   return (
     <>
       <Container>
@@ -14,43 +39,19 @@ const InquiryCheck = () => {
         >
           문의 게시글 조회
         </h2>
+        {inquiries.map((item) => (
+          <InquiryBox key={item}>
+            <Field> 게시글번호: {item.reportNo} </Field>
+            <Field> 제목: {item.title} </Field>
+            <Field> 작성일: {item.createDate} </Field>
+            <Field> 조회수: {item.count} </Field>
+            <Field>
+              파일 URL:{item.fileUrl}
+              <a></a>
+            </Field>
+          </InquiryBox>
+        ))}
 
-        <InquiryBox>
-          <Field> 게시글번호: </Field>
-          <Field> 제목: </Field>
-          <Field> 작성일: </Field>
-          <Field> 조회수: </Field>
-          <Field>
-            파일 URL:{" "}
-            <a href target="_blank" rel="noreferrer">
-              파일 보기
-            </a>
-          </Field>
-        </InquiryBox>
-        <InquiryBox>
-          <Field> 게시글번호: </Field>
-          <Field> 제목: </Field>
-          <Field> 작성일: </Field>
-          <Field> 조회수: </Field>
-          <Field>
-            파일 URL:{" "}
-            <a href target="_blank" rel="noreferrer">
-              파일 보기
-            </a>
-          </Field>
-        </InquiryBox>
-        <InquiryBox>
-          <Field> 게시글번호: </Field>
-          <Field> 제목: </Field>
-          <Field> 작성일: </Field>
-          <Field> 조회수: </Field>
-          <Field>
-            파일 URL:{" "}
-            <a href target="_blank" rel="noreferrer">
-              파일 보기
-            </a>
-          </Field>
-        </InquiryBox>
         <PaginationWrapper>
           <PageButton>{"<"}</PageButton>
           {[1, 2, 3, 4, 5].map((num) => (

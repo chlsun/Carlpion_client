@@ -6,10 +6,31 @@ import {
   PaginationWrapper,
 } from "./ReviewChcek.styles";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../Context/AuthContext";
 
 const ReviewCheck = () => {
-  const handleSwitch = () => {};
+  const { auth } = useContext(AuthContext);
+  const [review, setReview] = useState([]);
+
+  useEffect(() => {
+    if (auth.accessToken) {
+      axios
+        .get("http://localhost/mypage/reviews", {
+          headers: {
+            Authorization: `Bearer ${auth.accessToken}`,
+          },
+        })
+        .then((response) => {
+          console.log("받아온 데이터:", response.data);
+          setReview(response.data);
+        })
+        .catch((error) => {
+          console.error("리뷰게시판조회 실패 : ", error);
+        });
+    }
+  }, [auth.accessToken]);
+
   return (
     <>
       <Container>
@@ -18,43 +39,19 @@ const ReviewCheck = () => {
         >
           리뷰 게시글 조회
         </h2>
+        {review.map((item) => (
+          <ReviewBox key={item.reviewNo}>
+            <Field> 게시글번호: {item.reviewNo} </Field>
+            <Field> 제목: {item.title}</Field>
+            <Field> 작성일: {item.createDate} </Field>
+            <Field> 조회수: {item.count}</Field>
+            <Field>
+              파일 URL: {item.fileUrl}
+              <a></a>
+            </Field>
+          </ReviewBox>
+        ))}
 
-        <ReviewBox>
-          <Field> 게시글번호: </Field>
-          <Field> 제목: </Field>
-          <Field> 작성일: </Field>
-          <Field> 조회수: </Field>
-          <Field>
-            파일 URL:{" "}
-            <a href target="_blank" rel="noreferrer">
-              파일 보기
-            </a>
-          </Field>
-        </ReviewBox>
-        <ReviewBox>
-          <Field> 게시글번호: </Field>
-          <Field> 제목: </Field>
-          <Field> 작성일: </Field>
-          <Field> 조회수: </Field>
-          <Field>
-            파일 URL:{" "}
-            <a href target="_blank" rel="noreferrer">
-              파일 보기
-            </a>
-          </Field>
-        </ReviewBox>
-        <ReviewBox>
-          <Field> 게시글번호: </Field>
-          <Field> 제목: </Field>
-          <Field> 작성일: </Field>
-          <Field> 조회수: </Field>
-          <Field>
-            파일 URL:{" "}
-            <a href target="_blank" rel="noreferrer">
-              파일 보기
-            </a>
-          </Field>
-        </ReviewBox>
         <PaginationWrapper>
           <PageButton>{"<"}</PageButton>
           {[1, 2, 3, 4, 5].map((num) => (
