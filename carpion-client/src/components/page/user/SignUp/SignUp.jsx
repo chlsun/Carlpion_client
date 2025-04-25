@@ -116,9 +116,13 @@ const SignUp = () => {
 
     const [sendVerifyEmailMessage, setSendVerifyEmailMessage] = useState(null);
 
+    const [showVerifyCodeInput, setShowVerifyCodeInput] = useState(false);
+
     const [verifyCode, setVerifyCode] = useState(null);
 
     const handleChange = (e) => {
+        setSendVerifyEmailMessage("");
+
         const { id, value } = e.target;
         setInputValues({ ...inputValues, [id]: value });
         setIsEmptyMessage({ ...isEmptyMessage, [id]: "" });
@@ -205,11 +209,14 @@ const SignUp = () => {
 
     const handleSendVerifyEmail = () => {
         if (!isValid.email) {
-            document.getElementById("email").focus;
+            document.getElementById("email").focus();
             return;
         }
+
+        setShowVerifyCodeInput(true);
+
         axios
-            .post(`http://localhost:80/auth/send-email`, { email: inputValues.email })
+            .post(`http://localhost:80/auth/send-email`, { email: inputValues.email, type: "회원가입" })
             .then(() => {
                 setIsSendVerifyEmail(true);
                 setSendVerifyEmailMessage("인증 메일이 전송 되었습니다.");
@@ -229,7 +236,9 @@ const SignUp = () => {
                 navi("/sign-up-done");
             })
             .catch((error) => {
-                setExceptionMessage(error.response.data.cause);
+                console.log(error);
+                error.response.data.code && setExceptionMessage(error.response.data.code);
+                error.response.data.cause && setExceptionMessage(error.response.data.cause);
             });
     };
 
@@ -263,13 +272,17 @@ const SignUp = () => {
                                                 >
                                                     이메일 인증
                                                 </button>
-                                                <input
-                                                    id="code"
-                                                    type="text"
-                                                    onChange={handleCodeChange}
-                                                    placeholder="메일로 발송된 인증번호를 입력하세요."
-                                                    className="w-68 px-2 py-1 border-2 border-gray-300 rounded-md font-Pretendard text-md"
-                                                />
+                                                {showVerifyCodeInput ? (
+                                                    <input
+                                                        id="code"
+                                                        type="text"
+                                                        onChange={handleCodeChange}
+                                                        placeholder="메일로 발송된 인증번호를 입력하세요."
+                                                        className="w-68 px-2 py-1 border-2 border-gray-300 rounded-md font-Pretendard text-md"
+                                                    />
+                                                ) : (
+                                                    <></>
+                                                )}
                                             </div>
                                             {sendVerifyEmailMessage && (
                                                 <p className={`mt-1 ml-1 font-Pretendard text-lg ${isSendVerifyEmail ? "text-green-500" : "text-red-500"}`}>{sendVerifyEmailMessage}</p>
