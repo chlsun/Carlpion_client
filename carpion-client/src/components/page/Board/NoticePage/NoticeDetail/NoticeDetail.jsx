@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import styles from "./NoticeDetail.module.css";
+import ndstyles from "./NoticeDetail.module.css";
 import NoticeReply from "../NoticeReply/NoticeReply";
 
 function NoticeDetail() {
@@ -30,25 +30,31 @@ function NoticeDetail() {
 
   return (
     <>
-      <div className={styles.pageTitle}>공지사항</div>
+      <div className={ndstyles.pageTitle}>공지사항</div>
 
-      <div className={styles.container}>
-        <div className={styles.topRow}>
-          <h1 className={styles.title}>{post.title}</h1>
-          <span className={styles.views}>조회수: {post.count}</span>
-        </div>
-        <div className={styles.infoRow}>
-          <span className={styles.meta}>
-            {post.nickname} · {new Date(post.createDate).toLocaleDateString()}
+      <div className={ndstyles.container}>
+        <div className={ndstyles.topRow}>
+          <h1 className={ndstyles.title}>{post.title}</h1>
+          <span className={ndstyles.date}>
+            {new Date(post.createDate).toLocaleDateString()}
           </span>
         </div>
-
-        <div className={styles.content}>
+        <div className={ndstyles.infoRow}>
+          <span className={ndstyles.meta}>{post.nickName}</span>
+          <div className={ndstyles.rightInfo}>
+            <span className={ndstyles.views}>조회수: {post.count}</span>
+          </div>
+        </div>
+        <div className={ndstyles.content}>
           <p>{post.content}</p>
 
           {post.fileUrl ? (
-            <div className={styles.imageGallery}>
-              <img src={post.fileUrl} alt="첨부파일" className={styles.image} />
+            <div className={ndstyles.imageGallery}>
+              <img
+                src={post.fileUrl}
+                alt="첨부파일"
+                className={ndstyles.image}
+              />
             </div>
           ) : (
             <p>첨부파일이 없습니다.</p>
@@ -56,13 +62,13 @@ function NoticeDetail() {
         </div>
 
         {isAuthorOrAdmin && (
-          <div className={styles.bottomButtonGroup}>
-            <button className={styles.editBtn}>수정</button>
-            <button className={styles.deleteBtn}>삭제</button>
+          <div className={ndstyles.bottomButtonGroup}>
+            <button className={ndstyles.editBtn}>수정</button>
+            <button className={ndstyles.deleteBtn}>삭제</button>
           </div>
         )}
 
-        <div className={styles.commentPlaceholder}>
+        <div className={ndstyles.commentPlaceholder}>
           <NoticeReply noticeNo={noticeNo} />
         </div>
       </div>

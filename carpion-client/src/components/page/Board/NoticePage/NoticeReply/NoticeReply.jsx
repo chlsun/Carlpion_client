@@ -1,17 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import styles from "./NoticeReply.module.css";
+import nrstyles from "./NoticeReply.module.css";
+import { AuthContext } from "../../../context/AuthContext";
 
 function NoticeReply({ noticeNo }) {
+  const { auth } = useContext(AuthContext);
+  const { accessToken, isAuthenticated, user } = auth;
   const [comments, setComments] = useState([]);
-  const [message, setMessage] = useState("");
+  const [inputValue, setInputValue] = useState("");
+
+  const nickName = user ? user.nickName : "사용자"; // 현재 로그인된 사용자의 nickname
+  const isAdmin = isAuthenticated; // 관리자 여부 확인
 
   useEffect(() => {
     const fetchComments = async () => {
+      if (!noticeNo) return;
       try {
         const response = await axios.get(
-          `http://localhost:80/notice/comments?noticeNo=${noticeNo}`
+          `http://localhost:80/notice/comments?noticeNo=${noticeNo}`,
+          accessToken
+            ? {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                },
+              }
+            : {}
         );
+        console.log(response.data); // 서버에서 반환되는 댓글 데이터 확인
         setComments(response.data);
       } catch (error) {
         console.error("댓글 불러오기 실패:", error);
@@ -19,22 +34,50 @@ function NoticeReply({ noticeNo }) {
     };
 
     fetchComments();
-  }, [noticeNo]);
+  }, [noticeNo, accessToken]);
 
   const handleSend = async () => {
-    if (message.trim() === "") return;
+    if (!accessToken) {
+      alert("댓글을 작성하려면 로그인해야 합니다.");
+      return;
+    }
+    if (inputValue.trim() === "") return;
 
     const newComment = {
-      nickname: "사용자",
-      content: message,
+      nickname: nickName,
+      content: inputValue,
       noticeNo: noticeNo,
     };
 
     try {
-      const response = await axios.post("/notice/comments", newComment);
-      const createdComment = response.data;
-      setComments([...comments, createdComment]);
-      setMessage("");
+      // 댓글을 추가합니다.
+      await axios.post(
+        "http://localhost:80/notice/comments",
+        newComment,
+        accessToken
+          ? {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          : {}
+      );
+
+      // 댓글 추가 후 새로운 댓글 목록을 가져옵니다.
+      const response = await axios.get(
+        `http://localhost:80/notice/comments?noticeNo=${noticeNo}`,
+        accessToken
+          ? {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          : {}
+      );
+
+      // 댓글 목록을 새로 업데이트합니다.
+      setComments(response.data);
+      setInputValue(""); // 입력창 초기화
     } catch (error) {
       console.error("댓글 추가 실패:", error);
     }
@@ -42,56 +85,45 @@ function NoticeReply({ noticeNo }) {
 
   const handleDelete = async (commentNo) => {
     try {
-      await axios.delete(`/notice/comments/${commentNo}`);
-      setComments(
-        comments.filter((comment) => comment.commentNo !== commentNo)
+      await axios.delete(`http://localhost:80/notice/comments/${commentNo}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      setComments((prev) =>
+        prev.filter((comment) => comment.commentNo !== commentNo)
       );
     } catch (error) {
       console.error("댓글 삭제 실패:", error);
     }
   };
 
-  const handleEditSave = async (commentNo, newContent) => {
-    try {
-      await axios.put(`/notice/comments/${commentNo}`, {
-        content: newContent,
-      });
-      setComments(
-        comments.map((comment) =>
-          comment.commentNo === commentNo
-            ? { ...comment, content: newContent }
-            : comment
-        )
-      );
-    } catch (error) {
-      console.error("댓글 수정 실패:", error);
-    }
-  };
-
   return (
-    <div className={styles.commentWrapper}>
-      <div className={styles.commentSection}>
-        <div className={styles.commentList}>
+    <div className={nrstyles.commentWrapper}>
+      <div className={nrstyles.commentSection}>
+        <div className={nrstyles.commentList}>
           {comments.map((comment) => (
             <CommentItem
               key={comment.commentNo}
               comment={comment}
               onDelete={handleDelete}
-              onSaveEdit={handleEditSave}
+              isAdmin={isAdmin} // 관리자 여부 전달
+              currentUserNickName={nickName} // 현재 사용자 닉네임 전달
             />
           ))}
         </div>
 
-        <div className={styles.chatInputArea}>
+        <div className={nrstyles.chatInputArea}>
           <input
             type="text"
             placeholder="댓글을 입력하세요..."
-            className={styles.chatInput}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            className={nrstyles.chatInput}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && handleSend()}
           />
-          <button className={styles.sendButton} onClick={handleSend}>
+          <button className={nrstyles.sendButton} onClick={handleSend}>
             전송
           </button>
         </div>
@@ -99,49 +131,37 @@ function NoticeReply({ noticeNo }) {
     </div>
   );
 }
-function CommentItem({ comment, onDelete /* , onSaveEdit */ }) {
-  // const [isEditing, setIsEditing] = useState(false);
-  // const [newContent, setNewContent] = useState(comment.content);
+
+function CommentItem({ comment, onDelete, isAdmin, currentUserNickName }) {
   const [menuOpen, setMenuOpen] = useState(false);
-
-  // const handleEditClick = () => {
-  //   setIsEditing(true);
-  //   setMenuOpen(false);
-  // };
-
-  // const handleCancelEdit = () => {
-  //   setIsEditing(false);
-  //   setNewContent(comment.content);
-  //   setMenuOpen(false);
-  // };
-
-  // const handleSaveEdit = () => {
-  //   onSaveEdit(comment.commentNo, newContent);
-  //   setIsEditing(false);
-  //   setMenuOpen(false);
-  // };
 
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
   };
 
+  // 댓글 작성자가 현재 로그인된 사용자이거나 관리자일 때 삭제 버튼을 보이도록 함
+  const isOwnerOrAdmin = comment.nickname === currentUserNickName || isAdmin;
+
   return (
-    <div className={styles.comment}>
-      <div className={styles.commentHeader}>
-        <span className={styles.nickname}>{comment.nickname}</span>
-        <div className={styles.rightTop}>
-          <span className={styles.commentTime}>{comment.createDate}</span>
-          <div className={styles.menuContainer}>
-            <button className={styles.menuButton} onClick={handleMenuToggle}>
-              &#x22EE;
-            </button>
+    <div className={nrstyles.comment}>
+      <div className={nrstyles.commentHeader}>
+        {/* comment.nickname이 비어 있으면 "익명"으로 기본값 설정 */}
+        <span className={nrstyles.nickname}>{comment.nickname || "익명"}</span>
+        <div className={nrstyles.rightTop}>
+          <span className={nrstyles.commentTime}>{comment.createDate}</span>
+          <div className={nrstyles.menuContainer}>
+            {isOwnerOrAdmin && (
+              <button
+                className={nrstyles.menuButton}
+                onClick={handleMenuToggle}
+              >
+                &#x22EE;
+              </button>
+            )}
             {menuOpen && (
-              <div className={styles.menuDropdown}>
-                {/* <button className={styles.menuItem} onClick={handleEditClick}>
-                  수정
-                </button> */}
+              <div className={nrstyles.menuDropdown}>
                 <button
-                  className={`${styles.menuItem} ${styles.menuItemDelete}`}
+                  className={`${nrstyles.menuItem} ${nrstyles.menuItemDelete}`}
                   onClick={() => onDelete(comment.commentNo)}
                 >
                   삭제
@@ -152,27 +172,7 @@ function CommentItem({ comment, onDelete /* , onSaveEdit */ }) {
         </div>
       </div>
 
-      <div className={styles.commentContent}>{comment.content}</div>
-
-      {/* {isEditing ? (
-        <div className={styles.editSection}>
-          <textarea
-            className={styles.editInput}
-            value={newContent}
-            onChange={(e) => setNewContent(e.target.value)}
-          />
-          <div className={styles.editButtons}>
-            <button className={styles.saveButton} onClick={handleSaveEdit}>
-              저장
-            </button>
-            <button className={styles.cancelButton} onClick={handleCancelEdit}>
-              취소
-            </button>
-          </div>
-        </div>
-      ) : (
-        <div className={styles.commentContent}>{comment.content}</div>
-      )} */}
+      <div className={nrstyles.commentContent}>{comment.content}</div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import styles from "./CommuniteDetail.module.css";
+import cdstyles from "./CommuniteDetail.module.css";
 import CommuniteReply from "../CommuniteReply/CommuniteReply";
 
 function CommuniteDetail() {
@@ -43,41 +43,45 @@ function CommuniteDetail() {
 
   return (
     <>
-      <div className={styles.pageTitle}>커뮤니티 게시판</div>
+      <div className={cdstyles.pageTitle}>커뮤니티 게시판</div>
 
-      <div className={styles.container}>
-        <div className={styles.topRow}>
-          <h1 className={styles.title}>{post.title}</h1>
-          <span className={styles.views}>조회수: {post.count}</span>
+      <div className={cdstyles.container}>
+        <div className={cdstyles.topRow}>
+          <h1 className={cdstyles.title}>{post.title}</h1>
+          <span className={cdstyles.views}>조회수: {post.count}</span>
         </div>
-        <div className={styles.infoRow}>
-          <span className={styles.meta}>
+        <div className={cdstyles.infoRow}>
+          <span className={cdstyles.meta}>
             {post.nickname} · {new Date(post.createDate).toLocaleDateString()}
           </span>
 
           <button
-            className={`${styles.likeBtn} ${liked ? styles.liked : ""}`}
+            className={`${cdstyles.likeBtn} ${liked ? cdstyles.liked : ""}`}
             onClick={handleLike}
           >
             👍 {likes}
           </button>
         </div>
 
-        <div className={styles.content}>
+        <div className={cdstyles.content}>
           <p>{post.content}</p>
 
           {post.fileUrl ? (
-            <div className={styles.imageGallery}>
-              <img src={post.fileUrl} alt="첨부파일" className={styles.image} />
+            <div className={cdstyles.imageGallery}>
+              <img
+                src={post.fileUrl}
+                alt="첨부파일"
+                className={cdstyles.image}
+              />
             </div>
           ) : (
             <p>첨부파일이 없습니다.</p>
           )}
         </div>
 
-        <div className={styles.likeButtonWrapper}>
+        <div className={cdstyles.likeButtonWrapper}>
           <button
-            className={`${styles.likeBtn} ${liked ? styles.liked : ""}`}
+            className={`${cdstyles.likeBtn} ${liked ? cdstyles.liked : ""}`}
             onClick={handleLike}
           >
             👍 {likes}
@@ -85,13 +89,13 @@ function CommuniteDetail() {
         </div>
 
         {isAuthorOrAdmin && (
-          <div className={styles.bottomButtonGroup}>
-            <button className={styles.editBtn}>수정</button>
-            <button className={styles.deleteBtn}>삭제</button>
+          <div className={cdstyles.bottomButtonGroup}>
+            <button className={cdstyles.editBtn}>수정</button>
+            <button className={cdstyles.deleteBtn}>삭제</button>
           </div>
         )}
 
-        <div className={styles.commentPlaceholder}>
+        <div className={cdstyles.commentPlaceholder}>
           <CommuniteReply reviewNo={reviewNo} />
         </div>
       </div>

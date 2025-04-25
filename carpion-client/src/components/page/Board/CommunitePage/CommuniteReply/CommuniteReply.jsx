@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import styles from "./CommuniteReply.module.css";
+import crstyles from "./CommuniteReply.module.css";
 
 function CommuniteReply({ reviewNo }) {
   const [comments, setComments] = useState([]);
@@ -25,7 +25,7 @@ function CommuniteReply({ reviewNo }) {
     if (message.trim() === "") return;
 
     const newComment = {
-      nickname: "사용자",
+      nickName: "사용자",
       content: message,
       reviewNo: reviewNo,
     };
@@ -69,9 +69,9 @@ function CommuniteReply({ reviewNo }) {
   };
 
   return (
-    <div className={styles.commentWrapper}>
-      <div className={styles.commentSection}>
-        <div className={styles.commentList}>
+    <div className={crstyles.commentWrapper}>
+      <div className={crstyles.commentSection}>
+        <div className={crstyles.commentList}>
           {comments.map((comment) => (
             <CommentItem
               key={comment.commentNo}
@@ -82,16 +82,16 @@ function CommuniteReply({ reviewNo }) {
           ))}
         </div>
 
-        <div className={styles.chatInputArea}>
+        <div className={crstyles.chatInputArea}>
           <input
             type="text"
             placeholder="댓글을 입력하세요..."
-            className={styles.chatInput}
+            className={crstyles.chatInput}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && handleSend()}
           />
-          <button className={styles.sendButton} onClick={handleSend}>
+          <button className={crstyles.sendButton} onClick={handleSend}>
             전송
           </button>
         </div>
@@ -126,22 +126,22 @@ function CommentItem({ comment, onDelete /* , onSaveEdit */ }) {
   };
 
   return (
-    <div className={styles.comment}>
-      <div className={styles.commentHeader}>
-        <span className={styles.nickname}>{comment.nickname}</span>
-        <div className={styles.rightTop}>
-          <span className={styles.commentTime}>{comment.createDate}</span>
-          <div className={styles.menuContainer}>
-            <button className={styles.menuButton} onClick={handleMenuToggle}>
+    <div className={crstyles.comment}>
+      <div className={crstyles.commentHeader}>
+        <span className={crstyles.nickname}>{comment.nickName}</span>
+        <div className={crstyles.rightTop}>
+          <span className={crstyles.commentTime}>{comment.createDate}</span>
+          <div className={crstyles.menuContainer}>
+            <button className={crstyles.menuButton} onClick={handleMenuToggle}>
               &#x22EE;
             </button>
             {menuOpen && (
-              <div className={styles.menuDropdown}>
-                {/* <button className={styles.menuItem} onClick={handleEditClick}>
+              <div className={crstyles.menuDropdown}>
+                {/* <button className={crstyles.menuItem} onClick={handleEditClick}>
                   수정
                 </button> */}
                 <button
-                  className={`${styles.menuItem} ${styles.menuItemDelete}`}
+                  className={`${crstyles.menuItem} ${crstyles.menuItemDelete}`}
                   onClick={() => onDelete(comment.commentNo)}
                 >
                   삭제
@@ -152,26 +152,26 @@ function CommentItem({ comment, onDelete /* , onSaveEdit */ }) {
         </div>
       </div>
 
-      <div className={styles.commentContent}>{comment.content}</div>
+      <div className={crstyles.commentContent}>{comment.content}</div>
 
       {/* {isEditing ? (
-        <div className={styles.editSection}>
+        <div className={crstyles.editSection}>
           <textarea
-            className={styles.editInput}
+            className={crstyles.editInput}
             value={newContent}
             onChange={(e) => setNewContent(e.target.value)}
           />
-          <div className={styles.editButtons}>
-            <button className={styles.saveButton} onClick={handleSaveEdit}>
+          <div className={crstyles.editButtons}>
+            <button className={crstyles.saveButton} onClick={handleSaveEdit}>
               저장
             </button>
-            <button className={styles.cancelButton} onClick={handleCancelEdit}>
+            <button className={crstyles.cancelButton} onClick={handleCancelEdit}>
               취소
             </button>
           </div>
         </div>
       ) : (
-        <div className={styles.commentContent}>{comment.content}</div>
+        <div className={crstyles.commentContent}>{comment.content}</div>
       )} */}
     </div>
   );

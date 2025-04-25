@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import styles from "./CommuniteBoard.module.css";
+import cbstyles from "./CommuniteBoard.module.css";
 import defaultImg from "/img/cBoard/noImage.png";
 
 const formatDate = (dateString) => {
@@ -28,9 +28,9 @@ const PostCard = ({
   if (type === "grid") {
     return (
       <Link to={`/cd/${reviewNo}`}>
-        <div className={styles.GridCard}>
-          <img className={styles.GridImage} src={mainImage} alt="preview" />
-          <div className={styles.GridTitle}>{title}</div>
+        <div className={cbstyles.GridCard}>
+          <img className={cbstyles.GridImage} src={mainImage} alt="preview" />
+          <div className={cbstyles.GridTitle}>{title}</div>
         </div>
       </Link>
     );
@@ -41,18 +41,18 @@ const PostCard = ({
       <Link to={`/cd/${reviewNo}`}>
         <table>
           <tbody>
-            <tr className={styles.PostRow}>
-              <td className={styles.PostCell} colSpan={6}>
-                <div className={styles.ThumbnailWrapper}>
+            <tr className={cbstyles.PostRow}>
+              <td className={cbstyles.PostCell} colSpan={6}>
+                <div className={cbstyles.ThumbnailWrapper}>
                   <img
-                    className={styles.ThumbnailImg}
+                    className={cbstyles.ThumbnailImg}
                     src={mainImage}
                     alt="thumb"
                   />
-                  <div className={styles.TextInfo}>
+                  <div className={cbstyles.TextInfo}>
                     <h2>{title}</h2>
                     <p>{content}</p>
-                    <div className={styles.ThumbnailMeta}>
+                    <div className={cbstyles.ThumbnailMeta}>
                       <span>작성자: {nickname}</span>
                       <span>작성일: {formattedDate}</span>
                       <span>조회수: {count}</span>
@@ -69,15 +69,15 @@ const PostCard = ({
   }
 
   return (
-    <tr className={styles.PostRow}>
-      <td className={styles.PostCell}>{reviewNo}</td>
-      <td className={styles.PostCell}>
+    <tr className={cbstyles.PostRow}>
+      <td className={cbstyles.PostCell}>{reviewNo}</td>
+      <td className={cbstyles.PostCell}>
         <Link to={`/cd/${reviewNo}`}>{title}</Link>
       </td>
-      <td className={styles.PostCell}>{nickname}</td>
-      <td className={styles.PostCell}>{formattedDate}</td>
-      <td className={styles.PostCell}>{count}</td>
-      <td className={styles.PostCell}>{likeCount}</td>
+      <td className={cbstyles.PostCell}>{nickname}</td>
+      <td className={cbstyles.PostCell}>{formattedDate}</td>
+      <td className={cbstyles.PostCell}>{count}</td>
+      <td className={cbstyles.PostCell}>{likeCount}</td>
     </tr>
   );
 };
@@ -116,31 +116,31 @@ const CommuniteBoard = () => {
   };
 
   return (
-    <div className={styles.BoardContainer}>
-      <div className={styles.ActionWrapper}>
-        <button className={styles.WriteButton}>작성하기</button>
+    <div className={cbstyles.BoardContainer}>
+      <div className={cbstyles.ActionWrapper}>
+        <button className={cbstyles.WriteButton}>작성하기</button>
       </div>
 
-      <div className={styles.ButtonGroup}>
+      <div className={cbstyles.ButtonGroup}>
         <button
-          className={`${styles.ViewButton} ${
-            viewType === "grid" ? styles.active : ""
+          className={`${cbstyles.ViewButton} ${
+            viewType === "grid" ? cbstyles.active : ""
           }`}
           onClick={() => setViewType("grid")}
         >
           바둑판형
         </button>
         <button
-          className={`${styles.ViewButton} ${
-            viewType === "thumbnail" ? styles.active : ""
+          className={`${cbstyles.ViewButton} ${
+            viewType === "thumbnail" ? cbstyles.active : ""
           }`}
           onClick={() => setViewType("thumbnail")}
         >
           썸네일형
         </button>
         <button
-          className={`${styles.ViewButton} ${
-            viewType === "text" ? styles.active : ""
+          className={`${cbstyles.ViewButton} ${
+            viewType === "text" ? cbstyles.active : ""
           }`}
           onClick={() => setViewType("text")}
         >
@@ -149,9 +149,9 @@ const CommuniteBoard = () => {
       </div>
 
       {viewType === "grid" && (
-        <div className={styles.GridContainer}>
+        <div className={cbstyles.GridContainer}>
           {reviews.length === 0 ? (
-            <div className={styles.NoPosts}>게시글이 없습니다.</div>
+            <div className={cbstyles.NoPosts}>게시글이 없습니다.</div>
           ) : (
             currentPosts.map((post, idx) => (
               <PostCard
@@ -166,9 +166,9 @@ const CommuniteBoard = () => {
       )}
 
       {viewType === "thumbnail" && (
-        <div className={styles.ThumbnailContainer}>
+        <div className={cbstyles.ThumbnailContainer}>
           {reviews.length === 0 ? (
-            <div className={styles.NoPosts}>게시글이 없습니다.</div>
+            <div className={cbstyles.NoPosts}>게시글이 없습니다.</div>
           ) : (
             currentPosts.map((post, idx) => (
               <PostCard
@@ -183,21 +183,21 @@ const CommuniteBoard = () => {
       )}
 
       {viewType === "text" && (
-        <table className={styles.PostTable}>
+        <table className={cbstyles.PostTable}>
           <thead>
             <tr>
-              <th className={styles.PostCell}>번호</th>
-              <th className={styles.PostCell}>제목</th>
-              <th className={styles.PostCell}>작성자</th>
-              <th className={styles.PostCell}>작성일</th>
-              <th className={styles.PostCell}>조회수</th>
-              <th className={styles.PostCell}>좋아요</th>
+              <th className={cbstyles.PostCell}>번호</th>
+              <th className={cbstyles.PostCell}>제목</th>
+              <th className={cbstyles.PostCell}>작성자</th>
+              <th className={cbstyles.PostCell}>작성일</th>
+              <th className={cbstyles.PostCell}>조회수</th>
+              <th className={cbstyles.PostCell}>좋아요</th>
             </tr>
           </thead>
           <tbody>
             {reviews.length === 0 ? (
               <tr>
-                <td colSpan={6} className={styles.NoPosts}>
+                <td colSpan={6} className={cbstyles.NoPosts}>
                   게시글이 없습니다.
                 </td>
               </tr>
@@ -215,7 +215,7 @@ const CommuniteBoard = () => {
         </table>
       )}
 
-      <div className={styles.PaginationWrapper}>
+      <div className={cbstyles.PaginationWrapper}>
         <button
           onClick={() => handlePageChange(1)}
           disabled={currentPage === 1}
@@ -233,7 +233,7 @@ const CommuniteBoard = () => {
           ? Array.from({ length: totalPages }, (_, i) => (
               <button
                 key={i}
-                className={currentPage === i + 1 ? styles.active : ""}
+                className={currentPage === i + 1 ? cbstyles.active : ""}
                 onClick={() => handlePageChange(i + 1)}
               >
                 {i + 1}
@@ -246,7 +246,7 @@ const CommuniteBoard = () => {
                   <button key="first" onClick={() => handlePageChange(1)}>
                     1
                   </button>,
-                  <span key="dots1" className={styles.Dots}>
+                  <span key="dots1" className={cbstyles.Dots}>
                     ...
                   </span>
                 );
@@ -263,7 +263,7 @@ const CommuniteBoard = () => {
               }
 
               elements.push(
-                <button key="current" className={styles.active}>
+                <button key="current" className={cbstyles.active}>
                   {currentPage}
                 </button>
               );
@@ -281,7 +281,7 @@ const CommuniteBoard = () => {
 
               if (currentPage < totalPages - 1) {
                 elements.push(
-                  <span key="dots2" className={styles.Dots}>
+                  <span key="dots2" className={cbstyles.Dots}>
                     ...
                   </span>,
                   <button
@@ -310,8 +310,8 @@ const CommuniteBoard = () => {
         </button>
       </div>
 
-      <div className={styles.ActionWrapper}>
-        <button className={styles.WriteButton}>작성하기</button>
+      <div className={cbstyles.ActionWrapper}>
+        <button className={cbstyles.WriteButton}>작성하기</button>
       </div>
     </div>
   );

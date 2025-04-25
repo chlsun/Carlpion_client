@@ -1,46 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import styles from "./ReportBoard.module.css";
+import axios from "axios";
+import rbstyles from "./ReportBoard.module.css";
 
 const ReportBoard = () => {
   const role = "admin";
   const currentUser = "user1";
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchOption, setSearchOption] = useState("title"); // 검색 옵션 (제목, 작성자, 내용)
+  const [searchOption, setSearchOption] = useState("title");
   const [filteredReports, setFilteredReports] = useState([]);
+  const [reports, setReports] = useState([]);
   const itemsPerPage = 10;
 
-  const reports = [
-    { id: 1, title: "욕설 신고", content: "심한 욕설이 포함됨", user: "user1" },
-    { id: 2, title: "광고 신고", content: "홍보 링크 포함됨", user: "user2" },
-    {
-      id: 3,
-      title: "도배 신고",
-      content: "같은 내용 반복 작성",
-      user: "user1",
-    },
-    {
-      id: 4,
-      title: "불법 콘텐츠 신고",
-      content: "음란물 게시됨",
-      user: "user1",
-    },
-    { id: 5, title: "스팸 신고", content: "스팸 메시지 포함됨", user: "user2" },
-    { id: 6, title: "허위 신고", content: "사실 무근", user: "user1" },
-    { id: 7, title: "비방 신고", content: "허위 비방", user: "user2" },
-    { id: 8, title: "욕설 신고", content: "욕설과 비방", user: "user1" },
-    { id: 9, title: "광고 신고", content: "불법 광고 포함", user: "user1" },
-    { id: 10, title: "도배 신고", content: "중복된 내용", user: "user1" },
-    {
-      id: 11,
-      title: "불법 콘텐츠 신고",
-      content: "음란물 게시",
-      user: "user2",
-    },
-  ];
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const response = await axios.get("http://localhost:80/reports");
+        setReports(response.data);
+      } catch (err) {
+        console.error("데이터 로딩 실패:", err);
+      }
+    };
+    fetchReports();
+  }, []);
 
-  // 필터링된 보고서 상태 설정
   const visibleReports =
     role === "admin"
       ? filteredReports.length > 0
@@ -71,7 +55,6 @@ const ReportBoard = () => {
   };
 
   const handleSearchSubmit = () => {
-    // 선택된 검색 옵션에 따라 필터링된 결과 업데이트
     const filtered = reports.filter((r) => {
       if (searchOption === "title") {
         return r.title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -83,14 +66,14 @@ const ReportBoard = () => {
       return false;
     });
     setFilteredReports(filtered);
-    setCurrentPage(1); // 검색 후 첫 페이지로 이동
+    setCurrentPage(1);
   };
 
   const ReportItem = ({ report }) => (
-    <tr className={styles.item}>
-      <td>{startIndex + report.id}</td>
+    <tr className={rbstyles.item}>
+      <td>{startIndex + report.reportNo}</td>
       <td>
-        <Link to={`/rd/${report.id}`} className={styles.itemLink}>
+        <Link to={`/rd/${report.reportNo}`} className={rbstyles.itemLink}>
           {report.title}
         </Link>
       </td>
@@ -101,12 +84,12 @@ const ReportBoard = () => {
   );
 
   return (
-    <div className={styles.reportListWrapper}>
-      <div className={styles.reportHeader}>
+    <div className={rbstyles.reportListWrapper}>
+      <div className={rbstyles.reportHeader}>
         <h2>신고 목록</h2>
       </div>
 
-      <table className={styles.reportTable}>
+      <table className={rbstyles.reportTable}>
         <thead>
           <tr>
             <th>번호</th>
@@ -119,21 +102,23 @@ const ReportBoard = () => {
         <tbody>
           {currentReports.length === 0 ? (
             <tr>
-              <td colSpan={5} className={styles.empty}>
+              <td colSpan={5} className={rbstyles.empty}>
                 신고 내역이 없습니다.
               </td>
             </tr>
           ) : (
-            currentReports.map((r) => <ReportItem key={r.id} report={r} />)
+            currentReports.map((r) => (
+              <ReportItem key={r.reportNo} report={r} />
+            ))
           )}
         </tbody>
       </table>
 
-      <div className={styles.paginationWrapper}>
+      <div className={rbstyles.paginationWrapper}>
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className={styles.paginationButton}
+          className={rbstyles.paginationButton}
         >
           {"<"}
         </button>
@@ -142,8 +127,8 @@ const ReportBoard = () => {
           <button
             key={i}
             onClick={() => handlePageChange(i + 1)}
-            className={`${styles.paginationButton} ${
-              currentPage === i + 1 ? styles.active : ""
+            className={`${rbstyles.paginationButton} ${
+              currentPage === i + 1 ? rbstyles.active : ""
             }`}
           >
             {i + 1}
@@ -153,17 +138,17 @@ const ReportBoard = () => {
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className={styles.paginationButton}
+          className={rbstyles.paginationButton}
         >
           {">"}
         </button>
       </div>
 
-      <div className={styles.searchWrapper}>
+      <div className={rbstyles.searchWrapper}>
         <select
           value={searchOption}
           onChange={handleSearchOptionChange}
-          className={styles.searchSelect}
+          className={rbstyles.searchSelect}
         >
           <option value="title">제목</option>
           <option value="user">작성자</option>
@@ -175,15 +160,15 @@ const ReportBoard = () => {
           placeholder="검색"
           value={searchTerm}
           onChange={handleSearchChange}
-          className={styles.searchInput}
+          className={rbstyles.searchInput}
         />
-        <button className={styles.searchButton} onClick={handleSearchSubmit}>
+        <button className={rbstyles.searchButton} onClick={handleSearchSubmit}>
           검색
         </button>
       </div>
 
-      <div className={styles.actionWrapper}>
-        <button className={styles.writeButton}>신고 작성</button>
+      <div className={rbstyles.actionWrapper}>
+        <button className={rbstyles.writeButton}>신고 작성</button>
       </div>
     </div>
   );
