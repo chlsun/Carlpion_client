@@ -152,7 +152,7 @@ const CarPage = () => {
 
       setUpdateSelectedModelNo({
          label: rentCar.carModel.carModel,
-         value: rentCar.carModel.modelNo,
+         value: rentCar.modelNo,
       });
 
       setUpdateRentCar(rentCar.carId);
