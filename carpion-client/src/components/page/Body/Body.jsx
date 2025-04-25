@@ -2,20 +2,24 @@ import { useState } from "react";
 import {
   Container,
   Box,
-  Header,
   Button,
   ModalContainer,
   ModalBox,
   Input,
   ButtonWrapper,
-  MoreButton,
   FirstBox,
   ThirdBox,
   ProfileTextBox,
-  Section,
   InfoSection,
   GradeText,
   InfoButton,
+  ReservationMoreButton,
+  ReservationValue,
+  ReservationLabel,
+  ReservationRow,
+  ReservationTitle,
+  ReservationBox,
+  ReservationContainer,
 } from "./Body.styles";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -217,27 +221,70 @@ const Body = () => {
       </Box>
       <GradeText>예약 현황</GradeText>
 
-      <Section>
-        <div>예약차종</div>
-        <div>기간</div>
-        <div>위치 </div>
-        <div>차량정보</div>
-      </Section>
-      <ButtonWrapper>
-        <MoreButton>더보기</MoreButton>
-      </ButtonWrapper>
+      <ReservationContainer>
+        <ReservationBox>
+          <ReservationTitle>예약 현황</ReservationTitle>
 
+          <ReservationRow>
+            <ReservationLabel>예약 ID</ReservationLabel>
+            <ReservationValue>RV123456</ReservationValue>
+          </ReservationRow>
+          <ReservationRow>
+            <ReservationLabel>차량번호 / 모델</ReservationLabel>
+            <ReservationValue>23허1234 / K5</ReservationValue>
+          </ReservationRow>
+          <ReservationRow>
+            <ReservationLabel>대여일 ~ 반납일</ReservationLabel>
+            <ReservationValue>2025-04-01 ~ 2025-04-03</ReservationValue>
+          </ReservationRow>
+          <ReservationRow>
+            <ReservationLabel>결제금액</ReservationLabel>
+            <ReservationValue>150,000원</ReservationValue>
+          </ReservationRow>
+          <ReservationRow>
+            <ReservationLabel>결제완료</ReservationLabel>
+            <ReservationValue>2025-04-01 13:00</ReservationValue>
+          </ReservationRow>
+          <ReservationRow>
+            <ReservationLabel>주차장</ReservationLabel>
+            <ReservationValue>강남주차장 (서울 강남구)</ReservationValue>
+          </ReservationRow>
+
+          <ReservationMoreButton>더보기</ReservationMoreButton>
+        </ReservationBox>
+      </ReservationContainer>
       <GradeText>사용 내역</GradeText>
 
-      <Section>
-        <div>사용차종</div>
-        <div>기간</div>
-        <div>위치 </div>
-        <div>차량정보</div>
-      </Section>
-      <ButtonWrapper>
-        <MoreButton>더보기</MoreButton>
-      </ButtonWrapper>
+      <ReservationBox>
+        <ReservationTitle>사용 내역</ReservationTitle>
+
+        <ReservationRow>
+          <ReservationLabel>차량번호 / 모델</ReservationLabel>
+          <ReservationValue>23허4567 / K3</ReservationValue>
+        </ReservationRow>
+
+        <ReservationRow>
+          <ReservationLabel>대여일 ~ 반납일</ReservationLabel>
+          <ReservationValue>2025-03-20 ~ 2025-03-22</ReservationValue>
+        </ReservationRow>
+
+        <ReservationRow>
+          <ReservationLabel>결제금액</ReservationLabel>
+          <ReservationValue>80,000원</ReservationValue>
+        </ReservationRow>
+
+        <ReservationRow>
+          <ReservationLabel>결제완료시각</ReservationLabel>
+          <ReservationValue>2025-03-20 11:23</ReservationValue>
+        </ReservationRow>
+
+        <ReservationRow>
+          <ReservationLabel>주차장</ReservationLabel>
+          <ReservationValue>PI044 / 부산역주차장 / 부산 동구</ReservationValue>
+        </ReservationRow>
+
+        <ReservationMoreButton>더보기</ReservationMoreButton>
+      </ReservationBox>
       <GradeText>내 활동</GradeText>
       <Box>
         <Button onClick={() => navi("/reply")}>작성한 댓글 조회</Button>

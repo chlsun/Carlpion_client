@@ -15,7 +15,7 @@ import FindId from "./components/page/user/FIndId/FIndId";
 import FindPw from "./components/page/user/FindPw/FindPw";
 import FindPwCompleted from "./components/page/user/FindPw/FindPwCompleted";
 import SignUpCompleted from "./components/page/user/SignUp/SignUpCompleted";
-import Reply from "./components/page/reply/reply";
+import Reply from "./components/page/reply/Reply";
 import Login from "./components/page/user/Login/Login";
 import SignUp from "./components/page/user/SignUp/SignUp";
 import InquiryCheck from "./components/page/inquiryCheck/inquiryCheck";
