@@ -2,10 +2,12 @@ import { useContext, useState } from "react";
 import "./ParkingModal.css";
 import { AuthContext } from "../../../Context/AuthContext";
 import axios from "axios";
+import ParkingMap from "../../../../include/map/parkingMap/ParkingMap";
 
 const ParkingModal = ({ setModalOpen, modalBackground, setParkingInfo }) => {
    const { auth } = useContext(AuthContext);
 
+   const [mapOpenNum, setMapOpenNum] = useState(-1);
    const [search, setSearch] = useState("");
    const [parkingsInfo, setParkingsInfo] = useState([]);
 
@@ -46,6 +48,16 @@ const ParkingModal = ({ setModalOpen, modalBackground, setParkingInfo }) => {
       }
       e.preventDefault();
    };
+
+   const openMapHandler = (index) => {
+      if (mapOpenNum == index) {
+         setMapOpenNum(-1);
+         return;
+      }
+
+      setMapOpenNum(index);
+   };
+
    return (
       <>
          <div id="paking-modal" ref={modalBackground} onClick={bgModalHandler}>
@@ -77,25 +89,39 @@ const ParkingModal = ({ setModalOpen, modalBackground, setParkingInfo }) => {
                <div className="search-list">
                   {parkingsInfo.length > 0 ? (
                      parkingsInfo.map((parking, index) => (
-                        <div className="parking-info" key={parking.parkingId}>
-                           <div className="num">
-                              <p>{index + 1}</p>
-                           </div>
-                           <div className="name">
-                              <p>{parking.parkingTitle}</p>
-                           </div>
-                           <div className="addr">
-                              <p>{parking.parkingAddr}</p>
-                           </div>
-                           <div className="id">
-                              <p>{parking.parkingId}</p>
-                           </div>
-                           <button
-                              className="choose-btn"
-                              onClick={() => chooseParkingZone(parking)}
+                        <div className="parking-box">
+                           <div
+                              className="parking-info"
+                              key={parking.parkingId}
                            >
-                              선택
-                           </button>
+                              <div className="num">
+                                 <p>{index + 1}</p>
+                              </div>
+                              <div className="name">
+                                 <p>{parking.parkingTitle}</p>
+                              </div>
+                              <div className="addr">
+                                 <p>{parking.parkingAddr}</p>
+                              </div>
+                              <div className="id">
+                                 <p>{parking.parkingId}</p>
+                              </div>
+                              <button
+                                 className="open-map"
+                                 onClick={() => openMapHandler(index)}
+                              >
+                                 {mapOpenNum == index ? "접기" : "조회"}
+                              </button>
+                              <button
+                                 className="choose-btn"
+                                 onClick={() => chooseParkingZone(parking)}
+                              >
+                                 선택
+                              </button>
+                           </div>
+                           {mapOpenNum == index && (
+                              <ParkingMap parkingInfo={parking} />
+                           )}
                         </div>
                      ))
                   ) : (

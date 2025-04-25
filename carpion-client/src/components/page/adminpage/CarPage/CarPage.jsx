@@ -9,11 +9,17 @@ import { useParams } from "react-router-dom";
 const CarPage = () => {
    const { page } = useParams();
    const { auth } = useContext(AuthContext);
+   const [updateFormNum, setUpdateFormNum] = useState(-1);
    const [isPageLoad, setIsPageLoad] = useState(true);
    const [rentCarList, setRentCarList] = useState(null);
    const [options, setOptions] = useState([]);
    const [parkingInfo, setParkingInfo] = useState(null);
+   const [updateParkingInfo, setUpdateParkingInfo] = useState(null);
+   const [updateRentCar, setUpdateRentCar] = useState("");
    const [selectedModelNo, setSelectedModelNo] = useState(null);
+
+   const [updateSelectedModelNo, setUpdateSelectedModelNo] = useState(null);
+
    const [carId, setCarId] = useState("");
 
    const [rentCar, setRentCar] = useState({
@@ -23,6 +29,8 @@ const CarPage = () => {
    });
 
    const [modalOpen, setModalOpen] = useState(false);
+   const [updateModalOpen, setUpdateModalOpen] = useState(false);
+
    const modalBackground = useRef();
 
    const modalHandler = (e) => {
@@ -30,13 +38,20 @@ const CarPage = () => {
       setModalOpen(!modalOpen);
    };
 
-   const handleSelectChange = (selectedOption) => {
-      setSelectedModelNo(selectedOption.value);
+   const updateModalHandler = (e) => {
+      e.preventDefault();
+      setUpdateModalOpen(!updateModalOpen);
    };
 
-   useEffect(() => {
-      console.log(rentCarList);
-   }, [rentCarList]);
+   const handleSelectChange = (selectedOption) => {
+      setSelectedModelNo(selectedOption);
+   };
+
+   const updateHandleSelectChange = (selectedOption) => {
+      setUpdateSelectedModelNo(selectedOption);
+   };
+
+   const pattern = /^\d{2,3}[가-힣]\d{4}$/;
 
    const insertRequestHandler = (e) => {
       e.preventDefault();
@@ -47,9 +62,12 @@ const CarPage = () => {
       }
 
       if (rentCar.carId.length < 7 || rentCar.carId.length > 8) {
-         console.log("뭐임 들어옴");
          alert("차량 번호 7자 이상 8자 이하로 등록가능합니다.");
          return;
+      }
+
+      if (!!!pattern.test(rentCar.carId)) {
+         alert("실패실패");
       }
 
       if (auth.accessToken) {
@@ -62,6 +80,8 @@ const CarPage = () => {
             .then((result) => {
                alert("렌트차량이 추가되었습니다.");
                setIsPageLoad(!isPageLoad);
+               setParkingInfo(null);
+               setSelectedModelNo(null);
             })
             .catch((error) => {
                console.log(error);
@@ -71,7 +91,7 @@ const CarPage = () => {
 
    useEffect(() => {
       setRentCar({
-         modelNo: selectedModelNo,
+         modelNo: selectedModelNo ? selectedModelNo.value : null,
          carId: carId,
          parkingId: parkingInfo ? parkingInfo.parkingId : null,
       });
@@ -86,8 +106,14 @@ const CarPage = () => {
                },
             })
             .then((result) => {
-               console.log(result.data.carModelList);
                setRentCarList(result.data.carModelList);
+               setRentCar({
+                  modelNo: null,
+                  carId: null,
+                  parkingId: null,
+               });
+               setCarId("");
+               console.log(result.data.carModelList);
             })
             .catch((error) => {
                console.log(error);
@@ -114,6 +140,53 @@ const CarPage = () => {
             });
       }
    }, [auth.accessToken, isPageLoad]);
+
+   const updateFormHandler = (rentCar, index) => {
+      if (updateFormNum == index) {
+         setUpdateFormNum(-1);
+         updateHandleSelectChange(null);
+         setUpdateParkingInfo(null);
+         setUpdateRentCar("");
+         return;
+      }
+
+      setUpdateSelectedModelNo({
+         label: rentCar.carModel.carModel,
+         value: rentCar.carModel.modelNo,
+      });
+
+      setUpdateRentCar(rentCar.carId);
+      setUpdateFormNum(index);
+   };
+
+   const updateRequestHandler = (rentCar) => {
+      if (auth.accessToken) {
+         axios
+            .put(
+               "http://localhost/admin/car",
+               {
+                  carNo: rentCar.carNo,
+                  modelNo: updateSelectedModelNo.value,
+                  carId: updateRentCar,
+                  parkingId: updateParkingInfo
+                     ? updateParkingInfo.parkingId
+                     : rentCar.parkingId,
+               },
+               {
+                  headers: {
+                     Authorization: `Bearer ${auth.accessToken}`,
+                  },
+               }
+            )
+            .then((result) => {
+               console.log(result);
+            })
+            .catch((error) => {
+               console.log(error);
+            });
+      }
+   };
+
    if (rentCarList == null) return null;
    return (
       <>
@@ -124,6 +197,7 @@ const CarPage = () => {
                      options={options}
                      placeholder="차량모델 선택"
                      onChange={handleSelectChange}
+                     value={selectedModelNo}
                   />
                </div>
                <div className="input-box car-num">
@@ -162,27 +236,81 @@ const CarPage = () => {
                         <p>{index + 1 + (page - 1) * 10}</p>
                      </div>
                      <div className="model-name">
-                        <p>{rentCar.carModel.carModel}</p>
+                        {updateFormNum == index ? (
+                           <Select
+                              options={options}
+                              placeholder="차량모델 선택"
+                              onChange={updateHandleSelectChange}
+                              value={updateSelectedModelNo}
+                              className="update-options"
+                           />
+                        ) : (
+                           <p>{rentCar.carModel.carModel}</p>
+                        )}
                      </div>
                      <div className="car-num">
-                        <p>{rentCar.carId}</p>
+                        {updateFormNum == index ? (
+                           <input
+                              type="text"
+                              onChange={(e) => setUpdateRentCar(e.target.value)}
+                              value={updateRentCar}
+                           ></input>
+                        ) : (
+                           <p>{rentCar.carId}</p>
+                        )}
                      </div>
                      <div className="parking-name">
-                        <p>{rentCar.parking.parkingTitle}</p>
+                        <p>
+                           {updateFormNum == index && updateParkingInfo
+                              ? updateParkingInfo.parkingTitle
+                              : rentCar.parking.parkingTitle}
+                        </p>
                      </div>
                      <div className="parking-addr">
-                        <p>{rentCar.parking.parkingAddr}</p>
+                        <p>
+                           {updateParkingInfo
+                              ? updateParkingInfo.parkingAddr
+                              : rentCar.parking.parkingAddr}
+                        </p>
                      </div>
                      <div className="parking-id">
-                        <p>{rentCar.parkingId}</p>
+                        <p>
+                           {updateParkingInfo
+                              ? updateParkingInfo.parkingId
+                              : rentCar.parkingId}
+                        </p>
                      </div>
+
                      <div className="btn-box">
-                        <button type="button" className="update-btn">
-                           수정
+                        <button
+                           type="button"
+                           className="update-btn"
+                           onClick={() => updateFormHandler(rentCar, index)}
+                        >
+                           {updateFormNum == index ? "취소" : "수정"}
                         </button>
-                        <button type="button" className="delete-btn">
-                           삭제
-                        </button>
+                        {updateFormNum == index ? (
+                           <>
+                              <button
+                                 type="button"
+                                 className="parking-search"
+                                 onClick={updateModalHandler}
+                              >
+                                 조회
+                              </button>
+                              <button
+                                 type="button"
+                                 className="update-request"
+                                 onClick={() => updateRequestHandler(rentCar)}
+                              >
+                                 수정
+                              </button>
+                           </>
+                        ) : (
+                           <button type="button" className="delete-btn">
+                              삭제
+                           </button>
+                        )}
                      </div>
                   </div>
                ))}
@@ -206,6 +334,14 @@ const CarPage = () => {
                setModalOpen={setModalOpen}
                modalBackground={modalBackground}
                setParkingInfo={setParkingInfo}
+            />
+         )}
+
+         {updateModalOpen && (
+            <ParkingModal
+               setModalOpen={setUpdateModalOpen}
+               modalBackground={modalBackground}
+               setParkingInfo={setUpdateParkingInfo}
             />
          )}
       </>
