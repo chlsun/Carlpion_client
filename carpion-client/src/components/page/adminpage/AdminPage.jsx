@@ -1,8 +1,21 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import "./AdminPage.css";
 import AdminSide from "./module/adminside/AdminSide";
+import { useContext, useEffect } from "react";
+import { AuthContext } from "../Context/AuthContext";
 
 const AdminPage = () => {
+   const { auth } = useContext(AuthContext);
+
+   useEffect(() => {
+      const username = sessionStorage.getItem("username");
+
+      if (!username && !auth.accessToken) {
+         console.log(auth);
+         alert("로그인 후 이용 가능합니다.");
+      }
+   }, [auth]);
+
    return (
       <>
          <main id="admin-page">
