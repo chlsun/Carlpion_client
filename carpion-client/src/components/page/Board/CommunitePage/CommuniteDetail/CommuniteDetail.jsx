@@ -16,6 +16,8 @@ function CommuniteDetail() {
     const fetchPost = async () => {
       try {
         const res = await axios.get(`http://localhost:80/reviews/${reviewNo}`);
+        console.log("게시글 데이터:", res.data);
+        console.log("fileUrl:", res.data.fileUrl);
         setPost(res.data);
         setLikes(res.data.count ?? 0);
       } catch (err) {
@@ -69,7 +71,7 @@ function CommuniteDetail() {
           {post.fileUrl ? (
             <div className={cdstyles.imageGallery}>
               <img
-                src={post.fileUrl}
+                src={`http://localhost:80/uploads/${post.fileUrl}`}
                 alt="첨부파일"
                 className={cdstyles.image}
               />

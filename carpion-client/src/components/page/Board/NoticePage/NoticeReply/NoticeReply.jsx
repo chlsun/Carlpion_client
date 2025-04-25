@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import nrstyles from "./NoticeReply.module.css";
-import { AuthContext } from "../../../context/AuthContext";
+import { AuthContext } from "../../../Context/AuthContext";
 
 function NoticeReply({ noticeNo }) {
   const { auth } = useContext(AuthContext);
@@ -26,7 +26,7 @@ function NoticeReply({ noticeNo }) {
               }
             : {}
         );
-        console.log(response.data); // 서버에서 반환되는 댓글 데이터 확인
+        console.log(response.data);
         setComments(response.data);
       } catch (error) {
         console.error("댓글 불러오기 실패:", error);
@@ -95,7 +95,15 @@ function NoticeReply({ noticeNo }) {
         prev.filter((comment) => comment.commentNo !== commentNo)
       );
     } catch (error) {
-      console.error("댓글 삭제 실패:", error);
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data === "삭제할 권한이 없습니다."
+      ) {
+        alert("삭제할 권한이 없습니다.");
+      } else {
+        console.error("댓글 삭제 실패:", error);
+      }
     }
   };
 
@@ -146,7 +154,7 @@ function CommentItem({ comment, onDelete, isAdmin, currentUserNickName }) {
     <div className={nrstyles.comment}>
       <div className={nrstyles.commentHeader}>
         {/* comment.nickname이 비어 있으면 "익명"으로 기본값 설정 */}
-        <span className={nrstyles.nickname}>{comment.nickname || "익명"}</span>
+        <span className={nrstyles.nickname}>{comment.nickName}</span>
         <div className={nrstyles.rightTop}>
           <span className={nrstyles.commentTime}>{comment.createDate}</span>
           <div className={nrstyles.menuContainer}>

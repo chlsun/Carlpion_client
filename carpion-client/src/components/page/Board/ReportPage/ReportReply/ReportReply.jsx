@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import rrstyles from "./ReportReply.module.css";
-import { AuthContext } from "../../../context/AuthContext";
+import { AuthContext } from "../../../Context/AuthContext";
 
 function ReportReply({ reportNo }) {
   const { auth } = useContext(AuthContext);
@@ -80,7 +80,6 @@ function ReportReply({ reportNo }) {
     if (e.key === "Enter") handleSend();
   };
 
-  // 댓글 삭제 핸들러
   const handleDelete = async (commentNo) => {
     try {
       await axios.delete(`http://localhost:80/reports/comments/${commentNo}`, {
@@ -89,7 +88,6 @@ function ReportReply({ reportNo }) {
         },
       });
 
-      // 삭제된 댓글을 목록에서 제거
       setComments((prev) =>
         prev.filter((comment) => comment.commentNo !== commentNo)
       );
@@ -100,42 +98,44 @@ function ReportReply({ reportNo }) {
 
   return (
     <div className={rrstyles.chatContainer}>
-      <div className={rrstyles.chatThread}>
-        {comments.map((comment, idx) => {
-          const messageType =
-            comment.role === "ROLE_ADMIN" ? "answer" : "question";
-          return (
-            <div
-              key={idx}
-              className={`${rrstyles.chatBubbleWrapper} ${
-                messageType === "question" ? rrstyles.right : rrstyles.left
-              }`}
-            >
+      {comments.length > 0 && (
+        <div className={rrstyles.chatThread}>
+          {comments.map((comment, idx) => {
+            const messageType =
+              comment.role === "ROLE_ADMIN" ? "answer" : "question";
+            return (
               <div
-                className={`${rrstyles.chatBubble} ${rrstyles[messageType]}`}
+                key={idx}
+                className={`${rrstyles.chatBubbleWrapper} ${
+                  messageType === "question" ? rrstyles.right : rrstyles.left
+                }`}
               >
-                <span className={rrstyles.chatPrefix}>
-                  {messageType === "question" ? "Q." : "A."}{" "}
-                </span>
-                <p className={rrstyles.chatMessage}>{comment.content}</p>
-                <span className={rrstyles.chatTimestamp}>
-                  {comment.createDate}
-                </span>
+                <div
+                  className={`${rrstyles.chatBubble} ${rrstyles[messageType]}`}
+                >
+                  <span className={rrstyles.chatPrefix}>
+                    {messageType === "question" ? "Q." : "A."}{" "}
+                  </span>
+                  <p className={rrstyles.chatMessage}>{comment.content}</p>
+                  <span className={rrstyles.chatTimestamp}>
+                    {comment.createDate}
+                  </span>
 
-                {/* 관리자가 댓글을 삭제할 수 있는 X 버튼 추가 */}
-                {isAdmin && (
-                  <button
-                    className={rrstyles.deleteButton}
-                    onClick={() => handleDelete(comment.commentNo)}
-                  >
-                    x
-                  </button>
-                )}
+                  {isAdmin && (
+                    <button
+                      className={rrstyles.deleteButton}
+                      onClick={() => handleDelete(comment.commentNo)}
+                    >
+                      x
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
+
       <div className={rrstyles.chatInputArea}>
         <input
           type="text"
