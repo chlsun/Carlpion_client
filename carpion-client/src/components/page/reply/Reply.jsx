@@ -14,7 +14,6 @@ const Reply = () => {
 
   useEffect(() => {
     if (auth.accessToken) {
-      alert(2);
       axios
         .get("http://localhost/mypage/comments", {
           headers: {
@@ -22,13 +21,15 @@ const Reply = () => {
           },
         })
         .then((response) => {
+          console.log("받아온 데이터:", response.data);
           setReplyList(response.data);
         })
         .catch((error) => {
-          console.log("댓글 가져오기실패 : ", error);
+          console.error("댓글게시판조회 실패 : ", error);
         });
     }
   }, [auth.accessToken]);
+
   return (
     <>
       <Container>
@@ -37,31 +38,15 @@ const Reply = () => {
         >
           댓글 조회
         </h2>
+        {replyList.map((item) => (
+          <ReplyBox key={item}>
+            <Field> 게시판 제목 : {item.title} </Field>
+            <Field> 댓글 : {item.content}</Field>
+            <Field> 작성일: {item.createDate}</Field>
+            <Field> 조회수: {item.count}</Field>
+          </ReplyBox>
+        ))}
 
-        <ReplyBox>
-          <Field> 게시글타입: </Field>
-          <Field> 게시글번호: </Field>
-          <Field> 제목: </Field>
-          <Field> 댓글 : </Field>
-          <Field> 작성일: </Field>
-          <Field> 조회수: </Field>
-        </ReplyBox>
-        <ReplyBox>
-          <Field> 게시글타입: </Field>
-          <Field> 게시글번호: </Field>
-          <Field> 제목: </Field>
-          <Field> 댓글 : </Field>
-          <Field> 작성일: </Field>
-          <Field> 조회수: </Field>
-        </ReplyBox>
-        <ReplyBox>
-          <Field> 게시글타입: </Field>
-          <Field> 게시글번호: </Field>
-          <Field> 제목: </Field>
-          <Field> 댓글 : </Field>
-          <Field> 작성일: </Field>
-          <Field> 조회수: </Field>
-        </ReplyBox>
         <PaginationWrapper>
           <PageButton>{"<"}</PageButton>
           {[1, 2, 3, 4, 5].map((num) => (
