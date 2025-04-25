@@ -1,53 +1,46 @@
 import styled from "styled-components";
 export const Container = styled.div`
-  max-width: 980px;
+  padding: 40px;
+  max-width: 800px;
   margin: 0 auto;
 `;
-export const Header = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 40px;
-  font-weight: bold;
-  margin-top: 126px;
-`;
 
-export const Box = styled.div`
-  width: 100%;
-  padding: 25px;
-  margin: 20px auto;
-  background: #fff;
+export const ReplyBox = styled.div`
   border: 1px solid #ddd;
   border-radius: 12px;
-
-  display: flex;
-  flex-direction: column; 
-  align-items: center; 
-  justify-content: center;
-  text-align: center; /
-  
+  padding: 16px;
+  margin-bottom: 24px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 `;
 
-export const ReplyTitle = styled.div`
-  width: 100%;
-  font-weight: bold;
+export const Field = styled.div`
+  margin-bottom: 8px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+`;
+
+export const BoardType = styled.h4`
+  font-size: 16px;
+  color: #555;
   margin-bottom: 5px;
 `;
 
-export const ReplyTime = styled.div`
-  width: 100%;
-  font-size: 14px;
-  color: gray;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding: 15px;
+export const ReplyTitle = styled.h3`
+  font-size: 20px;
+  margin-bottom: 8px;
 `;
 
-export const ReplyContent = styled.div`
-  width: 100%;
+export const ReplyContent = styled.p`
   font-size: 16px;
-  margin-bottom: 10px;
-  margin-top: 10px;
+  color: #333;
+`;
+
+export const ReplyTime = styled.p`
+  font-size: 14px;
+  color: #777;
 `;
 
 export const ButtonWrapper = styled.div`
@@ -62,6 +55,7 @@ export const PaginationWrapper = styled.div`
   gap: 10px;
   margin-top: 30px;
 `;
+
 export const PageButton = styled.button`
   width: 36px;
   height: 36px;

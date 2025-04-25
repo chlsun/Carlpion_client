@@ -1,6 +1,14 @@
+import { useContext, useState } from "react";
 import "./ParkingModal.css";
+import { AuthContext } from "../../../Context/AuthContext";
+import axios from "axios";
 
-const ParkingModal = ({ setModalOpen, modalBackground }) => {
+const ParkingModal = ({ setModalOpen, modalBackground, setParkingInfo }) => {
+   const { auth } = useContext(AuthContext);
+
+   const [search, setSearch] = useState("");
+   const [parkingsInfo, setParkingsInfo] = useState([]);
+
    const bgModalHandler = (e) => {
       if (e.target === modalBackground.current) {
          setModalOpen(false);
@@ -11,9 +19,32 @@ const ParkingModal = ({ setModalOpen, modalBackground }) => {
       setModalOpen(false);
    };
 
+   const chooseParkingZone = (parking) => {
+      setParkingInfo({
+         parkingTitle: parking.parkingTitle,
+         parkingAddr: parking.parkingAddr,
+         parkingId: parking.parkingId,
+      });
+      setModalOpen(false);
+   };
+
    const searchHandler = (e) => {
+      if (auth.accessToken) {
+         axios
+            .get(`http://localhost/parking/${search}`, {
+               headers: {
+                  Authorization: auth.accessToken,
+               },
+            })
+            .then((result) => {
+               console.log(result);
+               setParkingsInfo(result.data);
+            })
+            .catch((error) => {
+               console.log(error);
+            });
+      }
       e.preventDefault();
-      alert("임시 search");
    };
    return (
       <>
@@ -35,6 +66,8 @@ const ParkingModal = ({ setModalOpen, modalBackground }) => {
                      type="text"
                      className="search-input"
                      placeholder="원하는 주차장 주소를 입력해주세요"
+                     value={search}
+                     onChange={(e) => setSearch(e.target.value)}
                   />
                   <button type="submit" className="search-btn">
                      검색
@@ -42,168 +75,34 @@ const ParkingModal = ({ setModalOpen, modalBackground }) => {
                </form>
 
                <div className="search-list">
-                  <div className="parking-info">
-                     <div className="num">
-                        <p>1</p>
+                  {parkingsInfo.length > 0 ? (
+                     parkingsInfo.map((parking, index) => (
+                        <div className="parking-info" key={parking.parkingId}>
+                           <div className="num">
+                              <p>{index + 1}</p>
+                           </div>
+                           <div className="name">
+                              <p>{parking.parkingTitle}</p>
+                           </div>
+                           <div className="addr">
+                              <p>{parking.parkingAddr}</p>
+                           </div>
+                           <div className="id">
+                              <p>{parking.parkingId}</p>
+                           </div>
+                           <button
+                              className="choose-btn"
+                              onClick={() => chooseParkingZone(parking)}
+                           >
+                              선택
+                           </button>
+                        </div>
+                     ))
+                  ) : (
+                     <div className="no-parkingList">
+                        원하는 주차장 주소를 검색해주세요...
                      </div>
-                     <div className="name">
-                        <p>주차장 이름</p>
-                     </div>
-                     <div className="addr">
-                        <p>주차장 주소</p>
-                     </div>
-                     <div className="id">
-                        <p>주차장 ID</p>
-                     </div>
-                     <button className="choose-btn">선택</button>
-                  </div>
-                  <div className="parking-info">
-                     <div className="num">
-                        <p>1</p>
-                     </div>
-                     <div className="name">
-                        <p>주차장 이름</p>
-                     </div>
-                     <div className="addr">
-                        <p>주차장 주소</p>
-                     </div>
-                     <div className="id">
-                        <p>주차장 ID</p>
-                     </div>
-                     <button className="choose-btn">선택</button>
-                  </div>
-                  <div className="parking-info">
-                     <div className="num">
-                        <p>1</p>
-                     </div>
-                     <div className="name">
-                        <p>주차장 이름</p>
-                     </div>
-                     <div className="addr">
-                        <p>주차장 주소</p>
-                     </div>
-                     <div className="id">
-                        <p>주차장 ID</p>
-                     </div>
-                     <button className="choose-btn">선택</button>
-                  </div>
-                  <div className="parking-info">
-                     <div className="num">
-                        <p>1</p>
-                     </div>
-                     <div className="name">
-                        <p>주차장 이름</p>
-                     </div>
-                     <div className="addr">
-                        <p>주차장 주소</p>
-                     </div>
-                     <div className="id">
-                        <p>주차장 ID</p>
-                     </div>
-                     <button className="choose-btn">선택</button>
-                  </div>
-                  <div className="parking-info">
-                     <div className="num">
-                        <p>1</p>
-                     </div>
-                     <div className="name">
-                        <p>주차장 이름</p>
-                     </div>
-                     <div className="addr">
-                        <p>주차장 주소</p>
-                     </div>
-                     <div className="id">
-                        <p>주차장 ID</p>
-                     </div>
-                     <button className="choose-btn">선택</button>
-                  </div>
-                  <div className="parking-info">
-                     <div className="num">
-                        <p>1</p>
-                     </div>
-                     <div className="name">
-                        <p>주차장 이름</p>
-                     </div>
-                     <div className="addr">
-                        <p>주차장 주소</p>
-                     </div>
-                     <div className="id">
-                        <p>주차장 ID</p>
-                     </div>
-                     <button className="choose-btn">선택</button>
-                  </div>
-                  <div className="parking-info">
-                     <div className="num">
-                        <p>1</p>
-                     </div>
-                     <div className="name">
-                        <p>주차장 이름</p>
-                     </div>
-                     <div className="addr">
-                        <p>주차장 주소</p>
-                     </div>
-                     <div className="id">
-                        <p>주차장 ID</p>
-                     </div>
-                     <button className="choose-btn">선택</button>
-                  </div>
-                  <div className="parking-info">
-                     <div className="num">
-                        <p>1</p>
-                     </div>
-                     <div className="name">
-                        <p>주차장 이름</p>
-                     </div>
-                     <div className="addr">
-                        <p>주차장 주소</p>
-                     </div>
-                     <div className="id">
-                        <p>주차장 ID</p>
-                     </div>
-                     <button className="choose-btn">선택</button>
-                  </div>
-                  <div className="parking-info">
-                     <div className="num">
-                        <p>1</p>
-                     </div>
-                     <div className="name">
-                        <p>주차장 이름</p>
-                     </div>
-                     <div className="addr">
-                        <p>주차장 주소</p>
-                     </div>
-                     <div className="id">
-                        <p>주차장 ID</p>
-                     </div>
-                     <button className="choose-btn">선택</button>
-                  </div>
-                  <div className="parking-info">
-                     <div className="num">
-                        <p>1</p>
-                     </div>
-                     <div className="name">
-                        <p>주차장 이름</p>
-                     </div>
-                     <div className="addr">
-                        <p>주차장 주소</p>
-                     </div>
-                     <div className="id">
-                        <p>주차장 ID</p>
-                     </div>
-                     <button className="choose-btn">선택</button>
-                  </div>
-               </div>
-
-               <div className="pagination">
-                  <div className="page-num">1</div>
-                  <div className="page-num">2</div>
-                  <div className="page-num active">3</div>
-                  <div className="page-num">4</div>
-                  <div className="page-num">5</div>
-                  <div className="page-num">6</div>
-                  <div className="page-num">7</div>
-                  <div className="page-num">8</div>
-                  <div className="page-num">9</div>
+                  )}
                </div>
             </div>
          </div>

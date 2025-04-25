@@ -15,11 +15,11 @@ import FindId from "./components/page/user/FIndId/FIndId";
 import FindPw from "./components/page/user/FindPw/FindPw";
 import FindPwCompleted from "./components/page/user/FindPw/FindPwCompleted";
 import SignUpCompleted from "./components/page/user/SignUp/SignUpCompleted";
-import Reply from "./components/page/reply/reply";
+import Reply from "./components/page/reply/Reply";
 import Login from "./components/page/user/Login/Login";
 import SignUp from "./components/page/user/SignUp/SignUp";
 import InquiryCheck from "./components/page/inquiryCheck/inquiryCheck";
-import ReviewCheck from "./components/page/reviewCheck/reviewCheck";
+import ReviewCheck from "./components/page/reviewCheck/ReviewCheck";
 import RentalReservation from "./components/page/rentalReservation/RentalReservation";
 import NoticeBoard from "./components/page/Board/NoticePage/NoticeBoard/NoticeBoard";
 import NoticeDetail from "./components/page/Board/NoticePage/NoticeDetail/NoticeDetail";
@@ -44,9 +44,9 @@ function App() {
           <Route path="/find-pw" element={<FindPw />} />
           <Route path="/find-pw-done" element={<FindPwCompleted />} />
           <Route path="/admin" element={<AdminPage />}>
-            <Route index element={<Navigate to="model" replace />} />
-            <Route path="model" element={<ModelPage />} />
-            <Route path="car" element={<CarPage />} />
+            <Route index element={<Navigate to="model/1" replace />} />
+            <Route path="model/:page" element={<ModelPage />} />
+            <Route path="car/:page" element={<CarPage />} />
           </Route>
           <Route path="/rent" element={<CarRentPage />} />
           <Route path="/rent/:id" element={<RentalReservation />} />

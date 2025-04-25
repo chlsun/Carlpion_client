@@ -20,24 +20,28 @@ const Point = () => {
         <Table>
           <thead>
             <tr>
-              <Th>회원아이디</Th>
+              <Th>회원번호</Th>
+              <Th>게시글번호</Th>
+              <Th>아이디</Th>
               <Th>이름</Th>
-              <Th>닉네임</Th>
-              <Th>포인트내용</Th>
+              <Th>등급</Th>
+              <Th>변동사유</Th>
+              <Th>변동내역</Th>
               <Th>포인트</Th>
               <Th>일시</Th>
-              <Th>포인트합</Th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <Td>kh123</Td>
+              <Td>1</Td>
+              <Td>34</Td>
+              <Td>ABC1234</Td>
               <Td>짱구</Td>
-              <Td>짱구</Td>
+              <Td>등급</Td>
               <Td>게시글 작성</Td>
+              <Td>욕설</Td>
               <Td>200</Td>
               <Td>2025.04.14</Td>
-              <Td>500</Td>
             </tr>
           </tbody>
         </Table>
