@@ -27,6 +27,8 @@ import CommuniteBoard from "./components/page/Board/CommunitePage/CommuniteBoard
 import CommuniteDetail from "./components/page/Board/CommunitePage/CommuniteDetail/CommuniteDetail";
 import ReportBoard from "./components/page/Board/ReportPage/ReportBoard/ReportBoard";
 import ReportDetail from "./components/page/Board/ReportPage/ReportDetail/ReportDetail";
+import WritePage from "./components/page/WritePage/WritePage";
+import ReportWrite from "./components/page/Board/ReportPage/ReportWrite/ReportWrite";
 
 function App() {
   return (
@@ -53,11 +55,12 @@ function App() {
           <Route path="/point" element={<Point />} />
           <Route path="/reply" element={<Reply />} />
           <Route path="/nb" element={<NoticeBoard />} />
-          <Route path="/nd/:id" element={<NoticeDetail />} />
+          <Route path="/nd/:noticeNo" element={<NoticeDetail />} />
           <Route path="/cb" element={<CommuniteBoard />} />
-          <Route path="/cd/:id" element={<CommuniteDetail />} />
+          <Route path="/cd/:reviewNo" element={<CommuniteDetail />} />
           <Route path="/rb" element={<ReportBoard />} />
-          <Route path="/rd/:id" element={<ReportDetail />} />
+          <Route path="/rd/:reportNo" element={<ReportDetail />} />
+          <Route path="/rw" element={<ReportWrite />} />
           <Route path="/inquiryCheck" element={<InquiryCheck />} />
           <Route path="/reviewCheck" element={<ReviewCheck />} />
         </Routes>

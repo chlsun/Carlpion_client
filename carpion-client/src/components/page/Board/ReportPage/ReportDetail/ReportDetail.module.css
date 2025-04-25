@@ -24,6 +24,18 @@
   margin-bottom: 12px;
 }
 
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.date {
+  font-size: 14px;
+  color: #666;
+}
+
 .infoRow {
   display: flex;
   justify-content: space-between;
@@ -98,24 +110,4 @@
   display: flex;
   justify-content: center;
   margin: 32px 0 8px;
-}
-
-.likeBtn {
-  background: none;
-  border: none;
-  font-size: 14px;
-  cursor: pointer;
-  color: #444;
-  padding: 4px 8px;
-  border-radius: 6px;
-  transition: background 0.2s;
-}
-
-.likeBtn:hover {
-  background: #f2f2f2;
-}
-
-.likeBtn.liked {
-  color: #e74c3c;
-  font-weight: bold;
 }

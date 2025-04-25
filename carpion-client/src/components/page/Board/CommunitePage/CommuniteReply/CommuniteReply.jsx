@@ -1,56 +1,80 @@
-import React, { useState } from "react";
-import styles from "./CommuniteReply.module.css";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import crstyles from "./CommuniteReply.module.css";
 
-function CommuniteReply() {
-  const [comments, setComments] = useState([
-    {
-      id: 1,
-      nickname: "홍길동",
-      content: "이 기능 정말 좋아요!",
-      time: "2025-04-15 14:32:00",
-    },
-    {
-      id: 2,
-      nickname: "김개발",
-      content: "버그는 없는지 확인해보겠습니다.",
-      time: "2025-04-16 09:12:47",
-    },
-  ]);
+function CommuniteReply({ reviewNo }) {
+  const [comments, setComments] = useState([]);
   const [message, setMessage] = useState("");
 
-  const handleSend = () => {
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:80/reviews/comments?reviewNo=${reviewNo}`
+        );
+        setComments(response.data);
+      } catch (error) {
+        console.error("댓글 불러오기 실패:", error);
+      }
+    };
+
+    fetchComments();
+  }, [reviewNo]);
+
+  const handleSend = async () => {
     if (message.trim() === "") return;
 
     const newComment = {
-      id: Date.now(),
-      nickname: "사용자", // 나중에 유저 정보와 연결 가능
+      nickName: "사용자",
       content: message,
-      time: new Date().toLocaleString(),
+      reviewNo: reviewNo,
     };
 
-    setComments([...comments, newComment]);
-    setMessage("");
+    try {
+      const response = await axios.post("/reviews/comments", newComment);
+      const createdComment = response.data;
+      setComments([...comments, createdComment]);
+      setMessage("");
+    } catch (error) {
+      console.error("댓글 추가 실패:", error);
+    }
   };
 
-  const handleDelete = (id) => {
-    setComments(comments.filter((comment) => comment.id !== id));
+  const handleDelete = async (commentNo) => {
+    try {
+      await axios.delete(`/reviews/comments/${commentNo}`);
+      setComments(
+        comments.filter((comment) => comment.commentNo !== commentNo)
+      );
+    } catch (error) {
+      console.error("댓글 삭제 실패:", error);
+    }
   };
 
-  const handleEditSave = (id, newContent) => {
-    setComments(
-      comments.map((comment) =>
-        comment.id === id ? { ...comment, content: newContent } : comment
-      )
-    );
+  const handleEditSave = async (commentNo, newContent) => {
+    try {
+      await axios.put(`/reviews/comments/${commentNo}`, {
+        content: newContent,
+      });
+      setComments(
+        comments.map((comment) =>
+          comment.commentNo === commentNo
+            ? { ...comment, content: newContent }
+            : comment
+        )
+      );
+    } catch (error) {
+      console.error("댓글 수정 실패:", error);
+    }
   };
 
   return (
-    <div className={styles.commentWrapper}>
-      <div className={styles.commentSection}>
-        <div className={styles.commentList}>
+    <div className={crstyles.commentWrapper}>
+      <div className={crstyles.commentSection}>
+        <div className={crstyles.commentList}>
           {comments.map((comment) => (
             <CommentItem
-              key={comment.id}
+              key={comment.commentNo}
               comment={comment}
               onDelete={handleDelete}
               onSaveEdit={handleEditSave}
@@ -58,16 +82,16 @@ function CommuniteReply() {
           ))}
         </div>
 
-        <div className={styles.chatInputArea}>
+        <div className={crstyles.chatInputArea}>
           <input
             type="text"
             placeholder="댓글을 입력하세요..."
-            className={styles.chatInput}
+            className={crstyles.chatInput}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && handleSend()}
           />
-          <button className={styles.sendButton} onClick={handleSend}>
+          <button className={crstyles.sendButton} onClick={handleSend}>
             전송
           </button>
         </div>
@@ -75,51 +99,50 @@ function CommuniteReply() {
     </div>
   );
 }
-
-function CommentItem({ comment, onDelete, onSaveEdit }) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [newContent, setNewContent] = useState(comment.content);
+function CommentItem({ comment, onDelete /* , onSaveEdit */ }) {
+  // const [isEditing, setIsEditing] = useState(false);
+  // const [newContent, setNewContent] = useState(comment.content);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleEditClick = () => {
-    setIsEditing(true);
-    setMenuOpen(false); // 수정할 때 메뉴 닫기
-  };
+  // const handleEditClick = () => {
+  //   setIsEditing(true);
+  //   setMenuOpen(false);
+  // };
 
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-    setNewContent(comment.content); // 원래 내용으로 되돌리기
-    setMenuOpen(false); // 취소 시 메뉴 닫기
-  };
+  // const handleCancelEdit = () => {
+  //   setIsEditing(false);
+  //   setNewContent(comment.content);
+  //   setMenuOpen(false);
+  // };
 
-  const handleSaveEdit = () => {
-    onSaveEdit(comment.id, newContent);
-    setIsEditing(false); // 수정 후 종료
-    setMenuOpen(false); // 저장 후 메뉴 닫기
-  };
+  // const handleSaveEdit = () => {
+  //   onSaveEdit(comment.commentNo, newContent);
+  //   setIsEditing(false);
+  //   setMenuOpen(false);
+  // };
 
   const handleMenuToggle = () => {
-    setMenuOpen(!menuOpen); // 메뉴 열기/닫기
+    setMenuOpen(!menuOpen);
   };
 
   return (
-    <div className={styles.comment}>
-      <div className={styles.commentHeader}>
-        <span className={styles.nickname}>{comment.nickname}</span>
-        <div className={styles.rightTop}>
-          <span className={styles.commentTime}>{comment.time}</span>
-          <div className={styles.menuContainer}>
-            <button className={styles.menuButton} onClick={handleMenuToggle}>
+    <div className={crstyles.comment}>
+      <div className={crstyles.commentHeader}>
+        <span className={crstyles.nickname}>{comment.nickName}</span>
+        <div className={crstyles.rightTop}>
+          <span className={crstyles.commentTime}>{comment.createDate}</span>
+          <div className={crstyles.menuContainer}>
+            <button className={crstyles.menuButton} onClick={handleMenuToggle}>
               &#x22EE;
             </button>
             {menuOpen && (
-              <div className={styles.menuDropdown}>
-                <button className={styles.menuItem} onClick={handleEditClick}>
+              <div className={crstyles.menuDropdown}>
+                {/* <button className={crstyles.menuItem} onClick={handleEditClick}>
                   수정
-                </button>
+                </button> */}
                 <button
-                  className={`${styles.menuItem} ${styles.menuItemDelete}`}
-                  onClick={() => onDelete(comment.id)}
+                  className={`${crstyles.menuItem} ${crstyles.menuItemDelete}`}
+                  onClick={() => onDelete(comment.commentNo)}
                 >
                   삭제
                 </button>
@@ -129,25 +152,27 @@ function CommentItem({ comment, onDelete, onSaveEdit }) {
         </div>
       </div>
 
-      {isEditing ? (
-        <div className={styles.editSection}>
+      <div className={crstyles.commentContent}>{comment.content}</div>
+
+      {/* {isEditing ? (
+        <div className={crstyles.editSection}>
           <textarea
-            className={styles.editInput}
+            className={crstyles.editInput}
             value={newContent}
             onChange={(e) => setNewContent(e.target.value)}
           />
-          <div className={styles.editButtons}>
-            <button className={styles.saveButton} onClick={handleSaveEdit}>
+          <div className={crstyles.editButtons}>
+            <button className={crstyles.saveButton} onClick={handleSaveEdit}>
               저장
             </button>
-            <button className={styles.cancelButton} onClick={handleCancelEdit}>
+            <button className={crstyles.cancelButton} onClick={handleCancelEdit}>
               취소
             </button>
           </div>
         </div>
       ) : (
-        <div className={styles.commentContent}>{comment.content}</div>
-      )}
+        <div className={crstyles.commentContent}>{comment.content}</div>
+      )} */}
     </div>
   );
 }
