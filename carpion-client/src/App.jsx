@@ -1,5 +1,6 @@
 import "./App.css";
 import { Navigate, Route, Routes } from "react-router-dom";
+import { AuthProvider } from "./components/page/Context/AuthContext";
 import MainPage from "./components/page/mainpage/MainPage";
 import AdminPage from "./components/page/adminpage/AdminPage";
 import ModelPage from "./components/page/adminpage/ModelPage/ModelPage";
@@ -20,7 +21,6 @@ import SignUp from "./components/page/user/SignUp/SignUp";
 import InquiryCheck from "./components/page/inquiryCheck/inquiryCheck";
 import ReviewCheck from "./components/page/reviewCheck/reviewCheck";
 import RentalReservation from "./components/page/rentalReservation/RentalReservation";
-import { AuthProvider } from "./components/page/Context/AuthContext";
 import NoticeBoard from "./components/page/Board/NoticePage/NoticeBoard/NoticeBoard";
 import NoticeDetail from "./components/page/Board/NoticePage/NoticeDetail/NoticeDetail";
 import CommuniteBoard from "./components/page/Board/CommunitePage/CommuniteBoard/CommuniteBoard";
