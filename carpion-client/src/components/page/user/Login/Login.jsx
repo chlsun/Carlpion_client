@@ -144,6 +144,10 @@ const Login = () => {
         }
     };
 
+    const handleLoginGoogle = () => {
+        window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=430311231437-p5htp79gao25qmgsqrt26t8q2hkjjuue.apps.googleusercontent.com&scope=openid email profile&response_type=code&redirect_uri=http://localhost:5173/login-redirect`;
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!validateForm()) return;
@@ -231,7 +235,7 @@ const Login = () => {
                             </div>
                             <div className="font-maintheme text-lg text-gray-500 tracking-wider">또는</div>
                             <div className="flex items-center gap-2">
-                                <button className="size-12 border-2 border-gray-300 rounded-md cursor-pointer">
+                                <button onClick={handleLoginGoogle} type="button" className="size-12 border-2 border-gray-300 rounded-md cursor-pointer">
                                     <img src={Icon_Google} alt="Icon_Google" />
                                 </button>
                                 <div className="font-maintheme text-lg text-gray-500 tracking-wider">로 시작하기</div>
