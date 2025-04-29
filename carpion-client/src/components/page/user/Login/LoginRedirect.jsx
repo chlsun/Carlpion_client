@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { AuthContext } from "../../Context/AuthContext";
+import { AuthSocialContext } from "../../Context/AuthSocialContext";
 
 const LoginRedirect = () => {
     const navi = useNavigate();
@@ -11,26 +11,34 @@ const LoginRedirect = () => {
 
     const [googleAccessToken, setGoogleAccecssToken] = useState(null);
 
+    const [googleIdToken, setGoogleIdToken] = useState(null);
+
     const [googleLoginInfo, setGoogleLoginInfo] = useState(null);
 
+    const { socialLogin } = useContext(AuthSocialContext);
+
     useEffect(() => {
-        axios
-            .post(`https://oauth2.googleapis.com/token`, {
-                code: code,
-                client_id: "430311231437-p5htp79gao25qmgsqrt26t8q2hkjjuue.apps.googleusercontent.com",
-                client_secret: "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",
-                redirect_uri: "http://localhost:5173/login-redirect",
-                grant_type: "authorization_code",
-            })
-            .then((tokenRes) => {
-                console.log(tokenRes);
-                if (tokenRes.status === 200) {
-                    setGoogleAccecssToken(tokenRes.data.access_token);
-                }
-            })
-            .catch((tokenError) => {
-                console.log(tokenError);
-            });
+        if (code || returnCode) {
+            axios
+                .post(`https://oauth2.googleapis.com/token`, {
+                    code: code,
+                    client_id: "430311231437-p5htp79gao25qmgsqrt26t8q2hkjjuue.apps.googleusercontent.com",
+                    client_secret: "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",
+                    redirect_uri: "http://localhost:5173/login-redirect",
+                    grant_type: "authorization_code",
+                })
+                .then((tokenRes) => {
+                    console.log(tokenRes);
+                    if (tokenRes.status === 200) {
+                        setGoogleAccecssToken(tokenRes.data.access_token);
+                        setGoogleIdToken(tokenRes.data.id_token);
+                    }
+                })
+                .catch((tokenError) => {
+                    console.log(tokenError);
+                    navi("/");
+                });
+        }
     }, []);
 
     useEffect(() => {
@@ -38,13 +46,13 @@ const LoginRedirect = () => {
             axios
                 .get(`https://www.googleapis.com/userinfo/v2/me`, { headers: { Authorization: `Bearer ${googleAccessToken}` } })
                 .then((userInfoRes) => {
-                    console.log(userInfoRes);
                     if (userInfoRes.status === 200) {
                         setGoogleLoginInfo({ socialId: userInfoRes.data.id, email: userInfoRes.data.email, platform: "google" });
                     }
                 })
                 .catch((userInfoError) => {
                     console.log(userInfoError);
+                    navi("/");
                 });
         }
     }, [googleAccessToken]);
@@ -54,17 +62,15 @@ const LoginRedirect = () => {
             axios
                 .post(`http://localhost:80/auth/login-social`, googleLoginInfo)
                 .then((googleLoginRes) => {
-                    console.log(googleLoginRes);
-                    if (googleLoginRes.status === 302) {
-                        navi("/sign-up-social", { state: googleLoginInfo });
-                        return;
-                    }
                     if (googleLoginRes.status === 200) {
-                        console.log(googleLoginRes);
+                        const { socialId, platform, nickname, realname, email } = googleLoginRes.data;
+                        socialLogin(socialId, platform, nickname, realname, email, googleIdToken);
                     }
                 })
                 .catch((googleLoginError) => {
-                    console.log(googleLoginError);
+                    if (googleLoginError.status === 302) {
+                        navi("/sign-up-social", { state: { ...googleLoginInfo, code } });
+                    }
                 });
         }
     }, [googleLoginInfo]);

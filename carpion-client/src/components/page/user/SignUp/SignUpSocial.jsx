@@ -61,9 +61,20 @@ const SignUpSocial = () => {
 
     const [exceptionMessage, setExceptionMessage] = useState(null);
 
+    const [googleLoginInfo, setGoogleLoginInfo] = useState(null);
+
+    const [code, setCode] = useState(null);
+
+    const [isProgress, setIsProgress] = useState(false);
+
     const location = useLocation();
 
-    useEffect(() => {});
+    useEffect(() => {
+        if (location.state) {
+            setGoogleLoginInfo({ socialId: location.state.socialId, platform: location.state.platform, email: location.state.email });
+            setCode(location.state.code);
+        }
+    }, []);
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -141,16 +152,20 @@ const SignUpSocial = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (isProgress) return;
         if (!validateForm()) return;
+        setIsProgress(true);
         axios
-            .post(``)
-            .then(() => {
-                navi("/sign-up-social");
+            .post(`http://localhost:80/auth/sign-up-social`, { ...googleLoginInfo, ...inputValues })
+            .then((result) => {
+                if (result.status == 201) {
+                    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=430311231437-p5htp79gao25qmgsqrt26t8q2hkjjuue.apps.googleusercontent.com&scope=openid email profile&response_type=code&redirect_uri=http://localhost:5173/login-redirect&login_hint=${googleLoginInfo.email}`;
+                }
             })
             .catch((error) => {
-                console.log(error);
                 error.response.data.code && setExceptionMessage(error.response.data.code);
                 error.response.data.cause && setExceptionMessage(error.response.data.cause);
+                setIsProgress(false);
             });
     };
 
@@ -158,7 +173,7 @@ const SignUpSocial = () => {
         <>
             <div className="size-full min-h-screen bg-gray-100 flex justify-center select-none">
                 <div className="w-xl px-24 my-48 bg-white border-2 border-maincolor rounded-2xl flex flex-col justify-center items-center">
-                    <section className="mt-24 mb-16 font-maintheme text-5xl text-maincolor">회원가입</section>
+                    <section className="mt-24 mb-16 font-maintheme text-4xl text-maincolor">소셜 회원 추가정보 입력</section>
                     <section className="w-full h-auto">
                         <ul className="flex flex-col gap-6">
                             {inputFields.map((field) => (
@@ -191,7 +206,9 @@ const SignUpSocial = () => {
                     <section className="w-full h-auto flex justify-center">
                         <button
                             onClick={handleSubmit}
-                            className="w-56 h-24 mt-16 mb-24 border-2 border-maincolor rounded-full font-maintheme text-maincolor text-3xl hover:bg-maincolor hover:text-white cursor-pointer"
+                            className={`w-56 h-24 mt-12 mb-8 border-2 border-maincolor rounded-full font-maintheme text-maincolor text-3xl ${
+                                isProgress ? "opacity-50 cursor-progress" : "hover:bg-maincolor hover:text-white cursor-pointer"
+                            }`}
                         >
                             회원가입
                         </button>

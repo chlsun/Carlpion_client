@@ -3,6 +3,7 @@ import Carlpion_Logo from "/src/assets/carlpion_logo.png";
 import Carlpion_Logo_TextOnly from "/src/assets/carlpion_logo_textonly.png";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../page/Context/AuthContext";
+import { AuthSocialContext } from "../../page/Context/AuthSocialContext";
 
 const Header = () => {
     const navi = useNavigate();
@@ -11,6 +12,7 @@ const Header = () => {
     const [openMenu, setOpenMenu] = useState(0);
 
     const { auth, logout } = useContext(AuthContext);
+    const { authSocial, socialLogout } = useContext(AuthSocialContext);
 
     const handleScroll = useCallback(() => {
         window.requestAnimationFrame(() => {
@@ -66,7 +68,7 @@ const Header = () => {
                     </ul>
                 </section>
                 <section className="w-1/6 h-full flex justify-end items-center gap-2">
-                    {!auth.isAuthenticated ? (
+                    {!auth.isAuthenticated && !authSocial.isAuthenticated ? (
                         <div
                             onClick={() => navi("/start")}
                             className={`flex items-center font-maintheme text-maincolor border-2 cursor-pointer hover:bg-maincolor hover:text-white transition-all duration-300 ${
@@ -86,7 +88,7 @@ const Header = () => {
                                 {sessionStorage.getItem("nickname")}
                             </div>
                             <div
-                                onClick={logout}
+                                onClick={auth.isAuthenticated ? logout : socialLogout}
                                 className={`flex items-center font-maintheme text-maincolor border-2 cursor-pointer hover:bg-maincolor hover:text-white transition-all duration-300 ${
                                     isScrolled ? "px-1 text-lg rounded-lg" : "px-2 py-1 text-xl rounded-xl"
                                 }`}

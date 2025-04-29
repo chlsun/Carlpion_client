@@ -56,6 +56,8 @@ const Login = () => {
 
     const [exceptionMessage, setExceptionMessage] = useState(null);
 
+    const [isProgress, setIsProgress] = useState(false);
+
     const { login } = useContext(AuthContext);
 
     const navi = useNavigate();
@@ -150,16 +152,20 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (isProgress) return;
         if (!validateForm()) return;
+        setIsProgress(true);
         axios
             .post(`http://localhost:80/auth/login`, inputValues)
             .then((result) => {
                 const { username, nickname, realname, email, accessToken, refreshToken } = result.data;
                 login(username, nickname, realname, email, accessToken, refreshToken);
+
                 navi("/");
             })
             .catch((error) => {
                 setExceptionMessage(error.response.data.cause);
+                setIsProgress(false);
             });
     };
 
@@ -205,7 +211,9 @@ const Login = () => {
                     <section className="w-full h-auto flex justify-center">
                         <button
                             onClick={handleSubmit}
-                            className="w-56 h-24 mt-12 mb-8 border-2 border-maincolor rounded-full font-maintheme text-maincolor text-3xl hover:bg-maincolor hover:text-white cursor-pointer"
+                            className={`w-56 h-24 mt-12 mb-8 border-2 border-maincolor rounded-full font-maintheme text-maincolor text-3xl ${
+                                isProgress ? "opacity-50 cursor-progress" : "hover:bg-maincolor hover:text-white cursor-pointer"
+                            }`}
                         >
                             로그인
                         </button>
