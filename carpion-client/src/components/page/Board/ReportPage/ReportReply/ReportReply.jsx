@@ -114,7 +114,7 @@ function ReportReply({ reportNo }) {
                   className={`${rrstyles.chatBubble} ${rrstyles[messageType]}`}
                 >
                   <span className={rrstyles.chatPrefix}>
-                    {messageType === "question" ? "Q." : "A."}{" "}
+                    {messageType === "question" ? "Q." : "A."}
                   </span>
                   <p className={rrstyles.chatMessage}>{comment.content}</p>
                   <span className={rrstyles.chatTimestamp}>
