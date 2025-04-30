@@ -100,7 +100,7 @@
 }
 #car-page .car-input .btn > button {
    width: 50%;
-   border-right: 1px solid gray;
+   border-right: 1px solid #80808050;
    background-color: #3dadf2;
    cursor: pointer;
    color: #ffffff;
@@ -119,7 +119,7 @@
    align-items: center;
    width: 100%;
    height: 60px;
-   border: 1px solid gray;
+   border: 1px solid #80808050;
    margin-bottom: 2px;
 }
 #car-page .car-list .car > div {
@@ -128,7 +128,7 @@
    display: flex;
    align-items: center;
    padding: 10px;
-   border-right: 1px solid gray;
+   border-right: 1px solid #80808050;
    overflow: hidden;
 }
 #car-page .car-list .car > div > p {
@@ -152,8 +152,19 @@
 #car-page .car-list .car .car-no > p {
    width: fit-content;
 }
+#car-page .car-list .car .car-num > input {
+   border: 1px solid #b1b1b1;
+   border-radius: 4px;
+   padding: 0 6px;
+   width: 100%;
+}
 #car-page .car-list .car .model-name {
    width: 18%;
+   overflow: inherit;
+}
+#car-page .car-list .car .model-name .update-options {
+   width: 100%;
+   height: 100%;
 }
 #car-page .car-list .car .parking-name {
    width: 20%;
@@ -165,10 +176,13 @@
    width: 15%;
 }
 #car-page .car-list .car .btn-box {
-   width: 10%;
+   width: 15%;
    border-right: 0;
    display: flex;
    padding: 0;
+}
+#car-page .car-list .car .parking-search {
+   border-right: 1px solid #ffffff;
 }
 #car-page .car-list .car .btn-box > button {
    background-color: #3dadf2;
@@ -177,7 +191,7 @@
    width: 50%;
 }
 #car-page .car-list .car .btn-box .update-btn {
-   border-right: 1px solid gray;
+   border-right: 1px solid rgb(255, 255, 255);
 }
 
 #car-page .pagination {

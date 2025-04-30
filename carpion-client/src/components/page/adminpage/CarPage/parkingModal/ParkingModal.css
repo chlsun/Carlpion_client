@@ -18,12 +18,17 @@
    border: none;
 }
 
+#paking-modal #map {
+   width: 60%;
+   height: 450px;
+}
+
 #paking-modal {
    margin: 0;
    padding: 0;
    font-family: "pretendard";
    box-sizing: border-box;
-   position: absolute;
+   position: fixed;
    top: 0;
    left: 0;
    z-index: 99;
@@ -98,6 +103,11 @@
    margin-bottom: 100px;
    overflow-y: scroll;
 }
+#paking-modal .search-list .parking-box {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
 #paking-modal .search-list .no-parkingList {
    width: 100%;
    height: 100%;
@@ -133,13 +143,21 @@
    font-weight: 600;
 }
 #paking-modal .search-list .parking-info .name {
-   width: 20%;
+   width: 40%;
 }
 #paking-modal .search-list .parking-info .addr {
-   width: 45%;
+   width: 35%;
 }
 #paking-modal .search-list .parking-info .id {
-   width: 25%;
+   width: 10%;
+}
+#paking-modal .search-list .parking-info .open-map {
+   width: 5%;
+   height: 100%;
+   font-weight: 500;
+   background-color: #858585;
+   color: #ffffff;
+   border-right: 1px solid white;
 }
 #paking-modal .search-list .parking-info .choose-btn {
    width: 5%;
