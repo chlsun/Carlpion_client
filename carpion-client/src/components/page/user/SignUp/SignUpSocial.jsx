@@ -171,8 +171,8 @@ const SignUpSocial = () => {
 
     return (
         <>
-            <div className="size-full min-h-screen bg-gray-100 flex justify-center select-none">
-                <div className="w-xl px-24 my-48 bg-white border-2 border-maincolor rounded-2xl flex flex-col justify-center items-center">
+            <div className="size-full min-h-screen bg-gray-100 dark:bg-gray-900 flex justify-center select-none">
+                <div className="w-xl px-24 my-48 bg-white dark:bg-gray-800 border-2 border-maincolor rounded-2xl flex flex-col justify-center items-center">
                     <section className="mt-24 mb-16 font-maintheme text-4xl text-maincolor">소셜 회원 추가정보 입력</section>
                     <section className="w-full h-auto">
                         <ul className="flex flex-col gap-6">

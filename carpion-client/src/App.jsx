@@ -32,6 +32,7 @@ import ReportWrite from "./components/page/Board/ReportPage/ReportWrite/ReportWr
 import LoginRedirect from "./components/page/user/Login/LoginRedirect";
 import SignUpSocial from "./components/page/user/SignUp/SignUpSocial";
 import { AuthSocialProvider } from "./components/page/Context/AuthSocialContext";
+import ErrorPage from "./components/page/ErrorPage/ErrorPage";
 
 function App() {
     return (
@@ -41,6 +42,7 @@ function App() {
                     <Header />
                     <Routes>
                         <Route path="/" element={<MainPage />} />
+                        <Route path="/error" element={<ErrorPage />} />
                         <Route path="/start" element={<Login />} />
                         <Route path="/login-redirect" element={<LoginRedirect />} />
                         <Route path="/sign-up" element={<SignUp />} />

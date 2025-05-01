@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated: false,
     });
 
-    const [refreshToken, setRefreshToekn] = useState(() => localStorage.getItem("refreshToken"));
+    const [refreshToken, setRefreshToekn] = useState(localStorage.getItem("refreshToken"));
 
     useEffect(() => {
         const token = sessionStorage.getItem("accessToken");
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
         }, 2000);
     }, [refreshToken]);
 
-    function login(username, nickname, realname, email, accessToken, refreshToken) {
+    const login = (username, nickname, realname, email, accessToken, refreshToken) => {
         if (refreshToken === undefined) {
             setAuth({
                 username,
@@ -95,7 +95,7 @@ export const AuthProvider = ({ children }) => {
         sessionStorage.setItem("email", email);
         sessionStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
-    }
+    };
 
     const logout = () => {
         const refreshToken = localStorage.getItem("refreshToken");

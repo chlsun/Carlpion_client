@@ -38,3 +38,5 @@
     --font-maintheme-bold: "HakgyoansimAllimjangTTF-B";
     --font-Pretendard: "Pretendard-Regular";
 }
+
+@custom-variant dark (&:where(.dark, .dark *));

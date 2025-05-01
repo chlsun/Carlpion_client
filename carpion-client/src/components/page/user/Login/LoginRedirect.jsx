@@ -18,7 +18,7 @@ const LoginRedirect = () => {
     const { socialLogin } = useContext(AuthSocialContext);
 
     useEffect(() => {
-        if (code || returnCode) {
+        if (code) {
             axios
                 .post(`https://oauth2.googleapis.com/token`, {
                     code: code,
@@ -77,8 +77,8 @@ const LoginRedirect = () => {
 
     return (
         <>
-            <div className="size-full min-h-screen bg-gray-100 flex justify-center select-none">
-                <div className="w-xl px-24 my-48 bg-white border-2 border-maincolor rounded-2xl flex flex-col justify-center items-center">
+            <div className="size-full min-h-screen bg-gray-100 dark:bg-gray-900 flex justify-center select-none">
+                <div className="w-xl px-24 my-48 bg-white dark:bg-gray-800 border-2 border-maincolor rounded-2xl flex flex-col justify-center items-center">
                     <div className="font-maintheme text-4xl text-maincolor">로그인 진행 중 입니다...</div>
                 </div>
             </div>
