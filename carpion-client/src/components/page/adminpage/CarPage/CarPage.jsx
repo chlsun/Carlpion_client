@@ -11,6 +11,8 @@ const CarPage = () => {
    const { auth } = useContext(AuthContext);
    const [updateFormNum, setUpdateFormNum] = useState(-1);
    const [isPageLoad, setIsPageLoad] = useState(true);
+   const [pageInfo, setPageInfo] = useState(null);
+   const [pageNumbers, setPageNumbers] = useState([1]);
    const [rentCarList, setRentCarList] = useState(null);
    const [options, setOptions] = useState([]);
    const [parkingInfo, setParkingInfo] = useState(null);
@@ -67,7 +69,10 @@ const CarPage = () => {
       }
 
       if (!!!pattern.test(rentCar.carId)) {
-         alert("실패실패");
+         alert(
+            "차량 번호 형식이 잘못되었습니다.\n00가0000 혹은 000가0000 와 같은 형식으로 입력해주세요."
+         );
+         return;
       }
 
       if (auth.accessToken) {
@@ -84,7 +89,9 @@ const CarPage = () => {
                setSelectedModelNo(null);
             })
             .catch((error) => {
-               console.log(error);
+               const errors = error.response.data;
+               const firstErrorMessage = Object.values(errors)[0];
+               alert(firstErrorMessage);
             });
       }
    };
@@ -96,6 +103,30 @@ const CarPage = () => {
          parkingId: parkingInfo ? parkingInfo.parkingId : null,
       });
    }, [parkingInfo, carId, selectedModelNo]);
+
+   useEffect(() => {
+      if (auth.accessToken) {
+         axios
+            .get(`http://localhost/admin/model`, {
+               headers: {
+                  Authorization: `Bearer ${auth.accessToken}`,
+               },
+            })
+            .then((result) => {
+               const modelList = result.data;
+               const option = modelList.map((model) => {
+                  return { value: model.modelNo, label: model.carModel };
+               });
+               setOptions([...options, ...option]);
+            })
+            .catch((error) => {
+               if (error.response.status == 403) {
+                  navi("/");
+                  alert("운영자만 이용가능한 페이지입니다.");
+               }
+            });
+      }
+   }, [auth.accessToken]);
 
    useEffect(() => {
       if (auth.accessToken) {
@@ -113,30 +144,20 @@ const CarPage = () => {
                   parkingId: null,
                });
                setCarId("");
-               console.log(result.data.carModelList);
+               setPageInfo(result.data.pageInfo);
+               const pageArray = [];
+
+               for (
+                  let i = result.data.pageInfo.startPage;
+                  i <= result.data.pageInfo.endPage;
+                  i++
+               ) {
+                  pageArray.push(i);
+               }
+               setPageNumbers(pageArray);
             })
             .catch((error) => {
                console.log(error);
-            });
-
-         axios
-            .get(`http://localhost/admin/model`, {
-               headers: {
-                  Authorization: `Bearer ${auth.accessToken}`,
-               },
-            })
-            .then((result) => {
-               const modelList = result.data;
-               const abc = modelList.map((model) => {
-                  return { value: model.modelNo, label: model.carModel };
-               });
-               setOptions([...options, ...abc]);
-            })
-            .catch((error) => {
-               if (error.response.status == 403) {
-                  navi("/");
-                  alert("운영자만 이용가능한 페이지입니다.");
-               }
             });
       }
    }, [auth.accessToken, isPageLoad]);
@@ -160,6 +181,23 @@ const CarPage = () => {
    };
 
    const updateRequestHandler = (rentCar) => {
+      if (!updateSelectedModelNo.value || !updateRentCar) {
+         alert("모든 정보를 기입해주세요");
+         return;
+      }
+
+      if (updateRentCar.length < 7 || updateRentCar.length > 8) {
+         alert("차량 번호 7자 이상 8자 이하로 등록가능합니다.");
+         return;
+      }
+
+      if (!!!pattern.test(updateRentCar)) {
+         alert(
+            "차량 번호 형식이 잘못되었습니다.\n00가0000 혹은 000가0000 와 같은 형식으로 입력해주세요."
+         );
+         return;
+      }
+
       if (auth.accessToken) {
          axios
             .put(
@@ -179,10 +217,38 @@ const CarPage = () => {
                }
             )
             .then((result) => {
-               console.log(result);
+               alert("수정 되었습니다");
+               setUpdateFormNum(-1);
+               setIsPageLoad(!isPageLoad);
             })
             .catch((error) => {
-               console.log(error);
+               const errors = error.response.data;
+               const firstErrorMessage = Object.values(errors)[0];
+               alert(firstErrorMessage);
+            });
+      }
+   };
+
+   const deleteRentCarHandler = (rentCar) => {
+      if (!!!confirm("정말로 삭제하시겠습니까?")) {
+         return;
+      }
+      if (auth.accessToken) {
+         axios
+            .delete("http://localhost/admin/car", {
+               params: { carNo: rentCar.carNo },
+               headers: {
+                  Authorization: `Bearer ${auth.accessToken}`,
+               },
+            })
+            .then((result) => {
+               alert("삭제 되었습니다.");
+               setIsPageLoad(!isPageLoad);
+            })
+            .catch((error) => {
+               const errors = error.response.data;
+               const firstErrorMessage = Object.values(errors)[0];
+               alert(firstErrorMessage);
             });
       }
    };
@@ -307,7 +373,11 @@ const CarPage = () => {
                               </button>
                            </>
                         ) : (
-                           <button type="button" className="delete-btn">
+                           <button
+                              type="button"
+                              className="delete-btn"
+                              onClick={() => deleteRentCarHandler(rentCar)}
+                           >
                               삭제
                            </button>
                         )}

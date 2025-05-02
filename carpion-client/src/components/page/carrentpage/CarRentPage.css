@@ -34,17 +34,46 @@
 #car-rent-page .map {
    height: 540px;
    width: 88%;
-   background-color: antiquewhite;
+   background-color: #b3ccf4;
    border-radius: 30px;
    margin-bottom: 64px;
    overflow: hidden;
    box-shadow: 0 0 8px 8px #0000000f;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+#car-rent-page .map > h2 {
+   font-size: 24px;
+   font-weight: 600;
 }
 
 #car-rent-page .select-container {
    display: flex;
    align-items: center;
-   margin-bottom: 120px;
+   margin-bottom: 30px;
+}
+#car-rent-page .dateMessage-box {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   margin-bottom: 130px;
+}
+#car-rent-page .dateMessage {
+   font-size: 20px;
+   font-weight: 500;
+   color: #333333;
+}
+#car-rent-page .dateMessage.between > b {
+   color: #6a7d9c;
+}
+
+#car-rent-page .dateMessage > b {
+   color: #3e7ee4;
+   font-weight: 600;
+}
+#car-rent-page .dateMessage.error {
+   color: #e43e3e;
 }
 #car-rent-page .select-container .title {
    font-size: 20px;
@@ -106,6 +135,7 @@
    background-color: #9a9a9a;
    margin-right: 20px;
    border-radius: 20px;
+   overflow: hidden;
 }
 
 #car-rent-page .car-list .rent-car .info {
@@ -178,4 +208,20 @@
 }
 #car-rent-page .car-list .rent-car.active .no-rent {
    display: flex;
+}
+
+#car-rent-page .no-search {
+   width: 100%;
+   margin-top: 60px;
+   margin-bottom: 260px;
+   display: flex;
+   justify-content: center;
+}
+#car-rent-page .no-search > h3 {
+   font-size: 24px;
+   font-weight: 600;
+   color: #333333;
+}
+#car-rent-page .no-search-box {
+   height: 200px;
 }
