@@ -4,34 +4,31 @@ import axios from "axios";
 import rbstyles from "./ReportBoard.module.css";
 
 const ReportBoard = () => {
-  const role = "admin";
-  const currentUser = "user1";
-
   const [searchParams, setSearchParams] = useSearchParams();
   const initialPage = parseInt(searchParams.get("page")) || 1;
-  const [searchQuery, setSearchQuery] = useState(""); // 검색 쿼리 상태
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [reports, setReports] = useState([]);
-  const [filteredReports, setFilteredReports] = useState([]); // 필터된 보고서
-  const [totalPages, setTotalPages] = useState(15); // 총 페이지 수
+  const [totalPages, setTotalPages] = useState(1);
+  const [startBtn, setStartBtn] = useState(1);
+  const [endBtn, setEndBtn] = useState(1);
+
   const itemsPerPage = 10;
 
   useEffect(() => {
     fetchReports(currentPage);
   }, [currentPage]);
 
-  useEffect(() => {
-    // 처음 로딩 시에는 필터된 보고서를 전체로 설정
-    setFilteredReports(reports);
-  }, [reports]);
-
   const fetchReports = async (page) => {
     try {
       const response = await axios.get(
-        `http://localhost:80/reports?page=${page - 1}`
+        `http://localhost:80/reports?page=${page}`
       );
-      setReports(response.data);
-      // 서버에서 총 페이지 수도 주면 여기서 setTotalPages(response.data.totalPages) 가능
+      const data = response.data;
+      console.log("리스폰", response.data);
+      setReports(data.list);
+      setTotalPages(data.maxPage);
+      setStartBtn(data.startBtn);
+      setEndBtn(data.endBtn);
     } catch (err) {
       console.error("❌ 데이터 로딩 실패:", err);
     }
@@ -43,26 +40,9 @@ const ReportBoard = () => {
     setSearchParams({ page: pageNumber });
   };
 
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value); // 입력값 업데이트
-  };
-
-  const handleSearchSubmit = () => {
-    // 검색 버튼 클릭 시 검색을 진행
-    if (searchQuery) {
-      const filtered = reports.filter((report) =>
-        report.title.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFilteredReports(filtered);
-    } else {
-      setFilteredReports(reports); // 검색어가 없으면 전체 보고서로 복귀
-    }
-  };
-
   const getPageNumbers = () => {
-    const maxPages = 5;
     let pages = [];
-    if (totalPages <= maxPages) {
+    if (totalPages <= 5) {
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
@@ -100,10 +80,6 @@ const ReportBoard = () => {
     </tr>
   );
 
-  const hasLeftEllipsis = getPageNumbers().includes("...") && currentPage > 3;
-  const hasRightEllipsis =
-    getPageNumbers().includes("...") && currentPage < totalPages - 2;
-
   return (
     <div className={rbstyles.reportListWrapper}>
       <div className={rbstyles.reportHeader}>
@@ -121,14 +97,14 @@ const ReportBoard = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredReports.length === 0 ? (
+          {reports.length === 0 ? (
             <tr>
               <td colSpan={5} className={rbstyles.empty}>
                 신고 내역이 없습니다.
               </td>
             </tr>
           ) : (
-            filteredReports.map((r, i) => (
+            reports.map((r, i) => (
               <ReportItem key={r.reportNo} report={r} index={i} />
             ))
           )}
@@ -136,7 +112,7 @@ const ReportBoard = () => {
       </table>
 
       <div className={rbstyles.paginationWrapper}>
-        {hasLeftEllipsis && (
+        {currentPage > 3 && totalPages > 5 && (
           <button
             onClick={() => handlePageChange(1)}
             className={rbstyles.paginationButton}
@@ -156,9 +132,7 @@ const ReportBoard = () => {
         {getPageNumbers().map((page, index) => (
           <button
             key={index}
-            onClick={() => {
-              if (page !== "...") handlePageChange(page);
-            }}
+            onClick={() => handlePageChange(page)}
             className={`${rbstyles.paginationButton} ${
               currentPage === page ? rbstyles.active : ""
             }`}
@@ -176,7 +150,7 @@ const ReportBoard = () => {
           {">"}
         </button>
 
-        {hasRightEllipsis && (
+        {currentPage < totalPages - 2 && totalPages > 5 && (
           <button
             onClick={() => handlePageChange(totalPages)}
             className={rbstyles.paginationButton}
@@ -184,20 +158,6 @@ const ReportBoard = () => {
             {"»"}
           </button>
         )}
-      </div>
-
-      {/* 검색 입력 및 버튼 */}
-      <div className={rbstyles.searchWrapper}>
-        <input
-          type="text"
-          className={rbstyles.searchInput}
-          value={searchQuery}
-          onChange={handleSearchChange}
-          placeholder="검색어를 입력하세요..."
-        />
-        <button className={rbstyles.searchButton} onClick={handleSearchSubmit}>
-          검색
-        </button>
       </div>
 
       <div className={rbstyles.actionWrapper}>
