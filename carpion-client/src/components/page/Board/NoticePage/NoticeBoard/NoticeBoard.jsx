@@ -19,13 +19,13 @@ const NoticeItem = ({ notice }) => (
 
 const NoticeBoard = () => {
   const [notices, setNotices] = useState([]);
-  const isAdmin = true;
 
   useEffect(() => {
     const fetchNotices = async () => {
       try {
         const response = await axios.get("http://localhost:80/notice");
-        setNotices(response.data);
+        console.log(response.data); // 데이터 구조 확인
+        setNotices(response.data.list); // 'list'에 해당하는 배열을 상태로 저장
       } catch (error) {
         console.error("데이터 로딩 실패:", error);
       }
@@ -49,7 +49,10 @@ const NoticeBoard = () => {
             className={nbstyles.titleIcon}
           />
           <h2 className={nbstyles.title}>공지사항</h2>
-          {isAdmin && <button className={nbstyles.writeButton}>작성</button>}
+
+          <Link to="/nw" className={nbstyles.writeButton}>
+            작성
+          </Link>
         </div>
 
         <ul className={nbstyles.list}>

@@ -5,9 +5,9 @@ import { AuthContext } from "../../../Context/AuthContext";
 import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/i18n/ko-kr";
-import wpstyles from "./ReportWrite.module.css";
+import wpstyles from "./NoticeWrite.module.css";
 
-function ReportWrite() {
+function NoticeWrite() {
   const editorRef = useRef();
   const imageMapRef = useRef([]);
   const navigate = useNavigate();
@@ -68,7 +68,7 @@ function ReportWrite() {
 
     try {
       const response = await axios.post(
-        "http://localhost:80/reports",
+        "http://localhost:80/notice",
         formData,
         {
           headers: {
@@ -128,4 +128,4 @@ function ReportWrite() {
   );
 }
 
-export default ReportWrite;
+export default NoticeWrite;

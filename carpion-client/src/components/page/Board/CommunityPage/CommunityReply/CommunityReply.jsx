@@ -1,23 +1,23 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import nrstyles from "./NoticeReply.module.css";
+import crstyles from "./CommunityReply.module.css";
 import { AuthContext } from "../../../Context/AuthContext";
 
-function NoticeReply({ noticeNo }) {
+function CommunityReply({ reviewNo }) {
   const { auth } = useContext(AuthContext);
   const { accessToken, isAuthenticated, user } = auth;
   const [comments, setComments] = useState([]);
   const [inputValue, setInputValue] = useState("");
 
-  const nickName = user ? user.nickName : "사용자";
-  const isAdmin = isAuthenticated;
+  const nickName = user ? user.nickName : "사용자"; // 현재 로그인된 사용자의 nickname
+  const isAdmin = isAuthenticated; // 관리자 여부 확인
 
   useEffect(() => {
     const fetchComments = async () => {
-      if (!noticeNo) return;
+      if (!reviewNo) return;
       try {
         const response = await axios.get(
-          `http://localhost:80/notice/comments?noticeNo=${noticeNo}`,
+          `http://localhost:80/reviews/comments?reviewNo=${reviewNo}`,
           accessToken
             ? {
                 headers: {
@@ -34,7 +34,7 @@ function NoticeReply({ noticeNo }) {
     };
 
     fetchComments();
-  }, [noticeNo, accessToken]);
+  }, [reviewNo, accessToken]);
 
   const handleSend = async () => {
     if (!accessToken) {
@@ -46,13 +46,13 @@ function NoticeReply({ noticeNo }) {
     const newComment = {
       nickname: nickName,
       content: inputValue,
-      noticeNo: noticeNo,
+      reviewNo: reviewNo,
     };
 
     try {
       // 댓글을 추가합니다.
       await axios.post(
-        "http://localhost:80/notice/comments",
+        "http://localhost:80/reviews/comments",
         newComment,
         accessToken
           ? {
@@ -65,7 +65,7 @@ function NoticeReply({ noticeNo }) {
 
       // 댓글 추가 후 새로운 댓글 목록을 가져옵니다.
       const response = await axios.get(
-        `http://localhost:80/notice/comments?noticeNo=${noticeNo}`,
+        `http://localhost:80/reviews/comments?reviewNo=${reviewNo}`,
         accessToken
           ? {
               headers: {
@@ -85,7 +85,7 @@ function NoticeReply({ noticeNo }) {
 
   const handleDelete = async (commentNo) => {
     try {
-      await axios.delete(`http://localhost:80/notice/comments/${commentNo}`, {
+      await axios.delete(`http://localhost:80/reviews/comments/${commentNo}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -108,30 +108,30 @@ function NoticeReply({ noticeNo }) {
   };
 
   return (
-    <div className={nrstyles.commentWrapper}>
-      <div className={nrstyles.commentSection}>
-        <div className={nrstyles.commentList}>
+    <div className={crstyles.commentWrapper}>
+      <div className={crstyles.commentSection}>
+        <div className={crstyles.commentList}>
           {comments.map((comment) => (
             <CommentItem
               key={comment.commentNo}
               comment={comment}
               onDelete={handleDelete}
-              isAdmin={isAdmin} // 관리자 여부 전달
-              currentUserNickName={nickName} // 현재 사용자 닉네임 전달
+              isAdmin={isAdmin}
+              currentUserNickName={nickName}
             />
           ))}
         </div>
 
-        <div className={nrstyles.chatInputArea}>
+        <div className={crstyles.chatInputArea}>
           <input
             type="text"
             placeholder="댓글을 입력하세요..."
-            className={nrstyles.chatInput}
+            className={crstyles.chatInput}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && handleSend()}
           />
-          <button className={nrstyles.sendButton} onClick={handleSend}>
+          <button className={crstyles.sendButton} onClick={handleSend}>
             전송
           </button>
         </div>
@@ -139,36 +139,32 @@ function NoticeReply({ noticeNo }) {
     </div>
   );
 }
-
 function CommentItem({ comment, onDelete, isAdmin, currentUserNickName }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
   };
-
-  // 댓글 작성자가 현재 로그인된 사용자이거나 관리자일 때 삭제 버튼을 보이도록 함
   const isOwnerOrAdmin = comment.nickname === currentUserNickName || isAdmin;
-
   return (
-    <div className={nrstyles.comment}>
-      <div className={nrstyles.commentHeader}>
-        <span className={nrstyles.nickname}>{comment.nickName}</span>
-        <div className={nrstyles.rightTop}>
-          <span className={nrstyles.commentTime}>{comment.createDate}</span>
-          <div className={nrstyles.menuContainer}>
+    <div className={crstyles.comment}>
+      <div className={crstyles.commentHeader}>
+        <span className={crstyles.nickname}>{comment.nickName}</span>
+        <div className={crstyles.rightTop}>
+          <span className={crstyles.commentTime}>{comment.createDate}</span>
+          <div className={crstyles.menuContainer}>
             {isOwnerOrAdmin && (
               <button
-                className={nrstyles.menuButton}
+                className={crstyles.menuButton}
                 onClick={handleMenuToggle}
               >
                 &#x22EE;
               </button>
             )}
             {menuOpen && (
-              <div className={nrstyles.menuDropdown}>
+              <div className={crstyles.menuDropdown}>
                 <button
-                  className={`${nrstyles.menuItem} ${nrstyles.menuItemDelete}`}
+                  className={`${crstyles.menuItem} ${crstyles.menuItemDelete}`}
                   onClick={() => onDelete(comment.commentNo)}
                 >
                   삭제
@@ -179,9 +175,9 @@ function CommentItem({ comment, onDelete, isAdmin, currentUserNickName }) {
         </div>
       </div>
 
-      <div className={nrstyles.commentContent}>{comment.content}</div>
+      <div className={crstyles.commentContent}>{comment.content}</div>
     </div>
   );
 }
 
-export default NoticeReply;
+export default CommunityReply;
