@@ -67,3 +67,16 @@
 .toastui-editor-mode-switch {
   display: none !important;
 }
+.previewImageWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.previewImage {
+  width: 150px;
+  height: auto;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}

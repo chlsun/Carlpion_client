@@ -94,16 +94,14 @@ function NoticeDetail() {
         )}
       </div>
 
-      {canEditOrDelete && (
-        <div className={ndstyles.bottomButtonGroup}>
-          <Link to={`/ne/${noticeNo}`} className={ndstyles.editBtn}>
-            수정
-          </Link>
-          <button className={ndstyles.deleteBtn} onClick={handleDelete}>
-            삭제
-          </button>
-        </div>
-      )}
+      <div className={ndstyles.bottomButtonGroup}>
+        <Link to={`/ne/${noticeNo}`} className={ndstyles.editBtn}>
+          수정
+        </Link>
+        <button className={ndstyles.deleteBtn} onClick={handleDelete}>
+          삭제
+        </button>
+      </div>
 
       <NoticeReply noticeNo={noticeNo} />
     </div>

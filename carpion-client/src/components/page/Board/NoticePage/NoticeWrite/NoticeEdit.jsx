@@ -19,12 +19,15 @@ function NoticeEdit() {
     content: "",
   });
 
+  // 게시글 가져오기
   useEffect(() => {
     const fetchPost = async () => {
       try {
         const res = await axios.get(`http://localhost:80/notice/${noticeNo}`);
-        console.log("Fetched Post Data:", res.data);
-        setPost(res.data);
+        setPost({
+          title: res.data.title,
+          content: res.data.content,
+        });
       } catch (err) {
         console.error("게시글 불러오기 실패:", err);
       }
@@ -46,58 +49,49 @@ function NoticeEdit() {
     }
   }, [auth, loading, navigate, accessToken]);
 
-  const handleAddImage = async (blob, callback) => {
-    const formData = new FormData();
-    formData.append("image", blob);
-
-    try {
-      const response = await axios.post(
-        "http://localhost:80/upload",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      const imageUrl = response.data.imageUrl;
-      callback(imageUrl);
-    } catch (error) {
-      console.error(
-        "이미지 업로드 실패:",
-        error.response ? error.response.data : error
-      );
-      alert("이미지 업로드 중 오류가 발생했습니다.");
+  // 이미지 URL 추출 함수
+  const extractImageUrls = (markdown) => {
+    const regex = /!\[.*?\]\((.*?)\)/g;
+    const urls = [];
+    let match;
+    while ((match = regex.exec(markdown)) !== null) {
+      urls.push(match[1]);
     }
+    return urls;
   };
 
+  // 글 제출 처리
   const handleSubmit = async () => {
     const editorInstance = editorRef.current.getInstance();
     const updatedContent = editorInstance.getMarkdown();
-
-    console.log("Posting updated data:", {
-      title: post.title,
-      content: updatedContent,
-    });
+    const imageUrls = extractImageUrls(updatedContent);
 
     const formData = new FormData();
     formData.append("title", post.title);
     formData.append("content", updatedContent);
+    formData.append("fileUrls", JSON.stringify(imageUrls)); // 여러 이미지 전송
 
-    try {
-      await axios.put(`http://localhost:80/notice/${noticeNo}`, formData, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      alert("수정 완료!");
-      navigate(`/nd/${noticeNo}`);
-    } catch (error) {
-      console.error("수정 실패:", error.response ? error.response.data : error);
-      alert("수정 중 오류가 발생했습니다.");
+    // 콘솔 출력용
+    console.log("수정 요청 데이터 확인:");
+    for (let pair of formData.entries()) {
+      console.log(`content:`, pair[1]);
     }
+
+    alert("※ 실제 요청은 전송되지 않았고 콘솔에 데이터만 출력되었습니다.");
+
+    // 실제 PUT 요청은 주석 처리
+    // try {
+    //   await axios.put(`http://localhost:80/notice/${noticeNo}`, formData, {
+    //     headers: {
+    //       Authorization: `Bearer ${accessToken}`,
+    //     },
+    //   });
+    //   alert("수정 완료!");
+    //   navigate(`/nd/${noticeNo}`);
+    // } catch (error) {
+    //   console.error("수정 실패:", error.response?.data || error);
+    //   alert("수정 중 오류가 발생했습니다.");
+    // }
   };
 
   const handleChange = (e) => {
@@ -132,10 +126,20 @@ function NoticeEdit() {
             language="ko"
             useCommandShortcut={false}
             hideModeSwitch={true}
-            hooks={{
-              addImageBlobHook: handleAddImage,
-            }}
           />
+        )}
+
+        {post.content && extractImageUrls(post.content).length > 0 && (
+          <div className={wpstyles.previewImageWrapper}>
+            {extractImageUrls(post.content).map((url, idx) => (
+              <img
+                key={idx}
+                src={url}
+                alt={`미리보기 이미지 ${idx + 1}`}
+                className={wpstyles.previewImage}
+              />
+            ))}
+          </div>
         )}
 
         <div className={wpstyles.submitButtonWrapper}>
