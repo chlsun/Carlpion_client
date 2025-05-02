@@ -1,4 +1,4 @@
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ReservationMap from "../../include/map/reservationMap/ReservationMap";
 import "./RentalReservation.css";
 import { useContext, useEffect, useState } from "react";
@@ -7,11 +7,13 @@ import { AuthContext } from "../Context/AuthContext";
 import { v4 as uuidv4 } from "uuid";
 
 const RentalReservation = () => {
+   const navi = useNavigate();
    const { id } = useParams("id");
    const { auth } = useContext(AuthContext);
    const location = useLocation();
    const reservationDate = location.state;
 
+   const [errorMsg, setErrorMsg] = useState("");
    const [rentCarInfo, setRentCarInfo] = useState(null);
 
    useEffect(() => {
@@ -42,57 +44,73 @@ const RentalReservation = () => {
       if (rentCarInfo) {
          const merchantUid = `rent_${uuidv4()}`;
 
-         const prepareRes = await axios.post(
-            "http://localhost/rents/payment/prepare",
-            {
-               merchantUid: merchantUid,
-               carNo: rentCarInfo[0].carNo,
-               rentalDate: reservationDate.rentalDateYMDH,
-               returnDate: reservationDate.returnDateYMDH,
-            },
-            {
-               headers: {
-                  Authorization: `Bearer ${auth.accessToken}`,
+         try {
+            const prepareRes = await axios.post(
+               "http://localhost/rents/payment/prepare",
+               {
+                  merchantUid: merchantUid,
+                  carNo: rentCarInfo[0].carNo,
+                  rentalDate: reservationDate.rentalDateYMDH,
+                  returnDate: reservationDate.returnDateYMDH,
                },
-            }
-         );
-
-         const totalPrice = prepareRes.data.totalPrice;
-
-         IMP.request_pay(
-            {
-               pg: "tosspay.tosstest",
-               pay_method: "card",
-               merchant_uid: merchantUid,
-               name: "차량 렌트 결제",
-               amount: totalPrice,
-            },
-            async (rsp) => {
-               if (rsp.success) {
-                  await axios.post(
-                     "http://localhost/rents/payment/complate",
-                     {
-                        carNo: rentCarInfo[0].carNo,
-                        rentalDate: reservationDate.rentalDateYMDH,
-                        returnDate: reservationDate.returnDateYMDH,
-                        totalPrice: totalPrice,
-                        merchantUid: merchantUid,
-                        impUID: rsp.imp_uid,
-                     },
-                     {
-                        headers: {
-                           Authorization: `Bearer ${auth.accessToken}`,
-                        },
-                     }
-                  );
-                  alert("결제 성공!");
-               } else {
-                  alert("결제 실패: " + rsp.error_msg);
+               {
+                  headers: {
+                     Authorization: `Bearer ${auth.accessToken}`,
+                  },
                }
-            }
-         );
+            );
+
+            const totalPrice = prepareRes.data.totalPrice;
+
+            IMP.request_pay(
+               {
+                  pg: "tosspay.tosstest",
+                  pay_method: "card",
+                  merchant_uid: merchantUid,
+                  name: "차량 렌트 결제",
+                  amount: totalPrice,
+               },
+               async (rsp) => {
+                  try {
+                     if (rsp.success) {
+                        await axios.post(
+                           "http://localhost/rents/payment/complate",
+                           {
+                              carNo: rentCarInfo[0].carNo,
+                              rentalDate: reservationDate.rentalDateYMDH,
+                              returnDate: reservationDate.returnDateYMDH,
+                              totalPrice: totalPrice,
+                              merchantUid: merchantUid,
+                              impUID: rsp.imp_uid,
+                           },
+                           {
+                              headers: {
+                                 Authorization: `Bearer ${auth.accessToken}`,
+                              },
+                           }
+                        );
+                        alert("결제 성공!");
+                        navi("/rent");
+                     } else {
+                        alert("결제 실패: " + rsp.error_msg);
+                     }
+                  } catch (error) {
+                     setErrorMsg(error.response.data);
+                  }
+               }
+            );
+         } catch (error) {
+            setErrorMsg(error.response.data);
+         }
       }
    };
+
+   useEffect(() => {
+      if (errorMsg.length > 0) {
+         alert(errorMsg);
+         setErrorMsg("");
+      }
+   }, [errorMsg]);
 
    return (
       <>
