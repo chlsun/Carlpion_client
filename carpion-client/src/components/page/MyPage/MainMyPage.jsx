@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -17,21 +17,31 @@ import {
 } from "./MainMypage.style";
 import { LeftBox, RightBox, Font, Input } from "./MainMypage.style";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../Context/AuthContext";
+import axios from "axios";
 
 const MainMyPage = () => {
+  const { auth, updateUser } = useContext(AuthContext);
   const [activeForm, setActiveForm] = useState(null);
   const [modifyName, setModifyName] = useState("");
+  const [modifyFile, setModifyFile] = useState("");
+
   const [modifyEmail, setModifyEmail] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [modifyPw, setModifyPw] = useState("");
   const [modifyCheckPw, setmodifyCheckPw] = useState("");
-  const [tempName, setTempName] = useState("");
   const [checked, setChecked] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
+
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [realName, setRealName] = useState("");
+
   const navi = useNavigate();
 
   const handleName = (e) => {
     const inputName = e.target.value;
-    setTempName(inputName);
+    setModifyName(inputName);
   };
 
   const handelEmail = (e) => {
@@ -39,15 +49,10 @@ const MainMyPage = () => {
     setModifyEmail(inputEmail);
   };
 
-  const handelPassword = (e) => {
-    const inputPassword = e.target.value;
-    setPasswordCheck(inputPassword);
-  };
-
   const submitName = (e) => {
     e.preventDefault();
     const regexName = /^([a-zA-Z]{2,30}|[\uAC00-\uD7A3]{2,5})$/;
-    if (!regexName.test(tempName)) {
+    if (!regexName.test(modifyName)) {
       alert("한글 이름 2~5자, 영어 이름 2~30자 입력해주세요.");
       return;
     }
@@ -57,14 +62,8 @@ const MainMyPage = () => {
       alert("영어 이메일 형식만 가능합니다.");
       return;
     }
-    if (!passwordCheck) {
-      alert("비밀번호를 확인해주세요");
-      return;
-    }
-    //console.log("이름 : ", modifyName);
-    //console.log("이메일 : ", modifyEmail);
-    //console.log("비밀번호 : ", passwordCheck);
-    setModifyName(tempName);
+
+    setModifyName(modifyName);
     setActiveForm(null);
   };
 
@@ -75,6 +74,91 @@ const MainMyPage = () => {
   const handleModifyCheckPw = (e) => {
     const inputCheckPw = e.target.value;
     setmodifyCheckPw(inputCheckPw);
+  };
+  const handelPassword = (e) => {
+    const inputPassword = e.target.value;
+    setPasswordCheck(inputPassword);
+  };
+
+  const handleCheckBox = (e) => {
+    const checkBox = e.target.checked;
+    setChecked(checkBox);
+  };
+
+  const submitCheckPw = (e) => {
+    e.preventDefault();
+    if (!passwordCheck) {
+      alert("비밀번호를 확인해주세요.");
+      return;
+    }
+
+    setActiveForm(null);
+  };
+
+  useEffect(() => {
+    if (auth.realname) {
+      setRealName(auth.realname);
+      setUserName(auth.username);
+    }
+  }, [auth.realname]);
+
+  useEffect(() => {
+    // console.log("isUpdate:", isUpdate);
+    //console.log("accessToken:", auth.accessToken);
+    if (isUpdate && auth.accessToken) {
+      //console.log(" 요청 보냅니다");
+      axios
+        .get("http://localhost/users/getUserInfo", {
+          headers: {
+            Authorization: `Bearer ${auth.accessToken}`,
+          },
+        })
+        .then((result) => {
+          //console.log("getUserInfo 응답 :", result.data);
+          updateUser(result.data.realName, result.data.email);
+          setIsUpdate(false);
+        });
+    }
+  }, [isUpdate, auth.accessToken]);
+
+  /*   updateUser({
+    realname: result.data.realName,
+    email: result.data.email,
+  }); */
+
+  useEffect(() => {
+    if (auth.email) {
+      setEmail(auth.email);
+    }
+  }, [auth.email]);
+  useEffect(() => {
+    if (email) {
+      localStorage.setItem("email", email);
+    }
+  }, [email]);
+
+  const handleModify = () => {
+    if (auth.accessToken) {
+      axios
+        .put(
+          "http://localhost/users/update-realname",
+          {
+            realName: modifyName,
+            email: modifyEmail,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${auth.accessToken}`,
+            },
+          }
+        )
+        .then((response) => {
+          setIsUpdate(true);
+        })
+        .catch((error) => {
+          console.log("이름 변경 실패 : ", error);
+        });
+    }
   };
   const submitModfyPw = (e) => {
     e.preventDefault();
@@ -93,24 +177,37 @@ const MainMyPage = () => {
       alert("비밀번호를 확인해주세요.");
       return;
     }
-    //console.log(" 변경 비밀번호 : ", modifyPw);
-    //console.log("변경 비밀번호 확인 : ", modifyCheckPw);
-    //console.log("비밀번호 확인 : ", passwordCheck);
-  };
-  const handleCheckBox = (e) => {
-    const checkBox = e.target.checked;
-    setChecked(checkBox);
-  };
 
-  const submitCheckPw = (e) => {
-    e.preventDefault();
-    if (!passwordCheck) {
-      alert("비밀번호를 확인해주세요.");
-      return;
+    if (auth.accessToken) {
+      axios
+        .put(
+          "http://localhost/users/update-pw",
+          {
+            password: passwordCheck,
+            modifyPw: modifyPw,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${auth.accessToken}`,
+            },
+          }
+        )
+        .then((response) => {
+          console.log("비밀번호 변경 성공: ", response.data);
+          alert("비밀번호가 변경되었습니다.");
+          setModifyPw("");
+          setPasswordCheck("");
+          setActiveForm(null);
+        })
+        .catch((error) => {
+          console.log("비밀번호 변경 실패 :", error);
+          if (error.response && error.response.data) {
+            alert(`변경실패 : ${error.response.data}`);
+          } else {
+            alert("알 수 없는 오류가 발생했습니다.");
+          }
+        });
     }
-
-    //console.log("확인 : ", passwordCheck);
-    setActiveForm(null);
   };
 
   return (
@@ -121,10 +218,9 @@ const MainMyPage = () => {
           <LeftBox>내정보</LeftBox>
           <RightBox>
             <div>
-              <Font>이름 : {modifyName}</Font>
-              <Font>닉네임 : </Font>
-              <Font>아이디 :</Font>
-              <Font>이메일 : {modifyEmail}</Font>
+              <Font>이름 : {realName} </Font>
+              <Font>아이디 : {userName} </Font>
+              <Font>이메일 : {email}</Font>
               <div>
                 <Button onClick={() => setActiveForm("info")}>
                   내정보 변경하기
@@ -141,7 +237,7 @@ const MainMyPage = () => {
                 <div>
                   <Input
                     type="text"
-                    value={tempName}
+                    value={modifyName}
                     onChange={handleName}
                     placeholder="변경 할 이름 입력"
                   />
@@ -151,15 +247,11 @@ const MainMyPage = () => {
                     onChange={handelEmail}
                     placeholder="변경 할 이메일 입력"
                   />
-                  <Input
-                    type="password"
-                    value={passwordCheck}
-                    onChange={handelPassword}
-                    placeholder="비밀번호 확인"
-                  />
                 </div>
                 <div>
-                  <Button type="submit">변경</Button>
+                  <Button onClick={handleModify} type="submit">
+                    변경
+                  </Button>
                   <Button onClick={() => setActiveForm(null)}>취소</Button>
                 </div>
               </form>
@@ -191,21 +283,26 @@ const MainMyPage = () => {
                   <Input
                     type="password"
                     onChange={handleModifyPw}
-                    placeholder="변경할 비밀번호 "
+                    placeholder="변경할 비밀번호"
+                    value={modifyPw}
                   />
                   <Input
                     type="password"
                     onChange={handleModifyCheckPw}
                     placeholder="변경할 비밀번호 확인"
+                    value={modifyCheckPw}
                   />
                   <Input
                     type="password"
                     onChange={handelPassword}
                     placeholder="비밀번호 확인"
+                    value={passwordCheck}
                   />
                 </div>
                 <div>
-                  <Button type="submit">비밀번호 변경</Button>
+                  <Button onClick={handlePw} type="submit">
+                    비밀번호 변경
+                  </Button>
                   <Button type="button" onClick={() => setActiveForm(null)}>
                     취소
                   </Button>
