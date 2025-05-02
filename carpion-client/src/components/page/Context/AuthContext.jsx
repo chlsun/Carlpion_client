@@ -144,5 +144,23 @@ export const AuthProvider = ({ children }) => {
         navi("/");
     };
 
-    return <AuthContext.Provider value={{ auth, isAdmin, login, logout }}>{children}</AuthContext.Provider>;
+    function updateUser(realname, email) {
+        setAuth((prev) => ({
+            ...prev,
+            realname,
+            email,
+        }));
+        sessionStorage.setItem("realname", realname);
+        sessionStorage.setItem("email", email);
+    }
+
+    function updateNickName(nickName) {
+        setAuth((prev) => ({
+            ...prev,
+            nickName,
+        }));
+        sessionStorage.setItem("nickname", nickName);
+    }
+
+    return <AuthContext.Provider value={{ auth, login, logout, isAdmin, updateUser, updateNickName }}>{children}</AuthContext.Provider>;
 };

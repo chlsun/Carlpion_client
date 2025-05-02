@@ -68,7 +68,7 @@ const Login = () => {
         const { id, value } = e.target;
         setInputValues({ ...inputValues, [id]: value });
         setIsEmptyMessage({ ...isEmptyMessage, [id]: "" });
-
+        zz;
         const field = inputFields.find((f) => f.id === id);
         const validation = validationRules[field.id];
 

@@ -23,16 +23,20 @@ import ReviewCheck from "./components/page/reviewCheck/ReviewCheck";
 import RentalReservation from "./components/page/rentalReservation/RentalReservation";
 import NoticeBoard from "./components/page/Board/NoticePage/NoticeBoard/NoticeBoard";
 import NoticeDetail from "./components/page/Board/NoticePage/NoticeDetail/NoticeDetail";
-import CommuniteBoard from "./components/page/Board/CommunitePage/CommuniteBoard/CommuniteBoard";
-import CommuniteDetail from "./components/page/Board/CommunitePage/CommuniteDetail/CommuniteDetail";
+import NoticeWrite from "./components/page/Board/NoticePage/NoticeWrite/NoticeWrite";
+import NoticeEdit from "./components/page/Board/NoticePage/NoticeWrite/NoticeEdit";
+import CommunityBoard from "./components/page/Board/CommunityPage/CommunityBoard/CommunityBoard";
+import CommunityDetail from "./components/page/Board/CommunityPage/CommunityDetail/CommunityDetail";
+import CommunityWrite from "./components/page/Board/CommunityPage/CommunityWrite/CommunityWrite";
+import CommunityEdit from "./components/page/Board/CommunityPage/CommunityWrite/CommunityEdit";
 import ReportBoard from "./components/page/Board/ReportPage/ReportBoard/ReportBoard";
 import ReportDetail from "./components/page/Board/ReportPage/ReportDetail/ReportDetail";
-import WritePage from "./components/page/WritePage/WritePage";
 import ReportWrite from "./components/page/Board/ReportPage/ReportWrite/ReportWrite";
 import LoginRedirect from "./components/page/user/Login/LoginRedirect";
 import SignUpSocial from "./components/page/user/SignUp/SignUpSocial";
 import { AuthSocialProvider } from "./components/page/Context/AuthSocialContext";
 import ErrorPage from "./components/page/ErrorPage/ErrorPage";
+import ReportEdit from "./components/page/Board/ReportPage/ReportWrite/ReportEdit";
 
 function App() {
     return (
@@ -62,13 +66,18 @@ function App() {
                         <Route path="/modify" element={<MainMyPage />} />
                         <Route path="/point" element={<Point />} />
                         <Route path="/reply" element={<Reply />} />
+                        <Route path="/cb" element={<CommunityBoard />} />
+                        <Route path="/cd/:reviewNo" element={<CommunityDetail />} />
+                        <Route path="/cw" element={<CommunityWrite />} />
+                        <Route path="/ce/:reviewNo" element={<CommunityEdit />} />
                         <Route path="/nb" element={<NoticeBoard />} />
                         <Route path="/nd/:noticeNo" element={<NoticeDetail />} />
-                        <Route path="/cb" element={<CommuniteBoard />} />
-                        <Route path="/cd/:reviewNo" element={<CommuniteDetail />} />
+                        <Route path="/nw" element={<NoticeWrite />} />
+                        <Route path="/ne/:noticeNo" element={<NoticeEdit />} />
                         <Route path="/rb" element={<ReportBoard />} />
                         <Route path="/rd/:reportNo" element={<ReportDetail />} />
                         <Route path="/rw" element={<ReportWrite />} />
+                        <Route path="/re/:reportNo" element={<ReportEdit />} />
                         <Route path="/inquiryCheck" element={<InquiryCheck />} />
                         <Route path="/reviewCheck" element={<ReviewCheck />} />
                     </Routes>
