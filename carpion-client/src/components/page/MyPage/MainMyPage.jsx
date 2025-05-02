@@ -300,9 +300,7 @@ const MainMyPage = () => {
                   />
                 </div>
                 <div>
-                  <Button onClick={handlePw} type="submit">
-                    비밀번호 변경
-                  </Button>
+                  <Button type="submit">비밀번호 변경</Button>
                   <Button type="button" onClick={() => setActiveForm(null)}>
                     취소
                   </Button>
