@@ -14,7 +14,6 @@ const InquiryCheck = () => {
 
   useEffect(() => {
     if (auth.accessToken) {
-      alert(1);
       axios
         .get("http://localhost/mypage/reports", {
           headers: {
