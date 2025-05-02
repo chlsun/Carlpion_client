@@ -22,7 +22,7 @@ function CommunityDetail() {
         const res = await axios.get(`http://localhost:80/reviews/${reviewNo}`);
         setPost(res.data);
         console.log("post.title:", res.data.title);
-        setLikes(res.data.likes || 0); // 서버에 likes 정보가 있다면 설정
+        setLikes(res.data.likes || 0);
       } catch (err) {
         console.error("게시글 불러오기 실패:", err);
         alert("게시글을 불러오는 데 실패했습니다.");
