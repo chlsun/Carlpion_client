@@ -16,9 +16,7 @@ const Header = () => {
 
     const [openMenu, setOpenMenu] = useState(0);
 
-    const [isAdmin, setIsAdmin] = useState(false);
-
-    const { auth, logout } = useContext(AuthContext);
+    const { auth, isAdmin, logout } = useContext(AuthContext);
 
     const { authSocial, socialLogout } = useContext(AuthSocialContext);
 
@@ -67,20 +65,6 @@ const Header = () => {
 
         setLongNickname(authSocial.nickname.substring(0, 4) + "...");
     }, [authSocial]);
-
-    useEffect(() => {
-        if (!auth.username || !auth.realname) {
-            setIsAdmin(false);
-            return;
-        }
-
-        if (auth.username.substring(2, 7) !== "admin" || auth.realname !== "어드민") {
-            setIsAdmin(false);
-            return;
-        }
-
-        setIsAdmin(true);
-    }, [auth]);
 
     return (
         <header className={`w-full z-50 flex justify-center bg-white dark:bg-gray-800 shadow-sm border-b-2 border-maincolor fixed top-0 left-0 right-0 select-none ${isScrolled ? "h-12" : "h-24"}`}>

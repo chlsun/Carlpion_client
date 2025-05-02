@@ -17,6 +17,12 @@ const SignUp = () => {
             placeholder: "사용할 비밀번호를 입력해 주세요.",
         },
         {
+            id: "checkPassword",
+            label: "비밀번호 확인",
+            type: "password",
+            placeholder: "비밀번호를 다시 입력해 주세요.",
+        },
+        {
             id: "nickname",
             label: "닉네임",
             type: "text",
@@ -49,6 +55,11 @@ const SignUp = () => {
             errorMessage: "사용 불가능한 비밀번호 입니다.",
             helpMessage: "8 ~ 30자, 영어 알파벳과 숫자, 특수문자가 포함되어야 합니다.",
         },
+        checkPassword: {
+            regExp: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]).\S{8,30}$/,
+            successMessage: "비밀번호가 일치합니다.",
+            errorMessage: "비밀번호가 일치하지 않습니다.",
+        },
         nickname: {
             regExp: /^[\uAC00-\uD7A3a-zA-Z0-9]{2,10}$/,
             successMessage: "사용 가능한 닉네임 입니다.",
@@ -73,6 +84,7 @@ const SignUp = () => {
     const [inputValues, setInputValues] = useState({
         username: "",
         password: "",
+        checkPassword: "",
         nickname: "",
         realname: "",
         email: "",
@@ -81,6 +93,7 @@ const SignUp = () => {
     const [isEmptyMessage, setIsEmptyMessage] = useState({
         username: "",
         password: "",
+        checkPassword: "",
         nickname: "",
         realname: "",
         email: "",
@@ -89,6 +102,7 @@ const SignUp = () => {
     const [fieldMessages, setFieldMessages] = useState({
         username: "",
         password: "",
+        checkPassword: "",
         nickname: "",
         realname: "",
         email: "",
@@ -105,6 +119,7 @@ const SignUp = () => {
     const [isValid, setIsValid] = useState({
         username: null,
         password: null,
+        checkPassword: null,
         nickname: null,
         realname: null,
         email: null,
@@ -128,6 +143,7 @@ const SignUp = () => {
         setSendVerifyEmailMessage("");
 
         const { id, value } = e.target;
+
         setInputValues({ ...inputValues, [id]: value });
         setIsEmptyMessage({ ...isEmptyMessage, [id]: "" });
 
@@ -143,14 +159,16 @@ const SignUp = () => {
             return;
         }
 
-        if (!validation.regExp.test(value)) {
-            setHelpMessages({ ...helpMessages, [id]: validation.helpMessage || "" });
-            setIsValid({ ...isValid, [id]: false });
-            setFieldMessages({ ...fieldMessages, [id]: validation.errorMessage });
-        } else {
-            setHelpMessages({ ...helpMessages, [id]: "" });
-            setIsValid({ ...isValid, [id]: true });
-            setFieldMessages({ ...fieldMessages, [id]: validation.successMessage });
+        if (id !== "checkPassword") {
+            if (!validation.regExp.test(value)) {
+                setHelpMessages({ ...helpMessages, [id]: validation.helpMessage || "" });
+                setIsValid({ ...isValid, [id]: false });
+                setFieldMessages({ ...fieldMessages, [id]: validation.errorMessage });
+            } else {
+                setHelpMessages({ ...helpMessages, [id]: "" });
+                setIsValid({ ...isValid, [id]: true });
+                setFieldMessages({ ...fieldMessages, [id]: validation.successMessage });
+            }
         }
     };
 
@@ -159,7 +177,7 @@ const SignUp = () => {
     };
 
     const validateForm = () => {
-        let isValid = true;
+        let isValidate = true;
         let focusedElement = null;
 
         inputFields.forEach((field) => {
@@ -172,9 +190,14 @@ const SignUp = () => {
                     particle = "를";
                 }
 
+                if (key === "checkPassword") {
+                    particle = "를 다시";
+                }
+
                 const labelMap = {
                     username: "아이디",
                     password: "비밀번호",
+                    checkPassword: "비밀번호",
                     nickname: "닉네임",
                     realname: "이름",
                     email: "이메일",
@@ -188,19 +211,45 @@ const SignUp = () => {
                 if (!focusedElement) {
                     focusedElement = document.getElementById(key);
                 }
-                isValid = false;
+
+                isValidate = false;
             }
 
-            if (inputValues[key] && !validationRules[field.id].regExp.test(inputValues[key])) {
+            if (key === "checkPassword") {
+                if (inputValues[key] === inputValues.password) {
+                    setFieldMessages((prev) => ({
+                        ...prev,
+                        [key]: validationRules[key].successMessage,
+                    }));
+
+                    setIsValid({ ...isValid, [key]: true });
+                } else {
+                    setFieldMessages((prev) => ({
+                        ...prev,
+                        [key]: validationRules[key].errorMessage,
+                    }));
+
+                    if (!focusedElement) {
+                        focusedElement = document.getElementById(key);
+                    }
+
+                    setIsValid({ ...isValid, [key]: false });
+
+                    isValidate = false;
+                }
+            }
+
+            if (key !== "checkPassword" && inputValues[key] && !validationRules[key].regExp.test(inputValues[key])) {
                 setFieldMessages((prev) => ({
                     ...prev,
-                    [key]: validationRules[field.id].errorMessage,
+                    [key]: validationRules[key].errorMessage,
                 }));
 
                 if (!focusedElement) {
                     focusedElement = document.getElementById(key);
                 }
-                isValid = false;
+
+                isValidate = false;
             }
         });
 
@@ -208,7 +257,7 @@ const SignUp = () => {
             focusedElement.focus();
         }
 
-        return isValid;
+        return isValidate;
     };
 
     const handleSendVerifyEmail = () => {
@@ -239,7 +288,14 @@ const SignUp = () => {
         if (!validateForm()) return;
         setIsProgress(true);
         axios
-            .post(`http://localhost:80/users`, { ...inputValues, code: verifyCode })
+            .post(`http://localhost:80/users`, {
+                username: inputValues.username,
+                password: inputValues.password,
+                nickname: inputValues.nickname,
+                realname: inputValues.realname,
+                email: inputValues.realname,
+                code: verifyCode,
+            })
             .then(() => {
                 navi("/sign-up-done");
             })

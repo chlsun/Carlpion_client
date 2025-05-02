@@ -17,6 +17,8 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated: false,
     });
 
+    const [isAdmin, setIsAdmin] = useState(false);
+
     const [refreshToken, setRefreshToekn] = useState(localStorage.getItem("refreshToken"));
 
     useEffect(() => {
@@ -57,6 +59,20 @@ export const AuthProvider = ({ children }) => {
             setRefreshToekn(localStorage.getItem("refreshToken"));
         }, 2000);
     }, [refreshToken]);
+
+    useEffect(() => {
+        if (!auth.username || !auth.realname) {
+            setIsAdmin(false);
+            return;
+        }
+
+        if (auth.username.substring(2, 7) !== "admin" || auth.realname !== "어드민") {
+            setIsAdmin(false);
+            return;
+        }
+
+        setIsAdmin(true);
+    }, [auth]);
 
     const login = (username, nickname, realname, email, accessToken, refreshToken) => {
         if (refreshToken === undefined) {
@@ -128,5 +144,5 @@ export const AuthProvider = ({ children }) => {
         navi("/");
     };
 
-    return <AuthContext.Provider value={{ auth, login, logout }}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={{ auth, isAdmin, login, logout }}>{children}</AuthContext.Provider>;
 };
