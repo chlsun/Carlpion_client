@@ -12,6 +12,11 @@ html {
    font-family: "pretendard";
 }
 
+#img-modal img{
+   width: 100%;
+   height: 100%;
+}
+
 #model-page img,
 #model-page svg {
    width: 100%;
@@ -166,7 +171,7 @@ html {
 }
 
 #img-modal {
-   position: absolute;
+   position: fixed;
    top: 0;
    left: 0;
    width: 100%;

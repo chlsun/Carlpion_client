@@ -42,8 +42,8 @@ function App() {
                     <Route path="/find-pw" element={<FindPw />} />
                     <Route path="/find-pw-done" element={<FindPwCompleted />} />
                     <Route path="/admin" element={<AdminPage />}>
-                        <Route index element={<Navigate to="model" replace />} />
-                        <Route path="model" element={<ModelPage />} />
+                        <Route index element={<Navigate to="model/1" replace />} />
+                        <Route path="model/:page" element={<ModelPage />} />
                         <Route path="car" element={<CarPage />} />
                     </Route>
                     <Route path="/rent" element={<CarRentPage />} />
