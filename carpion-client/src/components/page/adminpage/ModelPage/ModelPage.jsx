@@ -15,6 +15,7 @@ const ModelPage = () => {
    const [carModelList, setCarModelList] = useState(null);
    const [pageInfo, setPageInfo] = useState(null);
    const [pageNumbers, setPageNumbers] = useState([1]);
+   const [updateIndex, setUpdateIndex] = useState(-1);
    const [carModelInfo, setCarModelInfo] = useState({
       carModel: "",
       rentPrice: "",
@@ -22,11 +23,22 @@ const ModelPage = () => {
       chargeType: "",
       seatCount: "",
    });
-   const [isUpdateForm, setIsUpdateForm] = useState(true);
+
+   const [updateCarModel, setUpdateCarModel] = useState({
+      modelNo: -1,
+      carModel: "",
+      rentPrice: "",
+      hourPrice: "",
+      chargeType: "",
+      seatCount: "",
+   });
+   const [updateImgFile, setUpdateImgFile] = useState(null);
+   const [updatePreview, setUpdatePreview] = useState(null);
+   const [isUpdateForm, setIsUpdateForm] = useState(false);
    const [zoomedImage, setZoomedImage] = useState(null);
    const modalBackground = useRef();
    useEffect(() => {
-      if (auth.accessToken != null) {
+      if (auth.accessToken) {
          axios
             .get(`http://localhost/admin/model/${page}`, {
                headers: {
@@ -39,13 +51,24 @@ const ModelPage = () => {
                setPageInfo(result.data.pageInfo);
                const pageArray = [];
 
-               for(let i = result.data.pageInfo.startPage; i <= result.data.pageInfo.endPage; i++){
+               for (
+                  let i = result.data.pageInfo.startPage;
+                  i <= result.data.pageInfo.endPage;
+                  i++
+               ) {
                   pageArray.push(i);
                }
-               setPageNumbers(pageArray)
+               setPageNumbers(pageArray);
+
+               if (result.data.carModelList.length == 0) {
+                  navi(`/admin/model/${page - 1}`);
+               }
             })
             .catch((error) => {
-               console.log(error);
+               if (error.response.status == 403) {
+                  navi("/");
+                  alert("운영자만 이용가능한 페이지입니다.");
+               }
             });
       }
    }, [auth, page, isPageLoad]);
@@ -64,6 +87,7 @@ const ModelPage = () => {
          !!!carModelInfo.seatCount.trim()
       ) {
          alert("모든 정보를 기입해주세요");
+         return;
       }
       const formData = new FormData();
       formData.append("carModel", carModelInfo.carModel);
@@ -93,7 +117,8 @@ const ModelPage = () => {
             setPreview(null);
             if (fileInputRef.current) {
                fileInputRef.current.value = null;
-             }
+            }
+            alert("차량 모델이 추가되었습니다.");
          })
          .catch((error) => {
             console.log(error);
@@ -107,8 +132,76 @@ const ModelPage = () => {
          setPreview(URL.createObjectURL(selectedFile));
       }
    };
-   const updateFormHandler = () => {
+
+   const updateFormHandler = (carModel, index) => {
+      setUpdateIndex(-1);
+
       setIsUpdateForm(!isUpdateForm);
+      setUpdateIndex(index);
+
+      setUpdateCarModel({
+         modelNo: carModel.modelNo,
+         carModel: carModel.carModel,
+         rentPrice: carModel.rentPrice,
+         hourPrice: carModel.hourPrice,
+         chargeType: carModel.chargeType,
+         seatCount: carModel.seatCount,
+      });
+      setUpdateImgFile(carModel.imgURL);
+   };
+
+   const updateImgHanlder = (e) => {
+      const selectedFile = e.target.files[0];
+      if (selectedFile) {
+         setUpdateImgFile(selectedFile);
+         setUpdatePreview(URL.createObjectURL(selectedFile));
+      }
+   };
+
+   const updateRequest = () => {
+      console.log("updateImgFile : ", updateImgFile);
+      console.log("modelNo : ", updateCarModel.modelNo);
+      console.log("carModel : ", updateCarModel.carModel);
+      console.log("rentPrice : ", updateCarModel.rentPrice);
+      console.log("hourPrice : ", updateCarModel.hourPrice);
+      console.log("chargeType : ", updateCarModel.chargeType);
+      console.log("seatCount : ", updateCarModel.seatCount);
+      if (
+         !!!updateImgFile ||
+         updateCarModel.modelNo == -1 ||
+         !!!updateCarModel.carModel.trim() ||
+         !!!String(updateCarModel.rentPrice).trim() ||
+         !!!String(updateCarModel.hourPrice).trim() ||
+         !!!updateCarModel.chargeType.trim() ||
+         !!!String(updateCarModel.seatCount).trim()
+      ) {
+         alert("모든 정보를 기입해주세요");
+         return;
+      }
+      const formData = new FormData();
+      formData.append("modelNo", updateCarModel.modelNo);
+      formData.append("carModel", updateCarModel.carModel);
+      formData.append("rentPrice", updateCarModel.rentPrice);
+      formData.append("hourPrice", updateCarModel.hourPrice);
+      formData.append("chargeType", updateCarModel.chargeType);
+      formData.append("seatCount", updateCarModel.seatCount);
+      formData.append("file", updateImgFile);
+      axios
+         .put("http://localhost/admin/model", formData, {
+            headers: {
+               Authorization: `Bearer ${auth.accessToken}`,
+               "Content-Type": "multipart/form-data",
+            },
+         })
+         .then((result) => {
+            alert("수정 완료 되었습니다.");
+            setUpdateIndex(-1);
+            setIsUpdateForm(!isUpdateForm);
+            setIsPageLoad(!isPageLoad);
+         })
+         .catch((error) => {
+            console.log(error);
+         });
    };
    const zoomImageHandler = (e) => {
       const imageSrc = e.target.src;
@@ -123,30 +216,36 @@ const ModelPage = () => {
       setZoomedImage(null);
    };
 
-   const deleteHandler = (carModel) =>{
-      if(!!!confirm("정말로 삭제하시겠습니까?")){
+   const deleteHandler = (modelNo) => {
+      if (!!!confirm("정말로 삭제하시겠습니까?")) {
          return;
       }
 
-      axios.delete('http://localhost/admin/model', {
-         headers: {
-           Authorization: `Bearer ${auth.accessToken}`,
-         },
-         data: {
-           carModel: carModel
-         }
-       }).then((result)=>{
-         console.log(result);
-         setIsPageLoad(!isPageLoad);
-       }).catch((error)=>{
-         console.log(error);
-       })
-   }
+      console.log(modelNo);
 
-   const pageHandler = (e) =>{
+      axios
+         .delete("http://localhost/admin/model", {
+            headers: {
+               Authorization: `Bearer ${auth.accessToken}`,
+            },
+            data: {
+               modelNo: modelNo,
+            },
+         })
+         .then((result) => {
+            console.log(result);
+            setIsPageLoad(!isPageLoad);
+            alert("삭제되었습니다.");
+         })
+         .catch((error) => {
+            console.log(error);
+         });
+   };
+
+   const pageHandler = (e) => {
       console.log(e.target.textContent);
       navi(`/admin/model/${e.target.textContent}`);
-   }
+   };
 
    if (carModelList == null) {
       return null;
@@ -222,7 +321,12 @@ const ModelPage = () => {
                   />
                </div>
                <div className="input-box model-img">
-                  <input type="file" accept="image/*" onChange={saveImgFile} ref={fileInputRef} />
+                  <input
+                     type="file"
+                     accept="image/*"
+                     onChange={saveImgFile}
+                     ref={fileInputRef}
+                  />
                </div>
                <div className="submit-btn">
                   <button type="submit">추가하기</button>
@@ -233,47 +337,160 @@ const ModelPage = () => {
             </div>
             <div className="model-list">
                {carModelList.map((carModel, index) => (
-                  <div className="model" key={index}>
+                  <div
+                     className={`model ${
+                        isUpdateForm && updateIndex == index ? "active" : ""
+                     }`}
+                     key={carModel.modelNo}
+                  >
                      <div className="model-num">
                         <p>{index + 1 + (page - 1) * 10}</p>
                      </div>
                      <div className="model-name">
-                        <p>{carModel.carModel}</p>
+                        <p className="update-p">{carModel.carModel}</p>
+                        <input
+                           className="update-input"
+                           type="text"
+                           value={updateCarModel.carModel}
+                           onChange={(e) =>
+                              setUpdateCarModel((prev) => ({
+                                 ...prev,
+                                 carModel: e.target.value,
+                              }))
+                           }
+                        />
                      </div>
                      <div className="rent-price">
-                        <p>{carModel.rentPrice}</p>
+                        <p className="update-p">{carModel.rentPrice}</p>
+                        <input
+                           className="update-input"
+                           type="text"
+                           value={updateCarModel.rentPrice}
+                           onChange={(e) =>
+                              setUpdateCarModel((prev) => ({
+                                 ...prev,
+                                 rentPrice: e.target.value,
+                              }))
+                           }
+                        />
                      </div>
                      <div className="hour-price">
-                        <p>{carModel.hourPrice}</p>
+                        <p className="update-p">{carModel.hourPrice}</p>
+                        <input
+                           className="update-input"
+                           type="text"
+                           value={updateCarModel.hourPrice}
+                           onChange={(e) =>
+                              setUpdateCarModel((prev) => ({
+                                 ...prev,
+                                 hourPrice: e.target.value,
+                              }))
+                           }
+                        />
                      </div>
                      <div className="charge-type">
-                        <p>{carModel.chargeType}</p>
+                        <p className="update-p">{carModel.chargeType}</p>
+                        <input
+                           className="update-input"
+                           type="text"
+                           value={updateCarModel.chargeType}
+                           onChange={(e) =>
+                              setUpdateCarModel((prev) => ({
+                                 ...prev,
+                                 chargeType: e.target.value,
+                              }))
+                           }
+                        />
                      </div>
                      <div className="seat-count">
-                        <p>{carModel.seatCount}</p>
+                        <p className="update-p">{carModel.seatCount}</p>
+                        <input
+                           className="update-input"
+                           type="text"
+                           value={updateCarModel.seatCount}
+                           onChange={(e) =>
+                              setUpdateCarModel((prev) => ({
+                                 ...prev,
+                                 seatCount: e.target.value,
+                              }))
+                           }
+                        />
                      </div>
                      <div className="model-img">
-                        <img
-                           src={carModel.imgURL}
-                           alt=""
-                           onClick={zoomImageHandler}
-                        />
+                        {isUpdateForm && updateIndex == index ? (
+                           <>
+                              <img
+                                 src={
+                                    updatePreview
+                                       ? updatePreview
+                                       : carModel.imgURL
+                                 }
+                                 alt=""
+                                 onClick={zoomImageHandler}
+                              />
+                              <input
+                                 type="file"
+                                 accept="image/*"
+                                 onChange={updateImgHanlder}
+                                 id="update-file"
+                              />
+                              <label htmlFor="update-file">
+                                 <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    height="24px"
+                                    viewBox="0 -960 960 960"
+                                    width="24px"
+                                    fill="#e3e3e3"
+                                 >
+                                    <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Z" />
+                                 </svg>
+                              </label>
+                           </>
+                        ) : (
+                           <img
+                              src={carModel.imgURL}
+                              alt=""
+                              onClick={zoomImageHandler}
+                           />
+                        )}
                      </div>
                      <div className="btn-box">
                         <button
                            className="update-btn"
-                           onClick={updateFormHandler}
+                           onClick={() => updateFormHandler(carModel, index)}
                         >
-                           수정
+                           {isUpdateForm && updateIndex == index
+                              ? "취소"
+                              : "수정"}
                         </button>
-                        <button className="delete-btn" onClick={()=>deleteHandler(carModel.carModel)}>삭제</button>
+                        {isUpdateForm && updateIndex == index ? (
+                           <button
+                              className="real-update-btn"
+                              onClick={() => updateRequest()}
+                           >
+                              수정
+                           </button>
+                        ) : (
+                           <button
+                              className="delete-btn"
+                              onClick={() => deleteHandler(carModel.modelNo)}
+                           >
+                              삭제
+                           </button>
+                        )}
                      </div>
                   </div>
                ))}
             </div>
             <div className="pagination">
-               {pageNumbers.map((num)=>(
-                  <div className={`page-num ${page == num ? "active" : ""}`} onClick={pageHandler}  key={num}>{num}</div>
+               {pageNumbers.map((num) => (
+                  <div
+                     className={`page-num ${page == num ? "active" : ""}`}
+                     onClick={pageHandler}
+                     key={num}
+                  >
+                     {num}
+                  </div>
                ))}
             </div>
          </main>

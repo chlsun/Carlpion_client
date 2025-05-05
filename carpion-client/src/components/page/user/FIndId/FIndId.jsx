@@ -51,7 +51,27 @@ const FindId = () => {
         email: null,
     });
 
+    const [exceptionMessage, setExceptionMessage] = useState(null);
+
+    const [isSendVerifyEmail, setIsSendVerifyEmail] = useState(false);
+
+    const [sendVerifyEmailMessage, setSendVerifyEmailMessage] = useState(null);
+
+    const [showVerifyCodeInput, setShowVerifyCodeInput] = useState(false);
+
+    const [verifyCode, setVerifyCode] = useState(null);
+
+    const [showResult, setShowResult] = useState(false);
+
+    const [result, setResult] = useState("");
+
+    const [isProgress, setIsProgress] = useState(false);
+
+    const [isProgressSendEmail, setIsProgressSendEmail] = useState(false);
+
     const handleChange = (e) => {
+        setSendVerifyEmailMessage("");
+
         const { id, value } = e.target;
         setInputValues({ ...inputValues, [id]: value });
         setIsEmptyMessage({ ...isEmptyMessage, [id]: "" });
@@ -74,6 +94,10 @@ const FindId = () => {
             setIsValid({ ...isValid, [id]: true });
             setFieldMessages({ ...fieldMessages, [id]: validation.successMessage });
         }
+    };
+
+    const handleCodeChange = (e) => {
+        setVerifyCode(e.target.value);
     };
 
     const validateForm = () => {
@@ -122,24 +146,51 @@ const FindId = () => {
         return isValid;
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (!validateForm()) return;
+    const handleSendVerifyEmail = () => {
+        if (isProgressSendEmail) return;
+        if (!isValid.email) {
+            document.getElementById("email").focus();
+            return;
+        }
+        setShowVerifyCodeInput(true);
+        setIsProgressSendEmail(true);
         axios
-            .post(``, inputValues)
-            .then((result) => {
-                console.log(result);
+            .post(`http://localhost:80/auth/send-email`, { email: inputValues.email, type: "아이디 찾기" })
+            .then(() => {
+                setIsSendVerifyEmail(true);
+                setIsProgressSendEmail(false);
+                setSendVerifyEmailMessage("인증 메일이 전송 되었습니다.");
             })
             .catch((error) => {
-                console.log(error);
+                setIsSendVerifyEmail(false);
+                setIsProgressSendEmail(false);
+                setSendVerifyEmailMessage(error.response.data.cause);
             });
-        console.log("아이디 찾기 완료:", inputValues);
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (isProgress) return;
+        if (!validateForm()) return;
+        setIsProgress(true);
+        axios
+            .post(`http://localhost:80/auth/find-id`, { ...inputValues, code: verifyCode })
+            .then((result) => {
+                setResult(result.data.username);
+                setShowResult(true);
+                setIsProgress(false);
+            })
+            .catch((error) => {
+                error.response.data.code && setExceptionMessage(error.response.data.code);
+                error.response.data.cause && setExceptionMessage(error.response.data.cause);
+                setIsProgress(false);
+            });
     };
 
     return (
         <>
-            <div className="size-full min-h-screen bg-gray-100 flex justify-center select-none">
-                <div className="w-xl px-24 my-48 bg-white border-2 border-maincolor rounded-2xl flex flex-col justify-center items-center">
+            <div className="size-full min-h-screen bg-gray-100 dark:bg-gray-900 flex justify-center select-none">
+                <div className="w-xl px-24 my-48 bg-white dark:bg-gray-800 border-2 border-maincolor rounded-2xl flex flex-col justify-center items-center">
                     <section className="mt-24 mb-16 font-maintheme text-5xl text-maincolor">아이디 찾기</section>
                     <section className="w-full h-auto">
                         <ul className="flex flex-col gap-6">
@@ -157,18 +208,37 @@ const FindId = () => {
                                         className="p-2 mt-1 border-2 border-gray-300 rounded-md font-Pretendard text-lg"
                                     />
                                     {field.id === "email" ? (
-                                        <div className="w-full mt-2 flex justify-between">
-                                            <button className="px-2 py-1 border-2 border-maincolor rounded-md font-maintheme text-md text-maincolor tracking-wider cursor-pointer hover:underline hover:decoration-2 hover:underline-offset-3 active:bg-maincolor active:text-white">
-                                                이메일 인증
-                                            </button>
-                                            <input
-                                                type="text"
-                                                placeholder="메일로 발송된 인증번호를 입력하세요."
-                                                className="w-68 px-2 py-1 border-2 border-gray-300 rounded-md font-Pretendard text-md"
-                                            />
-                                        </div>
+                                        <>
+                                            <div className="w-full mt-2 flex justify-between">
+                                                <button
+                                                    type="button"
+                                                    onClick={handleSendVerifyEmail}
+                                                    className={`px-2 py-1 border-2 border-maincolor rounded-md font-maintheme text-md text-maincolor tracking-wider ${
+                                                        isProgressSendEmail
+                                                            ? "opacity-50 cursor-progress"
+                                                            : "hover:underline hover:decoration-2 hover:underline-offset-3 active:bg-maincolor active:text-white cursor-pointer"
+                                                    }`}
+                                                >
+                                                    이메일 인증
+                                                </button>
+                                                {showVerifyCodeInput ? (
+                                                    <input
+                                                        id="code"
+                                                        type="text"
+                                                        onChange={handleCodeChange}
+                                                        placeholder="메일로 발송된 인증번호를 입력하세요."
+                                                        className="w-68 px-2 py-1 border-2 border-gray-300 rounded-md font-Pretendard text-md"
+                                                    />
+                                                ) : (
+                                                    <></>
+                                                )}
+                                            </div>
+                                            {sendVerifyEmailMessage && (
+                                                <p className={`mt-1 ml-1 font-Pretendard text-lg ${isSendVerifyEmail ? "text-green-500" : "text-red-500"}`}>{sendVerifyEmailMessage}</p>
+                                            )}
+                                        </>
                                     ) : (
-                                        ""
+                                        <></>
                                     )}
                                     {isEmptyMessage[field.id] && <p className="mt-1 ml-1 text-red-500 font-Pretendard text-lg">{isEmptyMessage[field.id]}</p>}
                                     {fieldMessages[field.id] && <p className={`mt-1 ml-1 font-Pretendard text-lg text-red-500`}>{isValid[field.id] ? "" : fieldMessages[field.id]}</p>}
@@ -176,22 +246,33 @@ const FindId = () => {
                             ))}
                         </ul>
                     </section>
-                    <section className="w-full mt-12 flex flex-col justify-center">
-                        <div className="ml-1 font-maintheme text-maincolor text-2xl">해당 이메일로 가입된 아이디</div>
-                        <div className="w-full pl-1 py-2 mt-1 bg-gray-100 border-2 border-gray-200 rounded-md">
-                            <div className="font-Pretendard text-lg select-all">abcd1234</div>
-                        </div>
-                        <div
-                            onClick={() => navi("/find-pw")}
-                            className="w-fit ml-1 mt-2 font-maintheme text-xl text-maincolor tracking-wider hover:underline hover:decoration-2 hover:underline-offset-3 cursor-pointer"
-                        >
-                            비밀번호 찾기
-                        </div>
-                    </section>
+                    {showResult ? (
+                        <section className="w-full mt-12 flex flex-col justify-center">
+                            <div className="ml-1 font-maintheme text-maincolor text-2xl">해당 이메일로 가입된 아이디</div>
+                            <div className="w-full pl-1 py-2 mt-1 bg-gray-100 border-2 border-gray-200 rounded-md">
+                                <div className="font-Pretendard text-lg select-all">{result}</div>
+                            </div>
+                            <div
+                                onClick={() => navi("/find-pw", { state: { ...inputValues, username: result } })}
+                                className="w-fit ml-1 mt-2 font-maintheme text-xl text-maincolor tracking-wider hover:underline hover:decoration-2 hover:underline-offset-3 cursor-pointer"
+                            >
+                                비밀번호 찾기
+                            </div>
+                        </section>
+                    ) : (
+                        <></>
+                    )}
+                    {exceptionMessage && (
+                        <section className="mt-12 flex justify-center">
+                            <p className="font-Pretendard text-lg text-red-500">{exceptionMessage}</p>
+                        </section>
+                    )}
                     <section className="w-full h-auto flex justify-center">
                         <button
                             onClick={handleSubmit}
-                            className="w-56 h-24 mt-16 mb-24 border-2 border-maincolor rounded-full font-maintheme text-maincolor text-3xl hover:bg-maincolor hover:text-white cursor-pointer"
+                            className={`w-56 h-24 mt-12 mb-8 border-2 border-maincolor rounded-full font-maintheme text-maincolor text-3xl ${
+                                isProgress ? "opacity-50 cursor-progress" : "hover:bg-maincolor hover:text-white cursor-pointer"
+                            }`}
                         >
                             아이디 찾기
                         </button>

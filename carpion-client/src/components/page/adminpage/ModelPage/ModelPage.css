@@ -12,7 +12,7 @@ html {
    font-family: "pretendard";
 }
 
-#img-modal img{
+#img-modal img {
    width: 100%;
    height: 100%;
 }
@@ -108,6 +108,23 @@ html {
    border: 1px solid gray;
    margin-bottom: 2px;
 }
+#model-page .model-list .model .update-p {
+   display: inline;
+}
+#model-page .model-list .model .update-input {
+   display: none;
+   border: 1px solid rgb(133, 133, 133);
+   width: 100%;
+   height: 34px;
+   padding: 0 10px;
+   border-radius: 6px;
+}
+#model-page .model-list .model.active .update-p {
+   display: none;
+}
+#model-page .model-list .model.active .update-input {
+   display: inline-block;
+}
 #model-page .model-list .model > div {
    width: 10%;
    height: 100%;
@@ -131,6 +148,35 @@ html {
 #model-page .model-list .model .model-img {
    width: 8%;
    padding: 0;
+   position: relative;
+
+   cursor: pointer;
+}
+
+#model-page .model-list .model #update-file {
+   display: none;
+}
+#model-page .model-list .model .model-img > label {
+   z-index: 9;
+   background-color: rgba(0, 0, 0, 0.329);
+   position: absolute;
+   left: 0;
+   height: 0;
+   width: 100%;
+   height: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+}
+#model-page .model-list .model .model-img > label > svg {
+   width: 34px;
+   height: 34px;
+   fill: #d3d3d3;
+}
+
+#model-page .model-list .model .model-img:hover svg {
+   fill: #ffffff;
 }
 #model-page .model-list .model .btn-box {
    width: 12%;
@@ -180,6 +226,7 @@ html {
    display: flex;
    align-items: center;
    justify-content: center;
+   z-index: 50;
 }
 #img-modal .modal-container {
    width: 70%;

@@ -123,9 +123,11 @@
 .ThumbnailWrapper {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
+  gap: 8px;
+  border: 1px solid #ccc;
+  padding: 8px; /* 여백 추가 */
+  border-radius: 1rem;
 }
-
 .ThumbnailImg {
   width: 160px;
   height: 100px;
@@ -180,27 +182,33 @@
   color: #7f8c8d;
 }
 
-.PaginationWrapper {
+.paginationWrapper {
   display: flex;
   justify-content: center;
   gap: 8px;
-  margin: 24px 0;
+  margin-top: 24px;
 }
 
-.PaginationWrapper button {
-  padding: 6px 10px;
+.paginationButton {
+  padding: 6px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  background: white;
+  background-color: #fff;
+  color: #333;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.PaginationWrapper button.active {
+.paginationButton:hover {
+  background-color: #f0f0f0;
+}
+
+.paginationButton.active {
   background-color: #3498db;
   color: white;
 }
 
-.PaginationWrapper button:disabled {
+.paginationButton:disabled {
   background-color: #f0f0f0;
   cursor: not-allowed;
 }

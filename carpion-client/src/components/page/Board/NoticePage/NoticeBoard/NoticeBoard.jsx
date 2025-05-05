@@ -1,30 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import styles from "./NoticeBoard.module.css";
+import axios from "axios";
+import nbstyles from "./NoticeBoard.module.css";
 import CustomerBanner from "/img/notice/안내.jpg";
 
-const notices = [
-  {
-    id: 1,
-    title: "📌 서버 점검 안내",
-    date: "2025-04-10",
-    content: "4월 12일 오전 2시부터 4시까지 서버 점검이 있습니다.",
-  },
-  {
-    id: 2,
-    title: "🎉 신규 기능 업데이트",
-    date: "2025-04-09",
-    content: "공지사항에 아코디언 UI가 추가되었습니다!",
-  },
-];
-
 const NoticeItem = ({ notice }) => (
-  <li className={styles.item}>
-    <Link to={`/nd/${notice.id}`} className={styles.itemLink}>
-      <div className={styles.itemHeader}>
-        <span className={styles.itemTitle}>{notice.title}</span>
-        <div className={styles.rightBox}>
-          <span className={styles.itemDate}>{notice.date}</span>
+  <li className={nbstyles.item}>
+    <Link to={`/nd/${notice.noticeNo}`} className={nbstyles.itemLink}>
+      <div className={nbstyles.itemHeader}>
+        <span className={nbstyles.itemTitle}>{notice.title}</span>
+        <div className={nbstyles.rightBox}>
+          <span className={nbstyles.itemDate}>{notice.createDate}</span>
         </div>
       </div>
     </Link>
@@ -32,30 +18,51 @@ const NoticeItem = ({ notice }) => (
 );
 
 const NoticeBoard = () => {
-  const isAdmin = true;
+  const [notices, setNotices] = useState([]);
+
+  useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        const response = await axios.get("http://localhost:80/notice");
+        console.log(response.data); // 데이터 구조 확인
+        setNotices(response.data.list); // 'list'에 해당하는 배열을 상태로 저장
+      } catch (error) {
+        console.error("데이터 로딩 실패:", error);
+      }
+    };
+
+    fetchNotices();
+  }, []);
 
   return (
-    <div className={styles.noticeBoard}>
-      <div className={styles.banner}>
+    <div className={nbstyles.noticeBoard}>
+      <div className={nbstyles.banner}>
         <img src={CustomerBanner} alt="고객센터 배너" />
-        <div className={styles.bannerText}>고객센터</div>
+        <div className={nbstyles.bannerText}>고객센터</div>
       </div>
 
-      <div className={styles.container}>
-        <div className={styles.titleRow}>
+      <div className={nbstyles.container}>
+        <div className={nbstyles.titleRow}>
           <img
             src="/img/notice/사이렌.png"
             alt="공지 아이콘"
-            className={styles.titleIcon}
+            className={nbstyles.titleIcon}
           />
-          <h2 className={styles.title}>공지사항</h2>
-          {isAdmin && <button className={styles.writeButton}>작성</button>}
+          <h2 className={nbstyles.title}>공지사항</h2>
+
+          <Link to="/nw" className={nbstyles.writeButton}>
+            작성
+          </Link>
         </div>
 
-        <ul className={styles.list}>
-          {notices.map((notice) => (
-            <NoticeItem key={notice.id} notice={notice} />
-          ))}
+        <ul className={nbstyles.list}>
+          {notices.length === 0 ? (
+            <li className={nbstyles.item}>게시글이 없습니다.</li>
+          ) : (
+            notices.map((notice) => (
+              <NoticeItem key={notice.noticeNo} notice={notice} />
+            ))
+          )}
         </ul>
       </div>
     </div>

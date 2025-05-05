@@ -1,53 +1,108 @@
-import React from "react";
-import styles from "./ReportDetail.module.css";
-import img1 from "/img/cBoard/img1.jpg";
-import img2 from "/img/cBoard/img2.jpg";
-import img3 from "/img/cBoard/img3.jpg";
+import React, { useState, useEffect, useContext } from "react";
+import rdstyles from "./ReportDetail.module.css";
+import axios from "axios";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../Context/AuthContext";
 import ReportReply from "../ReportReply/ReportReply";
 
 function ReportDetail() {
-  const post = {
-    title: "신고/문의 제목 예시입니다",
-    content: "여기에 본문 내용이 들어갑니다.\n줄바꿈도 표현됩니다.",
-    createdAt: "2025-04-17T10:00:00Z",
-    author: { id: 1, name: "홍길동" },
-    images: [img1, img2, img3],
-    likes: 12,
+  const { reportNo } = useParams();
+  const { auth } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const { accessToken } = auth;
+  const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true); // 로딩 상태 추가
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const res = await axios.get(`http://localhost:80/reports/${reportNo}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        setPost(res.data);
+      } catch (err) {
+        console.error("게시글 불러오기 실패:", err);
+        alert("게시글을 불러오는 데 실패했습니다.");
+      } finally {
+        setLoading(false); // 로딩 종료
+      }
+    };
+
+    if (accessToken && reportNo) {
+      fetchPost();
+    } else {
+      setLoading(false);
+    }
+  }, [reportNo, accessToken]);
+
+  const handleDelete = async () => {
+    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+
+    try {
+      await axios.delete(`http://localhost:80/reports/${reportNo}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      alert("삭제 완료되었습니다.");
+      navigate("/rb");
+    } catch (error) {
+      console.error("삭제 실패:", error);
+      alert("삭제 중 오류가 발생했습니다.");
+    }
   };
 
-  const currentUser = { id: 1, name: "홍길동", role: "user" };
-  const isAuthorOrAdmin =
-    currentUser &&
-    (currentUser.id === post.author.id || currentUser.role === "admin");
+  // 로딩 중일 때 또는 post가 null이면
+  if (loading || !post) {
+    return (
+      <div className={rdstyles.container}>
+        <div>게시글을 불러오는 중입니다...</div>
+      </div>
+    );
+  }
 
   return (
     <>
-      <div className={styles.pageTitle}>신고/문의 게시판</div>
+      <div className={rdstyles.pageTitle}>신고/문의 게시판</div>
 
-      <div className={styles.container}>
-        <h1 className={styles.title}>{post.title}</h1>
-
-        <div className={styles.infoRow}>
-          <span className={styles.meta}>
-            {post.author.name} · {new Date(post.createdAt).toLocaleDateString()}
+      <div className={rdstyles.container}>
+        <div className={rdstyles.topRow}>
+          <h1 className={rdstyles.title}>{post.title}</h1>
+          <span className={rdstyles.date}>
+            {new Date(post.createDate).toLocaleDateString()}
           </span>
         </div>
 
-        <div className={styles.content}>
+        <div className={rdstyles.infoRow}>
+          <span className={rdstyles.meta}>{post.nickName}</span>
+          <div className={rdstyles.rightInfo}>
+            <span className={rdstyles.views}>조회수: {post.count}</span>
+          </div>
+        </div>
+
+        <div className={rdstyles.content}>
           {post.content.split("\n").map((line, i) => (
             <p key={i}>{line}</p>
           ))}
         </div>
 
-        {isAuthorOrAdmin && (
-          <div className={styles.bottomButtonGroup}>
-            <button className={styles.editBtn}>수정</button>
-            <button className={styles.deleteBtn}>삭제</button>
-          </div>
-        )}
+        <div className={rdstyles.bottomButtonGroup}>
+          {post.hasPermission && (
+            <>
+              <Link to={`/re/${reportNo}`} className={rdstyles.editBtn}>
+                수정
+              </Link>
+              <button className={rdstyles.deleteBtn} onClick={handleDelete}>
+                삭제
+              </button>
+            </>
+          )}
+        </div>
 
-        <div className={styles.commentPlaceholder}>
-          <ReportReply />
+        <div className={rdstyles.commentPlaceholder}>
+          <ReportReply reportNo={reportNo} />
         </div>
       </div>
     </>

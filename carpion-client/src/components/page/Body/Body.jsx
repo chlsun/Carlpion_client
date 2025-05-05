@@ -1,41 +1,44 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   Container,
   Box,
-  Header,
   Button,
   ModalContainer,
   ModalBox,
   Input,
   ButtonWrapper,
-  MoreButton,
   FirstBox,
   ThirdBox,
   ProfileTextBox,
-  Section,
   InfoSection,
   GradeText,
   InfoButton,
+  ReservationMoreButton,
+  ReservationValue,
+  ReservationLabel,
+  ReservationRow,
+  ReservationTitle,
+  ReservationBox,
+  ReservationContainer,
 } from "./Body.styles";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import axios from "axios";
+import { AuthContext } from "../Context/AuthContext";
+import MainMyPage from "../MyPage/MainMyPage";
+import ReservationComponent from "./module/ReservationComponent";
+import RentHistoryComponent from "./module/RentHistoryComponent";
 
 const Body = () => {
+  const { auth, updateNickName } = useContext(AuthContext);
   const [activeForm, setActiveForm] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [tempImage, setTempImage] = useState("");
   const [nickName, setNickName] = useState("");
-  const [tempNick, setTempNick] = useState("");
-  const navi = useNavigate();
+  const [modifyNickName, setModifyNickName] = useState("");
+  const [isUpdate, setIsUpdate] = useState(false);
 
-  useEffect(() => {
-    if (selectedImage) {
-      localStorage.setItem("profileImage", selectedImage);
-    }
-    if (nickName) {
-      localStorage.setItem("nickName", nickName);
-    }
-  }, [nickName, selectedImage]);
+  const navi = useNavigate();
 
   useEffect(() => {
     setSelectedImage("/img/mypage/profile.logo.png");
@@ -45,12 +48,6 @@ const Body = () => {
       setTempImage(null);
     }
   }, [activeForm]);
-  const handleReport = () => {
-    console.log("문의게시판 수정 클릭됨");
-  };
-  const handleReview = () => {
-    console.log("리뷰게시판 수정 클릭됨");
-  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -73,17 +70,17 @@ const Body = () => {
 
   const handelNameEdit = (e) => {
     const inputValue = e.target.value;
-    setTempNick(inputValue);
+    setModifyNickName(inputValue);
   };
   const submitNickname = (e) => {
     e.preventDefault();
 
     const regex = /^[\uAC00-\uD7A3a-zA-Z0-9]{2,10}$/;
-    if (!regex.test(tempNick)) {
+    if (!regex.test(modifyNickName)) {
       alert(" 2 ~ 10자, 한글과 영어 알파벳, 숫자로 이루어져야 합니다");
       return;
     }
-    setNickName(tempNick);
+    setNickName(modifyNickName);
     setActiveForm(null);
   };
   const handleProfileSubmit = () => {
@@ -97,42 +94,76 @@ const Body = () => {
     setActiveForm(null);
   };
 
-  /*   axios
-    .put("http:/localhost:80/users/update-nickname", {
-      userNo: 1,
-      currentNickname: "가나다",
-      newCurrentNickname: "가나다라",
-    })
-    .then((response) => {
-      console.log("성공: ", response.data);
-      alert("닉네임 변경 성공!");
-    })
-    .catch((err) => {
-      console.error("실패", err);
-      alert("에러발생");
-    });
+  const [reservations, setReservations] = useState([]);
 
-  axios.put("http://localhost:80/users/update-pw", {
-    userNo: 1,
-    currentPassword: 1234,
-    newPassword: 1234,
-  });
-  .then(()=>{})
+  useEffect(() => {
+    if (auth.accessToken) {
+      axios
+        .get("http://localhost/mypage/reservations", {
+          headers: {
+            Authorization: `Bearer ${auth.accessToken}`,
+          },
+        })
+        .then((response) => {
+          setReservations(response.data);
+        })
+        .catch((error) => {
+          console.error("예약조회 실패 : ", error);
+        });
+    }
+  }, [auth.accessToken]);
 
-  axios.put("http:/localhost:80/users/update-email", {
-    userNo: 1,
-    email: "kh@123.com",
-    newEmail: "kh@12345.com",
-  });
+  useEffect(() => {
+    if (isUpdate && auth.accessToken) {
+      console.log(" 닉네임요청 보냅니다");
+      axios
+        .get("http://localhost/mypage/selectNickname", {
+          headers: {
+            Authorization: `Bearer ${auth.accessToken}`,
+          },
+        })
+        .then((result) => {
+          console.log("selectNickname 응답 :", result.data);
+          updateNickName(result.data.nickName);
+        });
+      setIsUpdate(false);
+    }
+  }, [isUpdate, auth.accessToken]);
 
-  const formData = new FormData();
-  formData.append("file", selectedImage);
-  formData.append("userNo", 1); */
+  useEffect(() => {
+    if (auth.nickname) {
+      setNickName(auth.nickname);
+    }
+  }, [auth.nickname]);
+
+  const handleNickname = () => {
+    if (auth.accessToken) {
+      axios
+        .put(
+          "http://localhost/users/update-nickname",
+          {
+            nickName: modifyNickName,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${auth.accessToken}`,
+            },
+          }
+        )
+        .then((response) => {
+          console.log("받아온 데이터:", response.data);
+          setIsUpdate(true);
+        })
+        .catch((error) => {
+          console.error("닉네임 변경 실패 : ", error);
+        });
+    }
+  };
 
   return (
     <Container>
       <div>
-        <GradeText>XXX님 안녕하세요</GradeText>
+        <GradeText>님 안녕하세요</GradeText>
       </div>
 
       <Box>
@@ -172,11 +203,13 @@ const Body = () => {
                 <Input
                   onChange={handelNameEdit}
                   placeholder="변경할 닉네임을 입력해주세요"
-                  value={tempNick}
+                  value={modifyNickName}
                 />
 
                 <ButtonWrapper>
-                  <Button type="submit">확인</Button>
+                  <Button onClick={handleNickname} type="submit">
+                    확인
+                  </Button>
                   <Button onClick={() => setActiveForm(null)}>취소</Button>
                 </ButtonWrapper>
               </form>
@@ -215,29 +248,14 @@ const Body = () => {
           <InfoButton onClick={() => navi("/point")}>포인트</InfoButton>
         </ThirdBox>
       </Box>
-      <GradeText>예약 현황</GradeText>
+      <GradeText>예약 정보</GradeText>
 
-      <Section>
-        <div>예약차종</div>
-        <div>기간</div>
-        <div>위치 </div>
-        <div>차량정보</div>
-      </Section>
-      <ButtonWrapper>
-        <MoreButton>더보기</MoreButton>
-      </ButtonWrapper>
+      <ReservationComponent/>
 
-      <GradeText>사용 내역</GradeText>
+      <GradeText>이용 내역</GradeText>
 
-      <Section>
-        <div>사용차종</div>
-        <div>기간</div>
-        <div>위치 </div>
-        <div>차량정보</div>
-      </Section>
-      <ButtonWrapper>
-        <MoreButton>더보기</MoreButton>
-      </ButtonWrapper>
+      <RentHistoryComponent/>
+
       <GradeText>내 활동</GradeText>
       <Box>
         <Button onClick={() => navi("/reply")}>작성한 댓글 조회</Button>

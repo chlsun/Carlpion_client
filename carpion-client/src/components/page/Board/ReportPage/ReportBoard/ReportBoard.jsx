@@ -1,112 +1,92 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import styles from "./ReportBoard.module.css";
+import React, { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import axios from "axios";
+import rbstyles from "./ReportBoard.module.css";
 
 const ReportBoard = () => {
-  const role = "admin";
-  const currentUser = "user1";
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchOption, setSearchOption] = useState("title"); // 검색 옵션 (제목, 작성자, 내용)
-  const [filteredReports, setFilteredReports] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialPage = parseInt(searchParams.get("page")) || 1;
+  const [currentPage, setCurrentPage] = useState(initialPage);
+  const [reports, setReports] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [startBtn, setStartBtn] = useState(1);
+  const [endBtn, setEndBtn] = useState(1);
+
   const itemsPerPage = 10;
 
-  const reports = [
-    { id: 1, title: "욕설 신고", content: "심한 욕설이 포함됨", user: "user1" },
-    { id: 2, title: "광고 신고", content: "홍보 링크 포함됨", user: "user2" },
-    {
-      id: 3,
-      title: "도배 신고",
-      content: "같은 내용 반복 작성",
-      user: "user1",
-    },
-    {
-      id: 4,
-      title: "불법 콘텐츠 신고",
-      content: "음란물 게시됨",
-      user: "user1",
-    },
-    { id: 5, title: "스팸 신고", content: "스팸 메시지 포함됨", user: "user2" },
-    { id: 6, title: "허위 신고", content: "사실 무근", user: "user1" },
-    { id: 7, title: "비방 신고", content: "허위 비방", user: "user2" },
-    { id: 8, title: "욕설 신고", content: "욕설과 비방", user: "user1" },
-    { id: 9, title: "광고 신고", content: "불법 광고 포함", user: "user1" },
-    { id: 10, title: "도배 신고", content: "중복된 내용", user: "user1" },
-    {
-      id: 11,
-      title: "불법 콘텐츠 신고",
-      content: "음란물 게시",
-      user: "user2",
-    },
-  ];
+  useEffect(() => {
+    fetchReports(currentPage);
+  }, [currentPage]);
 
-  // 필터링된 보고서 상태 설정
-  const visibleReports =
-    role === "admin"
-      ? filteredReports.length > 0
-        ? filteredReports
-        : reports
-      : filteredReports.length > 0
-      ? filteredReports.filter((r) => r.user === currentUser)
-      : reports.filter((r) => r.user === currentUser);
-
-  const totalPages = Math.ceil(visibleReports.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentReports = visibleReports.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
+  const fetchReports = async (page) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:80/reports?page=${page}`
+      );
+      const data = response.data;
+      console.log("리스폰", response.data);
+      setReports(data.list);
+      setTotalPages(data.maxPage);
+      setStartBtn(data.startBtn);
+      setEndBtn(data.endBtn);
+    } catch (err) {
+      console.error("❌ 데이터 로딩 실패:", err);
+    }
+  };
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber < 1 || pageNumber > totalPages) return;
     setCurrentPage(pageNumber);
+    setSearchParams({ page: pageNumber });
   };
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const handleSearchOptionChange = (e) => {
-    setSearchOption(e.target.value);
-  };
-
-  const handleSearchSubmit = () => {
-    // 선택된 검색 옵션에 따라 필터링된 결과 업데이트
-    const filtered = reports.filter((r) => {
-      if (searchOption === "title") {
-        return r.title.toLowerCase().includes(searchTerm.toLowerCase());
-      } else if (searchOption === "user") {
-        return r.user.toLowerCase().includes(searchTerm.toLowerCase());
-      } else if (searchOption === "content") {
-        return r.content.toLowerCase().includes(searchTerm.toLowerCase());
+  const getPageNumbers = () => {
+    let pages = [];
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
       }
-      return false;
-    });
-    setFilteredReports(filtered);
-    setCurrentPage(1); // 검색 후 첫 페이지로 이동
+    } else {
+      if (currentPage <= 3) {
+        pages = [1, 2, 3, "...", totalPages];
+      } else if (currentPage >= totalPages - 2) {
+        pages = [1, "...", totalPages - 2, totalPages - 1, totalPages];
+      } else {
+        pages = [
+          1,
+          "...",
+          currentPage - 1,
+          currentPage,
+          currentPage + 1,
+          "...",
+          totalPages,
+        ];
+      }
+    }
+    return pages;
   };
 
-  const ReportItem = ({ report }) => (
-    <tr className={styles.item}>
-      <td>{startIndex + report.id}</td>
+  const ReportItem = ({ report, index }) => (
+    <tr className={rbstyles.item}>
+      <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
       <td>
-        <Link to={`/rd/${report.id}`} className={styles.itemLink}>
+        <Link to={`/rd/${report.reportNo}`} className={rbstyles.itemLink}>
           {report.title}
         </Link>
       </td>
-      <td>{report.user}</td>
-      <td>{new Date().toLocaleDateString()}</td>
-      <td>{Math.floor(Math.random() * 100)}</td>
+      <td>{report.nickName}</td>
+      <td>{new Date(report.createDate).toLocaleDateString()}</td>
+      <td>{report.count}</td>
     </tr>
   );
 
   return (
-    <div className={styles.reportListWrapper}>
-      <div className={styles.reportHeader}>
+    <div className={rbstyles.reportListWrapper}>
+      <div className={rbstyles.reportHeader}>
         <h2>신고 목록</h2>
       </div>
 
-      <table className={styles.reportTable}>
+      <table className={rbstyles.reportTable}>
         <thead>
           <tr>
             <th>번호</th>
@@ -117,73 +97,73 @@ const ReportBoard = () => {
           </tr>
         </thead>
         <tbody>
-          {currentReports.length === 0 ? (
+          {reports.length === 0 ? (
             <tr>
-              <td colSpan={5} className={styles.empty}>
+              <td colSpan={5} className={rbstyles.empty}>
                 신고 내역이 없습니다.
               </td>
             </tr>
           ) : (
-            currentReports.map((r) => <ReportItem key={r.id} report={r} />)
+            reports.map((r, i) => (
+              <ReportItem key={r.reportNo} report={r} index={i} />
+            ))
           )}
         </tbody>
       </table>
 
-      <div className={styles.paginationWrapper}>
+      <div className={rbstyles.paginationWrapper}>
+        {currentPage > 3 && totalPages > 5 && (
+          <button
+            onClick={() => handlePageChange(1)}
+            className={rbstyles.paginationButton}
+          >
+            {"«"}
+          </button>
+        )}
+
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className={styles.paginationButton}
+          className={rbstyles.paginationButton}
         >
           {"<"}
         </button>
 
-        {Array.from({ length: totalPages }, (_, i) => (
+        {getPageNumbers().map((page, index) => (
           <button
-            key={i}
-            onClick={() => handlePageChange(i + 1)}
-            className={`${styles.paginationButton} ${
-              currentPage === i + 1 ? styles.active : ""
+            key={index}
+            onClick={() => handlePageChange(page)}
+            className={`${rbstyles.paginationButton} ${
+              currentPage === page ? rbstyles.active : ""
             }`}
+            disabled={page === "..."}
           >
-            {i + 1}
+            {page}
           </button>
         ))}
 
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className={styles.paginationButton}
+          className={rbstyles.paginationButton}
         >
           {">"}
         </button>
+
+        {currentPage < totalPages - 2 && totalPages > 5 && (
+          <button
+            onClick={() => handlePageChange(totalPages)}
+            className={rbstyles.paginationButton}
+          >
+            {"»"}
+          </button>
+        )}
       </div>
 
-      <div className={styles.searchWrapper}>
-        <select
-          value={searchOption}
-          onChange={handleSearchOptionChange}
-          className={styles.searchSelect}
-        >
-          <option value="title">제목</option>
-          <option value="user">작성자</option>
-          <option value="content">내용</option>
-        </select>
-
-        <input
-          type="text"
-          placeholder="검색"
-          value={searchTerm}
-          onChange={handleSearchChange}
-          className={styles.searchInput}
-        />
-        <button className={styles.searchButton} onClick={handleSearchSubmit}>
-          검색
-        </button>
-      </div>
-
-      <div className={styles.actionWrapper}>
-        <button className={styles.writeButton}>신고 작성</button>
+      <div className={rbstyles.actionWrapper}>
+        <Link to="/rw" className={rbstyles.writeButton}>
+          신고 작성
+        </Link>
       </div>
     </div>
   );

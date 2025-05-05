@@ -1,42 +1,54 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   Container,
-  Header,
-  Box,
-  ReplyTitle,
-  ReplyTime,
-  ReplyContent,
+  ReplyBox,
+  Field,
   PaginationWrapper,
   PageButton,
 } from "./Reply.style";
-
+import axios from "axios";
+import { AuthContext } from "../Context/AuthContext";
 const Reply = () => {
-  const handleSwitch = () => {};
+  const { auth } = useContext(AuthContext);
+  const [replyList, setReplyList] = useState([]);
+
+  useEffect(() => {
+    if (auth.accessToken) {
+      axios
+        .get("http://localhost/mypage/comments", {
+          headers: {
+            Authorization: `Bearer ${auth.accessToken}`,
+          },
+        })
+        .then((response) => {
+          console.log("받아온 데이터:", response.data);
+          setReplyList(response.data);
+        })
+        .catch((error) => {
+          console.error("댓글게시판조회 실패 : ", error);
+        });
+    }
+  }, [auth.accessToken]);
+
   return (
     <>
       <Container>
-        <Header>댓글 조회</Header>
-        <Box>
-          <div>공지사항</div>
-          <ReplyTitle>게시물제목</ReplyTitle>
-          <ReplyTime>시간</ReplyTime>
-          <ReplyContent>댓글</ReplyContent>
-        </Box>
-        <Box>
-          <div>문의 게시판</div>
-          <ReplyTitle>게시물제목</ReplyTitle>
-          <ReplyTime>시간</ReplyTime>
-          <ReplyContent>댓글</ReplyContent>
-        </Box>
-        <Box>
-          <div>리뷰 게시판</div>
-          <ReplyTitle>게시물제목</ReplyTitle>
-          <ReplyTime>시간</ReplyTime>
-          <ReplyContent>댓글</ReplyContent>
-        </Box>
+        <h2
+          style={{ textAlign: "center", marginTop: "80px", fontWeight: "bold" }}
+        >
+          댓글 조회
+        </h2>
+        {replyList.map((item) => (
+          <ReplyBox key={item}>
+            <Field> 게시판 제목 : {item.title} </Field>
+            <Field> 댓글 : {item.content}</Field>
+            <Field> 작성일: {item.createDate}</Field>
+            <Field> 조회수: {item.count}</Field>
+          </ReplyBox>
+        ))}
 
         <PaginationWrapper>
-          <PageButton onClick={handleSwitch}>{"<"}</PageButton>
+          <PageButton>{"<"}</PageButton>
           {[1, 2, 3, 4, 5].map((num) => (
             <PageButton key={num}>{num}</PageButton>
           ))}

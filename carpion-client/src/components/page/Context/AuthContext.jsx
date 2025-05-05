@@ -17,16 +17,19 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated: false,
     });
 
-    const [refreshToken, setRefreshToekn] = useState(() => localStorage.getItem("refreshToken"));
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    const [refreshToken, setRefreshToekn] = useState(localStorage.getItem("refreshToken"));
 
     useEffect(() => {
         const token = sessionStorage.getItem("accessToken");
 
         if (token == null && refreshToken) {
             axios
-                .post(`http://localhost:80/auth/auto-login`, { refreshToken: refreshToken })
+                .post(`http://localhost:80/auth/auto-login`, {
+                    refreshToken: refreshToken,
+                })
                 .then((result) => {
-                    console.log(result.data);
                     const { username, nickname, realname, email, accessToken, refreshToken } = result.data;
                     login(username, nickname, realname, email, accessToken, refreshToken);
                 })
@@ -41,11 +44,37 @@ export const AuthProvider = ({ children }) => {
             const accessToken = sessionStorage.getItem("accessToken");
             const refreshToken = localStorage.getItem("refreshToken");
 
-            setAuth({ username, nickname, realname, email, accessToken, refreshToken, isAuthenticated: true });
+            setAuth({
+                username,
+                nickname,
+                realname,
+                email,
+                accessToken,
+                refreshToken,
+                isAuthenticated: true,
+            });
         }
+
+        setTimeout(() => {
+            setRefreshToekn(localStorage.getItem("refreshToken"));
+        }, 2000);
     }, [refreshToken]);
 
-    function login(username, nickname, realname, email, accessToken, refreshToken) {
+    useEffect(() => {
+        if (!auth.username || !auth.realname) {
+            setIsAdmin(false);
+            return;
+        }
+
+        if (auth.username.substring(2, 7) !== "admin" || auth.realname !== "어드민") {
+            setIsAdmin(false);
+            return;
+        }
+
+        setIsAdmin(true);
+    }, [auth]);
+
+    const login = (username, nickname, realname, email, accessToken, refreshToken) => {
         if (refreshToken === undefined) {
             setAuth({
                 username,
@@ -82,14 +111,15 @@ export const AuthProvider = ({ children }) => {
         sessionStorage.setItem("email", email);
         sessionStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
-    }
+    };
 
     const logout = () => {
         const refreshToken = localStorage.getItem("refreshToken");
 
         if (refreshToken && refreshToken !== "undefined") {
-            axios.post(`http://localhost:80/auth/logout`, { refreshToken: refreshToken });
-            navi("/");
+            axios.post(`http://localhost:80/auth/logout`, {
+                refreshToken: refreshToken,
+            });
         }
 
         setAuth({
@@ -107,8 +137,30 @@ export const AuthProvider = ({ children }) => {
         sessionStorage.removeItem("realname");
         sessionStorage.removeItem("email");
         sessionStorage.removeItem("accessToken");
+        sessionStorage.removeItem("socialId");
+        sessionStorage.removeItem("platform");
         localStorage.removeItem("refreshToken");
+
+        navi("/");
     };
 
-    return <AuthContext.Provider value={{ auth, login, logout }}>{children}</AuthContext.Provider>;
+    function updateUser(realname, email) {
+        setAuth((prev) => ({
+            ...prev,
+            realname,
+            email,
+        }));
+        sessionStorage.setItem("realname", realname);
+        sessionStorage.setItem("email", email);
+    }
+
+    function updateNickName(nickName) {
+        setAuth((prev) => ({
+            ...prev,
+            nickName,
+        }));
+        sessionStorage.setItem("nickname", nickName);
+    }
+
+    return <AuthContext.Provider value={{ auth, login, logout, isAdmin, updateUser, updateNickName }}>{children}</AuthContext.Provider>;
 };

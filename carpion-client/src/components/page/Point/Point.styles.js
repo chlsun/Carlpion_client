@@ -38,3 +38,28 @@ export const MoreButton = styled.button`
     background: #eee;
   }
 `;
+export const PaginationWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+`;
+export const PageButton = styled.button`
+  width: 36px;
+  height: 36px;
+  border: 1px solid #aaa;
+  background: white;
+  text-align: center;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+
+  &:hover {
+    background: #f0f0f0;
+  }
+
+  &.active {
+    background: #007bff;
+    color: white;
+  }
+`;

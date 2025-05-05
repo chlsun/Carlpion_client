@@ -1,17 +1,9 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 1000px;
+  margin: 70px auto;
   padding: 40px;
-`;
-
-export const Header = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 50px;
-  font-weight: bold;
 `;
 
 export const Box = styled.div`
@@ -22,19 +14,8 @@ export const Box = styled.div`
   padding: 40px;
   border-radius: 12px;
   margin: 40px;
-  min-width: 1000px;
+  min-width: 600px;
   max-width: 1000px;
-`;
-
-export const NicknameBox = styled.div`
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-`;
-export const ButtonColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 `;
 
 export const FirstBox = styled.div`
@@ -50,26 +31,12 @@ export const ProfileTextBox = styled.div`
   align-items: center;
   gap: 10px;
 `;
-export const SecondBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-`;
 
 export const ThirdBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: column;
   text-align: center;
-`;
-
-export const FormWrapper = styled.form`
-  border: 1px solid #eee;
-  padding: 20px;
-  margin-top: 20px;
-  border-radius: 10px;
-  background: white;
 `;
 
 export const Input = styled.input`
@@ -94,21 +61,7 @@ export const Button = styled.button`
     background: #eee;
   }
 `;
-export const MoreButton = styled.button`
- display: block;
-  margin: 20px auto;
-  padding: 10px;
-  width: 120px;
-  cursor: pointer;
-  background: #f9f9f9;
-  border: 1px solid #aaa;
-  text-align: center;
-  border-radius:6px;
 
-  &:hover {
-    background: #eee;
-  }
-`;
 export const ButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -138,8 +91,8 @@ export const ModalBox = styled.div`
 `;
 export const Section = styled.div`
   display: flex;
-  justify-content: space-between; 
-  gap: 40px; 
+  justify-content: space-between;
+  gap: 40px;
   width: 100%;
   padding: 20px;
   border: 1px solid #ddd;
@@ -149,14 +102,14 @@ export const Section = styled.div`
 export const InfoSection = styled.div`
   display: flex;
   align-items: center;
-  gap: 20px; 
+  gap: 20px;
   margin-top: 20px;
 `;
 
 export const GradeText = styled.div`
   font-size: 22px;
   font-weight: bold;
-  margin :20px;
+  margin: 20px;
 `;
 
 export const InfoButton = styled.button`
@@ -167,5 +120,57 @@ export const InfoButton = styled.button`
   cursor: pointer;
   &:hover {
     background-color: #f0f0f0;
+  }
+`;
+
+export const ReservationContainer = styled.div`
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+`;
+
+export const ReservationBox = styled.div`
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 24px;
+  background-color: #fdfdfd;
+  margin-bottom: 30px;
+`;
+
+export const ReservationTitle = styled.h3`
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+`;
+
+export const ReservationRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 15px;
+  border-bottom: 1px solid #eee;
+`;
+
+export const ReservationLabel = styled.span`
+  font-weight: 600;
+  color: #444;
+`;
+
+export const ReservationValue = styled.span`
+  color: #666;
+`;
+
+export const ReservationMoreButton = styled.button`
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 14px;
+  background: #fff;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background: #f0f0f0;
   }
 `;
