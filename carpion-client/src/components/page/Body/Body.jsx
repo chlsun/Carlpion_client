@@ -38,7 +38,10 @@ const Body = () => {
   const [nickName, setNickName] = useState("");
   const [modifyNickName, setModifyNickName] = useState("");
   const [isUpdate, setIsUpdate] = useState(false);
+  const [isPageLoad, setIsPageLoad] = useState(true);
 
+  const [reservationList, setReservationList] = useState(null);
+  const [reservations, setReservations] = useState([]);
   const navi = useNavigate();
 
   /*  useEffect(() => {
@@ -81,8 +84,6 @@ const Body = () => {
     setActiveForm(null);
   };
 
-  const [reservations, setReservations] = useState([]);
-
   useEffect(() => {
     if (auth.accessToken) {
       axios
@@ -98,8 +99,21 @@ const Body = () => {
         .catch((error) => {
           console.error("예약조회 실패 : ", error);
         });
+      /*  axios
+        .get("http://localhost/mypage/reservation", {
+          headers: {
+            Authorization: `Bearer ${auth.accessToken}`,
+          },
+        })
+        .then((result) => {
+          console.log(result);
+          setReservationList(result.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        }); */
     }
-  }, [auth.accessToken]);
+  }, [auth.accessToken, isPageLoad]);
 
   useEffect(() => {
     if (isUpdate && auth.accessToken) {
@@ -156,6 +170,7 @@ const Body = () => {
         })
         .then((res) => {
           const url = res.data.fileUrl;
+          console.log("DB에서 받아온 이미지:", url);
           setSelectedImage(url || "/img/mypage/profile.logo.png");
         })
         .catch(() => {
@@ -186,7 +201,7 @@ const Body = () => {
           console.log("사진업데이트", response.data);
           const newUrl = response.data.fileUrl;
           setSelectedImage(newUrl);
-          localStorage.setItem("profileImg", newUrl);
+          localStorage.setItem("profileImg_${auth.username}", newUrl);
           setActiveForm(null);
         })
         .catch((error) => {
@@ -294,10 +309,12 @@ const Body = () => {
       </Box>
       <GradeText>예약 정보</GradeText>
 
-      <ReservationComponent />
-
+      <ReservationComponent
+        reservationList={reservationList}
+        setIsPageLoad={setIsPageLoad}
+        isPageLoad={isPageLoad}
+      />
       <GradeText>이용 내역</GradeText>
-
       <RentHistoryComponent rentHistory={reservations} />
 
       <GradeText>내 활동</GradeText>

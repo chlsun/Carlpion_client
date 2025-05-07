@@ -7,7 +7,7 @@ import ModelPage from "./components/page/adminpage/ModelPage/ModelPage";
 import CarPage from "./components/page/adminpage/CarPage/CarPage";
 import Header from "./components/include/Header/Header";
 import Footer from "./components/include/Footer/Footer";
-import CarRentPage from "./components/page/carrentpage/CarRentPage";
+import CarRentPage from "./components/page/CarRentPage/CarRentPage";
 import MainMyPage from "./components/page/MyPage/MainMyPage";
 import Body from "./components/page/Body/Body";
 import Point from "./components/page/Point/Point";

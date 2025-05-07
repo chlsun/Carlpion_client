@@ -124,13 +124,33 @@ export const AuthProvider = ({ children }) => {
       isAuthenticated: true,
     });
 
-    sessionStorage.setItem("username", username);
-    sessionStorage.setItem("nickname", nickname);
-    sessionStorage.setItem("realname", realname);
-    sessionStorage.setItem("email", email);
-    sessionStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("refreshToken", refreshToken);
+    setAuth({
+      username,
+      nickname,
+      realname,
+      email,
+      accessToken,
+      refreshToken,
+      isAuthenticated: true,
+    });
   };
+
+  useEffect(() => {
+    if (!auth.username || !auth.realname) {
+      setIsAdmin(false);
+      return;
+    }
+
+    if (
+      auth.username.substring(2, 7) !== "admin" ||
+      auth.realname !== "어드민"
+    ) {
+      setIsAdmin(false);
+      return;
+    }
+
+    setIsAdmin(true);
+  }, [auth]);
 
   const logout = () => {
     const refreshToken = localStorage.getItem("refreshToken");

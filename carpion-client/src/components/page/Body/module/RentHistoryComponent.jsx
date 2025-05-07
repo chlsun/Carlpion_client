@@ -51,10 +51,10 @@ const RentHistoryComponent = (props) => {
       </div>
 
       {/* 이용 내역 없을떄 보여주는 컴포넌트 */}
-      {/* <div id="no-search">
-                <img src="/img/notFound_car.png" alt="" />
-                <p className="msg">칼피온 이용내역이 없습니다.</p>
-            </div> */}
+      {/*  <div id="no-search">
+        <img src="/img/notFound_car.png" alt="" />
+        <p className="msg">칼피온 이용내역이 없습니다.</p>
+      </div> */}
     </>
   );
 };

@@ -89,7 +89,7 @@ const ParkingModal = ({ setModalOpen, modalBackground, setParkingInfo }) => {
                <div className="search-list">
                   {parkingsInfo.length > 0 ? (
                      parkingsInfo.map((parking, index) => (
-                        <div className="parking-box">
+                        <div className="parking-box" key={index}>
                            <div
                               className="parking-info"
                               key={parking.parkingId}

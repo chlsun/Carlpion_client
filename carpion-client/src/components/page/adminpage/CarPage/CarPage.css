@@ -111,8 +111,8 @@
 
 #car-page .car-list {
    width: 100%;
-   margin-top: 80px;
-   height: 620px;
+   min-height: 460px;
+   margin-bottom: 40px;
 }
 #car-page .car-list .car {
    display: flex;
@@ -195,8 +195,8 @@
 }
 
 #car-page .pagination {
-   margin-top: 40px;
-   margin-bottom: 40px;
+   margin-top: 80px;
+   margin-bottom: 30px;
    display: flex;
    align-items: center;
    justify-content: center;
@@ -214,4 +214,16 @@
 #car-page .pagination .page-num.active {
    background-color: #5c5c5c;
    color: #ffffff;
+}
+
+#not-found{
+   width: 100%;
+   height: 400px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 24px;
+   font-weight: 600;
+   color: #000000;
+   text-align: center;
 }
