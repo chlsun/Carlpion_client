@@ -98,14 +98,15 @@ html {
 
 #model-page .model-list {
    width: 100%;
-   margin-top: 80px;
+   min-height: 460px;
+   margin-bottom: 40px;
 }
 #model-page .model-list .model {
    display: flex;
    align-items: center;
    width: 100%;
    height: 80px;
-   border: 1px solid gray;
+   border: 1px solid #80808050;
    margin-bottom: 2px;
 }
 #model-page .model-list .model .update-p {
@@ -131,7 +132,7 @@ html {
    display: flex;
    align-items: center;
    padding: 10px;
-   border-right: 1px solid gray;
+   border-right: 1px solid #80808050;
 }
 #model-page .model-list .model .model-num {
    width: 5%;
@@ -195,8 +196,8 @@ html {
 }
 
 #model-page .pagination {
-   margin-top: 40px;
-   margin-bottom: 40px;
+   margin-top: 60px;
+   margin-bottom: 30px;
    display: flex;
    align-items: center;
    justify-content: center;
@@ -252,4 +253,15 @@ html {
    width: 24px;
    height: 24px;
    fill: #ffffff;
+}
+#model-page .not-found{
+   width: 100%;
+   height: 300px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 24px;
+   font-weight: 600;
+   color: #000000;
+   text-align: center;
 }

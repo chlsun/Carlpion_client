@@ -18,11 +18,13 @@ const CarRentPage = () => {
    const [returnDate, setReturnDate] = useState(null);
    const [returnHour, setReturnHour] = useState(null);
 
+   const [rentalHourOption, setRentalHourOption] = useState(null);
    const [returnHourOption, setReturnHourOption] = useState(null);
 
    const [rentalDateYMDH, setRentalDateYMDH] = useState(null);
    const [returnDateYMDH, setReturnDateYMDH] = useState(null);
 
+   const [isRentalDateDisabled, setIsRentalDateDisabled] = useState(true);
    const [isDateDisabled, setIsDateDisabled] = useState(true);
    const [isHourDisabled, setIsHourDisabled] = useState(true);
 
@@ -62,15 +64,35 @@ const CarRentPage = () => {
       { value: "중랑구", label: "중랑구" },
    ];
 
-   const rentalHourOption = Array.from({ length: 24 }, (_, i) => {
+   const defaultRentalHourOption = Array.from({ length: 24 }, (_, i) => {
       const hour = i.toString().padStart(2, "0");
-      return { value: `${hour}:00:00`, label: `${hour}:00:00` };
+      return { value: `${hour}:00:00`, label: `${hour}:00` };
    });
 
+   const getRentalHour = (startHour) =>{
+
+      const paramHour = parseInt(startHour);
+
+      return Array.from({ length: 24 - paramHour - 1 }, (_, i) => {
+         const hour = (paramHour + i + 1).toString().padStart(2, "0");
+         return { value: `${hour}:00:00`, label: `${hour}:00` };
+      });
+   }
+
    const getReturnHour = (startHour) => {
+      
+      if(startHour == -1){
+         const defaultHour = 0;
+
+         return Array.from({ length: 24 }, (_, i) => {
+            const hour = (i).toString().padStart(2, "0");
+            return { value: `${hour}:00:00`, label: `${hour}:00` };
+         });
+      }
+
       return Array.from({ length: 24 - startHour - 1 }, (_, i) => {
          const hour = (startHour + i + 1).toString().padStart(2, "0");
-         return { value: `${hour}:00:00`, label: `${hour}:00:00` };
+         return { value: `${hour}:00:00`, label: `${hour}:00` };
       });
    };
 
@@ -122,6 +144,20 @@ const CarRentPage = () => {
    };
 
    useEffect(() => {
+      if (rentalDate){
+         const date = new Date();
+         const matchDate = toStringByDate2(date);
+
+         if(matchDate == rentalDate.value){
+            const hour = String(date.getHours()).padStart(2, "0");
+            setRentalHourOption(getRentalHour(hour))
+         }else{
+            setRentalHourOption(defaultRentalHourOption);
+         }
+
+         setIsRentalDateDisabled(false);
+      }
+
       if (rentalDate && rentalHour) {
          setReturnDates(getNextTenDays(new Date(rentalDate.value)));
          setIsDateDisabled(false);
@@ -132,7 +168,7 @@ const CarRentPage = () => {
             const hour = parseInt(rentalHour.value.slice(0, 2), 10);
             setReturnHourOption(getReturnHour(hour));
          } else {
-            setReturnHourOption(getReturnHour(0));
+            setReturnHourOption(getReturnHour(-1));
          }
          setIsHourDisabled(false);
       }
@@ -153,9 +189,6 @@ const CarRentPage = () => {
          setDiffHour(0);
          const diffMSec = returnDateYMDH.getTime() - rentalDateYMDH.getTime();
          const diffHour = diffMSec / (60 * 60 * 1000);
-         /*          if (!diffHour < 1 || !diffHour < 24 * 10) {
-            setDiffHour(diffHour);
-         } */
 
          if (diffHour < 1) {
             setDateError("대여 / 반납일을 다시 선택해주세요.");
@@ -205,6 +238,13 @@ const CarRentPage = () => {
       return `${year}년 ${month}월 ${day}일 ${hour}시`;
    }
 
+   function toStringByDate2(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+
+      return `${year}/${month}/${day}`;
+   }
    function requestToStringByDate(date) {
       const year = String(date.getFullYear()).substr(2, 4);
       const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -261,6 +301,7 @@ const CarRentPage = () => {
                            placeholder="대여시간"
                            onChange={handleRentalHour}
                            value={rentalHour}
+                           isDisabled={isRentalDateDisabled}
                            className="rental-hour"
                         />
                      </div>

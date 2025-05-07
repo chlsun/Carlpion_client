@@ -89,9 +89,7 @@ const CarPage = () => {
                setSelectedModelNo(null);
             })
             .catch((error) => {
-               const errors = error.response.data;
-               const firstErrorMessage = Object.values(errors)[0];
-               alert(firstErrorMessage);
+               alert(error.response.data);
             });
       }
    };
@@ -117,9 +115,10 @@ const CarPage = () => {
                const option = modelList.map((model) => {
                   return { value: model.modelNo, label: model.carModel };
                });
-               setOptions([...options, ...option]);
+               setOptions([...option]);
             })
             .catch((error) => {
+               console.log(error);
                if (error.response.status == 403) {
                   navi("/");
                   alert("운영자만 이용가능한 페이지입니다.");
@@ -160,7 +159,7 @@ const CarPage = () => {
                console.log(error);
             });
       }
-   }, [auth.accessToken, isPageLoad]);
+   }, [auth.accessToken, page, isPageLoad]);
 
    const updateFormHandler = (rentCar, index) => {
       if (updateFormNum == index) {
@@ -242,18 +241,21 @@ const CarPage = () => {
                },
             })
             .then((result) => {
-               alert("삭제 되었습니다.");
                setIsPageLoad(!isPageLoad);
+               alert("삭제 되었습니다.");
             })
             .catch((error) => {
-               const errors = error.response.data;
-               const firstErrorMessage = Object.values(errors)[0];
-               alert(firstErrorMessage);
+               alert(error.response.data);
             });
       }
    };
 
-   if (rentCarList == null) return null;
+   const pageHandler = (e) => {
+      navi(`/admin/model/${e.target.textContent}`);
+   };
+
+   if(options.length == 0) return <div id="not-found">차량 모델을 먼저 추가해주세요</div>
+
    return (
       <>
          <main id="car-page">
@@ -295,108 +297,112 @@ const CarPage = () => {
                </div>
             </form>
 
-            <div className="car-list">
-               {rentCarList.map((rentCar, index) => (
-                  <div className="car" key={rentCar.carId}>
-                     <div className="car-no">
-                        <p>{index + 1 + (page - 1) * 10}</p>
-                     </div>
-                     <div className="model-name">
-                        {updateFormNum == index ? (
-                           <Select
-                              options={options}
-                              placeholder="차량모델 선택"
-                              onChange={updateHandleSelectChange}
-                              value={updateSelectedModelNo}
-                              className="update-options"
-                           />
-                        ) : (
-                           <p>{rentCar.carModel.carModel}</p>
-                        )}
-                     </div>
-                     <div className="car-num">
-                        {updateFormNum == index ? (
-                           <input
-                              type="text"
-                              onChange={(e) => setUpdateRentCar(e.target.value)}
-                              value={updateRentCar}
-                           ></input>
-                        ) : (
-                           <p>{rentCar.carId}</p>
-                        )}
-                     </div>
-                     <div className="parking-name">
-                        <p>
-                           {updateFormNum == index && updateParkingInfo
-                              ? updateParkingInfo.parkingTitle
-                              : rentCar.parking.parkingTitle}
-                        </p>
-                     </div>
-                     <div className="parking-addr">
-                        <p>
-                           {updateParkingInfo
-                              ? updateParkingInfo.parkingAddr
-                              : rentCar.parking.parkingAddr}
-                        </p>
-                     </div>
-                     <div className="parking-id">
-                        <p>
-                           {updateParkingInfo
-                              ? updateParkingInfo.parkingId
-                              : rentCar.parkingId}
-                        </p>
-                     </div>
-
-                     <div className="btn-box">
-                        <button
-                           type="button"
-                           className="update-btn"
-                           onClick={() => updateFormHandler(rentCar, index)}
-                        >
-                           {updateFormNum == index ? "취소" : "수정"}
-                        </button>
-                        {updateFormNum == index ? (
-                           <>
-                              <button
-                                 type="button"
-                                 className="parking-search"
-                                 onClick={updateModalHandler}
-                              >
-                                 조회
-                              </button>
-                              <button
-                                 type="button"
-                                 className="update-request"
-                                 onClick={() => updateRequestHandler(rentCar)}
-                              >
-                                 수정
-                              </button>
-                           </>
-                        ) : (
-                           <button
-                              type="button"
-                              className="delete-btn"
-                              onClick={() => deleteRentCarHandler(rentCar)}
-                           >
-                              삭제
-                           </button>
-                        )}
-                     </div>
+            <div className="pagination">
+               {pageNumbers.map((num) => (
+                  <div
+                     className={`page-num ${page == num ? "active" : ""}`}
+                     onClick={pageHandler}
+                     key={num}
+                  >
+                     {num}
                   </div>
                ))}
             </div>
 
-            <div className="pagination">
-               <div className="page-num">1</div>
-               <div className="page-num">2</div>
-               <div className="page-num active">3</div>
-               <div className="page-num">4</div>
-               <div className="page-num">5</div>
-               <div className="page-num">6</div>
-               <div className="page-num">7</div>
-               <div className="page-num">8</div>
-               <div className="page-num">9</div>
-            </div>
+            {rentCarList && rentCarList.length != 0 ? (
+               <div className="car-list">
+                  {rentCarList.map((rentCar, index) => (
+                     <div className="car" key={rentCar.carId}>
+                        <div className="car-no">
+                           <p>{index + 1 + (page - 1) * 10}</p>
+                        </div>
+                        <div className="model-name">
+                           {updateFormNum == index ? (
+                              <Select
+                                 options={options}
+                                 placeholder="차량모델 선택"
+                                 onChange={updateHandleSelectChange}
+                                 value={updateSelectedModelNo}
+                                 className="update-options"
+                              />
+                           ) : (
+                              <p>{rentCar.carModel.carModel}</p>
+                           )}
+                        </div>
+                        <div className="car-num">
+                           {updateFormNum == index ? (
+                              <input
+                                 type="text"
+                                 onChange={(e) => setUpdateRentCar(e.target.value)}
+                                 value={updateRentCar}
+                              ></input>
+                           ) : (
+                              <p>{rentCar.carId}</p>
+                           )}
+                        </div>
+                        <div className="parking-name">
+                           <p>
+                              {updateFormNum == index && updateParkingInfo
+                                 ? updateParkingInfo.parkingTitle
+                                 : rentCar.parking.parkingTitle}
+                           </p>
+                        </div>
+                        <div className="parking-addr">
+                           <p>
+                              {updateParkingInfo
+                                 ? updateParkingInfo.parkingAddr
+                                 : rentCar.parking.parkingAddr}
+                           </p>
+                        </div>
+                        <div className="parking-id">
+                           <p>
+                              {updateParkingInfo
+                                 ? updateParkingInfo.parkingId
+                                 : rentCar.parkingId}
+                           </p>
+                        </div>
+
+                        <div className="btn-box">
+                           <button
+                              type="button"
+                              className="update-btn"
+                              onClick={() => updateFormHandler(rentCar, index)}
+                           >
+                              {updateFormNum == index ? "취소" : "수정"}
+                           </button>
+                           {updateFormNum == index ? (
+                              <>
+                                 <button
+                                    type="button"
+                                    className="parking-search"
+                                    onClick={updateModalHandler}
+                                 >
+                                    조회
+                                 </button>
+                                 <button
+                                    type="button"
+                                    className="update-request"
+                                    onClick={() => updateRequestHandler(rentCar)}
+                                 >
+                                    수정
+                                 </button>
+                              </>
+                           ) : (
+                              <button
+                                 type="button"
+                                 className="delete-btn"
+                                 onClick={() => deleteRentCarHandler(rentCar)}
+                              >
+                                 삭제
+                              </button>
+                           )}
+                        </div>
+                     </div>
+                  ))}
+               </div>
+            ) : (
+               <div id="not-found">렌트 차량이 존재하지 않습니다.<br/>렌트 차량을 추가해주세요.</div>
+            )}
          </main>
 
          {modalOpen && (

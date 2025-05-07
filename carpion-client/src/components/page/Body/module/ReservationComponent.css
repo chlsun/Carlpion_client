@@ -28,18 +28,35 @@
    border-radius: 12px;
    border: 1px solid #ccc;
    background-color: #fdfdfd;
-   position: relative;
+
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+#reservation-container .reservation-info{
+    width: 100%;
+    position: relative;
+
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #afafaf;
+}
+#reservation-container .reservation-info:last-child{
+    border-bottom: 0;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
 }
 
 #reservation-container .model-name{
     font-size: 24px;
     font-weight: 600;
-    color: #333333;
+    color: #000000;
 }
 #reservation-container .car-num{
     font-size: 22px;
     font-weight: 600;
-    color: #000000;
+    color: #333333;
     margin-bottom: 12px;
     
 }
@@ -67,8 +84,8 @@
 
 #reservation-container .status{
     position: absolute;
-    top: 24px;
-    right: 24px;
+    top: 0;
+    right: 0;
     display: flex;
     align-items: center;
     padding: 4px 5px 4px 10px;
@@ -86,8 +103,8 @@
 
 #reservation-container .cancel-btn{
     position: absolute;
-    bottom: 24px;
-    right: 24px;
+    bottom: 14px;
+    right: 0;
     padding: 4px 10px;
     background-color: #afafaf;
     color: #ffffff;
@@ -97,6 +114,14 @@
 }
 #reservation-container .cancel-btn:hover{
     background-color: #727272;
+}
+#reservation-container .goto-rentHistoryPage{
+    padding: 10px 30px;
+    background-color: #adadad;
+    color: #ffffff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.1s;
 }
 
 #no-search{

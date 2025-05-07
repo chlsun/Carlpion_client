@@ -38,6 +38,8 @@ const Body = () => {
   const [modifyNickName, setModifyNickName] = useState("");
   const [isUpdate, setIsUpdate] = useState(false);
 
+  const [reservationList, setReservationList] = useState(null);
+
   const navi = useNavigate();
 
   useEffect(() => {
@@ -110,6 +112,20 @@ const Body = () => {
         .catch((error) => {
           console.error("예약조회 실패 : ", error);
         });
+
+        axios
+          .get("http://localhost/mypage/reservation", {
+            headers: {
+              Authorization: `Bearer ${auth.accessToken}`,
+            },
+          })
+          .then((result)=>{
+            console.log(result);
+            setReservationList(result.data);
+          })
+          .catch((error)=>{
+            console.log(error);
+          })
     }
   }, [auth.accessToken]);
 
@@ -250,7 +266,7 @@ const Body = () => {
       </Box>
       <GradeText>예약 정보</GradeText>
 
-      <ReservationComponent/>
+      <ReservationComponent reservationList={reservationList}/>
 
       <GradeText>이용 내역</GradeText>
 
