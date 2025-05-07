@@ -26,6 +26,8 @@ import { useEffect } from "react";
 import axios from "axios";
 import { AuthContext } from "../Context/AuthContext";
 import MainMyPage from "../MyPage/MainMyPage";
+import ReservationComponent from "./module/ReservationComponent";
+import RentHistoryComponent from "./module/RentHistoryComponent";
 
 const Body = () => {
   const { auth, updateNickName } = useContext(AuthContext);
@@ -35,6 +37,8 @@ const Body = () => {
   const [nickName, setNickName] = useState("");
   const [modifyNickName, setModifyNickName] = useState("");
   const [isUpdate, setIsUpdate] = useState(false);
+
+  const [reservationList, setReservationList] = useState(null);
 
   const navi = useNavigate();
 
@@ -108,6 +112,20 @@ const Body = () => {
         .catch((error) => {
           console.error("예약조회 실패 : ", error);
         });
+
+        axios
+          .get("http://localhost/mypage/reservation", {
+            headers: {
+              Authorization: `Bearer ${auth.accessToken}`,
+            },
+          })
+          .then((result)=>{
+            console.log(result);
+            setReservationList(result.data);
+          })
+          .catch((error)=>{
+            console.log(error);
+          })
     }
   }, [auth.accessToken]);
 
@@ -246,82 +264,14 @@ const Body = () => {
           <InfoButton onClick={() => navi("/point")}>포인트</InfoButton>
         </ThirdBox>
       </Box>
-      <GradeText>예약 현황</GradeText>
+      <GradeText>예약 정보</GradeText>
 
-      <ReservationContainer>
-        <ReservationBox>
-          <ReservationTitle>예약 현황</ReservationTitle>
-          {reservations.map((item) => (
-            <div key={item.reservationNo}>
-              <ReservationRow>
-                <ReservationLabel>예약 ID</ReservationLabel>
-                <ReservationValue>{item.reservationNo}</ReservationValue>
-              </ReservationRow>
-              <ReservationRow>
-                <ReservationLabel>차량번호 / 모델</ReservationLabel>
-                <ReservationValue>
-                  {item.carId} / {item.carModel}
-                </ReservationValue>
-              </ReservationRow>
-              <ReservationRow>
-                <ReservationLabel>대여일 ~ 반납일</ReservationLabel>
-                <ReservationValue>
-                  {item.rentalDate} ~ {item.returnDate}
-                </ReservationValue>
-              </ReservationRow>
-              <ReservationRow>
-                <ReservationLabel>결제금액</ReservationLabel>
-                <ReservationValue>{item.totalPrice}</ReservationValue>
-              </ReservationRow>
-              <ReservationRow>
-                <ReservationLabel>결제완료</ReservationLabel>
-                <ReservationValue>{item.paymentCompletedAt}</ReservationValue>
-              </ReservationRow>
-              <ReservationRow>
-                <ReservationLabel>주차장</ReservationLabel>
-                <ReservationValue>
-                  {item.parkingTitle} ({item.parkingAddr})
-                </ReservationValue>
-              </ReservationRow>
-            </div>
-          ))}
+      <ReservationComponent reservationList={reservationList}/>
 
-          <ReservationMoreButton>더보기</ReservationMoreButton>
-        </ReservationBox>
-      </ReservationContainer>
+      <GradeText>이용 내역</GradeText>
 
-      <GradeText>사용 내역</GradeText>
+      <RentHistoryComponent/>
 
-      <ReservationBox>
-        <ReservationTitle>사용 내역</ReservationTitle>
-
-        <ReservationRow>
-          <ReservationLabel>차량번호 / 모델</ReservationLabel>
-          <ReservationValue>23허4567 / K3</ReservationValue>
-        </ReservationRow>
-
-        <ReservationRow>
-          <ReservationLabel>대여일 ~ 반납일</ReservationLabel>
-          <ReservationValue>2025-03-20 ~ 2025-03-22</ReservationValue>
-        </ReservationRow>
-
-        <ReservationRow>
-          <ReservationLabel>결제금액</ReservationLabel>
-          <ReservationValue>80,000원</ReservationValue>
-        </ReservationRow>
-
-        <ReservationRow>
-          <ReservationLabel>결제완료시각</ReservationLabel>
-          <ReservationValue>2025-03-20 11:23</ReservationValue>
-        </ReservationRow>
-
-        <ReservationRow>
-          <ReservationLabel>주차장</ReservationLabel>
-          <ReservationValue>PI044 / 부산역주차장 / 부산 동구</ReservationValue>
-        </ReservationRow>
-
-        <ReservationMoreButton>더보기</ReservationMoreButton>
-      </ReservationBox>
       <GradeText>내 활동</GradeText>
       <Box>
         <Button onClick={() => navi("/reply")}>작성한 댓글 조회</Button>
