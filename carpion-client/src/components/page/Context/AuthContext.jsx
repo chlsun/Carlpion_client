@@ -17,7 +17,9 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated: false,
   });
 
-  const [refreshToken, setRefreshToekn] = useState(() =>
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const [refreshToken, setRefreshToekn] = useState(
     localStorage.getItem("refreshToken")
   );
 
@@ -61,16 +63,37 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated: true,
       });
     }
+
+    setTimeout(() => {
+      setRefreshToekn(localStorage.getItem("refreshToken"));
+    }, 2000);
   }, [refreshToken]);
 
-  function login(
+  useEffect(() => {
+    if (!auth.username || !auth.realname) {
+      setIsAdmin(false);
+      return;
+    }
+
+    if (
+      auth.username.substring(2, 7) !== "admin" ||
+      auth.realname !== "어드민"
+    ) {
+      setIsAdmin(false);
+      return;
+    }
+
+    setIsAdmin(true);
+  }, [auth]);
+
+  const login = (
     username,
     nickname,
     realname,
     email,
     accessToken,
     refreshToken
-  ) {
+  ) => {
     if (refreshToken === undefined) {
       setAuth({
         username,
@@ -107,7 +130,7 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.setItem("email", email);
     sessionStorage.setItem("accessToken", accessToken);
     localStorage.setItem("refreshToken", refreshToken);
-  }
+  };
 
   const logout = () => {
     const refreshToken = localStorage.getItem("refreshToken");
@@ -116,7 +139,6 @@ export const AuthProvider = ({ children }) => {
       axios.post(`http://localhost:80/auth/logout`, {
         refreshToken: refreshToken,
       });
-      navi("/");
     }
 
     setAuth({
@@ -134,24 +156,12 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.removeItem("realname");
     sessionStorage.removeItem("email");
     sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("socialId");
+    sessionStorage.removeItem("platform");
     localStorage.removeItem("refreshToken");
+
+    navi("/");
   };
-
-  /*   function updateUser(updatedFields) {
-    setAuth((prev) => ({
-      ...prev,
-      ...updatedFields,
-    }));
-
-    // 세션 동기화 (선택적)
-    Object.entries(updatedFields).forEach(([key, value]) => {
-      if (key === "refreshToken") {
-        localStorage.setItem("refreshToken", value);
-      } else {
-        sessionStorage.setItem(key, value);
-      }
-    });
-  } */
 
   function updateUser(realname, email) {
     setAuth((prev) => ({
@@ -162,6 +172,7 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.setItem("realname", realname);
     sessionStorage.setItem("email", email);
   }
+
   function updateNickName(nickName) {
     setAuth((prev) => ({
       ...prev,
@@ -172,7 +183,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ auth, login, logout, updateUser, updateNickName }}
+      value={{ auth, login, logout, isAdmin, updateUser, updateNickName }}
     >
       {children}
     </AuthContext.Provider>

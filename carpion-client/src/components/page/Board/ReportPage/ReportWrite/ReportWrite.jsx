@@ -9,10 +9,10 @@ import wpstyles from "./ReportWrite.module.css";
 
 function ReportWrite() {
   const editorRef = useRef();
-  const imageMapRef = useRef([]); // 이미지 데이터 추적용
+  const imageMapRef = useRef([]);
   const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
-  const { accessToken } = auth; // accessToken 가져오기
+  const { accessToken } = auth;
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,16 +24,14 @@ function ReportWrite() {
   useEffect(() => {
     if (!loading && !accessToken) {
       alert("로그인 후 글쓰기가 가능합니다.");
-      navigate("/start"); // 로그인 페이지로 리디렉션
+      navigate("/start");
     }
   }, [auth, loading, navigate]);
 
-  // 이미지 업로드 처리 함수
   const handleAddImage = async (blob, callback) => {
     const formData = new FormData();
-    formData.append("image", blob); // 이미지 파일을 FormData에 추가
+    formData.append("image", blob);
 
-    // 서버로 이미지 업로드
     try {
       const response = await axios.post(
         "http://localhost:80/upload",
@@ -46,23 +44,19 @@ function ReportWrite() {
         }
       );
 
-      const imageUrl = response.data.imageUrl; // 서버에서 반환된 이미지 URL
-      const markdownImageTag = `![이미지](${imageUrl})`; // 마크다운 형식으로 변환
-      callback(markdownImageTag, "이미지"); // 에디터에 이미지 URL 삽입
+      const imageUrl = response.data.imageUrl;
+      const markdownImageTag = `![이미지](${imageUrl})`;
     } catch (error) {
       console.error("이미지 업로드 실패:", error);
       alert("이미지 업로드 중 오류가 발생했습니다.");
     }
   };
 
-  // 글 작성 및 이미지 업로드 후 데이터 전송
   const handleSubmit = async () => {
     const title = document.querySelector("#post-title").value;
 
-    // 여기서 마크다운 형식으로 내용을 가져옵니다
-    let content = editorRef.current.getInstance().getMarkdown(); // getMarkdown() 사용
+    let content = editorRef.current.getInstance().getMarkdown();
 
-    // 제목과 내용만 FormData로 전송
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
@@ -84,14 +78,13 @@ function ReportWrite() {
       );
 
       alert("등록 완료!");
-      navigate(-1); // 이전 페이지로 돌아가기
+      navigate(-1);
     } catch (error) {
       console.error("등록 실패:", error);
       alert("등록 중 오류가 발생했습니다.");
     }
   };
 
-  // 취소 버튼 클릭 시
   const handleCancel = () => {
     if (window.confirm("작성 중인 내용이 사라집니다. 취소하시겠습니까?")) {
       navigate(-1);
@@ -118,7 +111,7 @@ function ReportWrite() {
           useCommandShortcut={false}
           hideModeSwitch={true}
           hooks={{
-            addImageBlobHook: handleAddImage, // 이미지 업로드 처리
+            addImageBlobHook: handleAddImage,
           }}
         />
 

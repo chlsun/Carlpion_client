@@ -1,0 +1,93 @@
+
+@import url("https://webfontworld.github.io/pretendard/Pretendard.css");
+
+#rental-history a {
+   text-decoration: none;
+}
+
+#rental-history input::placeholder {
+   font-family: "pretendard";
+}
+
+#img-modal img {
+   width: 100%;
+   height: 100%;
+}
+
+#rental-history img,
+#rental-history svg {
+   width: 100%;
+   height: 100%;
+}
+
+#rental-history button {
+   border: none;
+}
+
+#rental-history {
+   margin: 0;
+   padding: 0;
+   font-family: "pretendard";
+   box-sizing: border-box;
+   width: 100%;
+   display: flex;
+   justify-content: center;
+}
+
+#rental-history .main-container{
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 200px 100px 100px;
+    box-shadow: 0 0 16px 8px #00000017;
+}
+#rental-history .main-container > img{
+    width: 60px;
+    height: 60px;
+    margin-bottom: 20px;
+}
+#rental-history .main-container > h3{
+    font-size: 20px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 50px;
+}
+#rental-history .info-box{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 10px;
+}
+#rental-history .info-box .left{
+    font-size: 16px;
+    font-weight: 500;
+    color: #868686;
+}
+#rental-history .info-box .right{
+    font-size: 15px;
+    font-weight: 500;
+    color: #333333;
+    text-align: right;
+}
+#rental-history .goto-main{
+    margin-top: 100px;
+    width: 100%;
+    padding: 10px 0;
+    border-radius: 6px;
+    font-size: 18;
+    font-weight: 500;
+    color: #747474;
+    border: 1px solid #929292;
+    margin-bottom: 40px;
+}
+
+#rental-history .goto-history{
+    width: 100%;
+    padding: 10px 0;
+    border-radius: 6px;
+    font-size: 18;
+    font-weight: 500;
+    background-color: #45a5e6;
+    color: #ffffff;
+}

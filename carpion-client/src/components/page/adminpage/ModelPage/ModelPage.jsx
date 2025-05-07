@@ -203,7 +203,6 @@ const ModelPage = () => {
             console.log(error);
          });
    };
-
    const zoomImageHandler = (e) => {
       const imageSrc = e.target.src;
       setZoomedImage(imageSrc);

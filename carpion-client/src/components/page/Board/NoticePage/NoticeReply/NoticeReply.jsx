@@ -9,8 +9,8 @@ function NoticeReply({ noticeNo }) {
   const [comments, setComments] = useState([]);
   const [inputValue, setInputValue] = useState("");
 
-  const nickName = user ? user.nickName : "사용자"; // 현재 로그인된 사용자의 nickname
-  const isAdmin = isAuthenticated; // 관리자 여부 확인
+  const nickName = user ? user.nickName : "사용자";
+  const isAdmin = isAuthenticated;
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -153,7 +153,6 @@ function CommentItem({ comment, onDelete, isAdmin, currentUserNickName }) {
   return (
     <div className={nrstyles.comment}>
       <div className={nrstyles.commentHeader}>
-        {/* comment.nickname이 비어 있으면 "익명"으로 기본값 설정 */}
         <span className={nrstyles.nickname}>{comment.nickName}</span>
         <div className={nrstyles.rightTop}>
           <span className={nrstyles.commentTime}>{comment.createDate}</span>
