@@ -37,6 +37,7 @@ const Body = () => {
   const [nickName, setNickName] = useState("");
   const [modifyNickName, setModifyNickName] = useState("");
   const [isUpdate, setIsUpdate] = useState(false);
+  const [isPageLoad, setIsPageLoad] = useState(true);
 
   const [reservationList, setReservationList] = useState(null);
 
@@ -96,23 +97,8 @@ const Body = () => {
     setActiveForm(null);
   };
 
-  const [reservations, setReservations] = useState([]);
-
   useEffect(() => {
     if (auth.accessToken) {
-      axios
-        .get("http://localhost/mypage/reservations", {
-          headers: {
-            Authorization: `Bearer ${auth.accessToken}`,
-          },
-        })
-        .then((response) => {
-          setReservations(response.data);
-        })
-        .catch((error) => {
-          console.error("예약조회 실패 : ", error);
-        });
-
         axios
           .get("http://localhost/mypage/reservation", {
             headers: {
@@ -127,7 +113,7 @@ const Body = () => {
             console.log(error);
           })
     }
-  }, [auth.accessToken]);
+  }, [auth.accessToken, isPageLoad]);
 
   useEffect(() => {
     if (isUpdate && auth.accessToken) {
@@ -151,6 +137,7 @@ const Body = () => {
       setNickName(auth.nickname);
     }
   }, [auth.nickname]);
+
 
   const handleNickname = () => {
     if (auth.accessToken) {
@@ -265,8 +252,7 @@ const Body = () => {
         </ThirdBox>
       </Box>
       <GradeText>예약 정보</GradeText>
-
-      <ReservationComponent reservationList={reservationList}/>
+      <ReservationComponent reservationList={reservationList} setIsPageLoad={setIsPageLoad} isPageLoad={isPageLoad}/>
 
       <GradeText>이용 내역</GradeText>
 
