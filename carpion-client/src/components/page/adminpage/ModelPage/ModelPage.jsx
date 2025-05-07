@@ -235,8 +235,8 @@ const ModelPage = () => {
          })
          .then((result) => {
             console.log(result);
-            setIsPageLoad(!isPageLoad);
             alert("삭제되었습니다.");
+            setIsPageLoad(!isPageLoad);
          })
          .catch((error) => {
             console.log(error);
