@@ -7,7 +7,7 @@ import ModelPage from "./components/page/adminpage/ModelPage/ModelPage";
 import CarPage from "./components/page/adminpage/CarPage/CarPage";
 import Header from "./components/include/Header/Header";
 import Footer from "./components/include/Footer/Footer";
-import CarRentPage from "./components/page/carrentpage/CarRentPage";
+import CarRentPage from "./components/page/CarRentPage/CarRentPage";
 import MainMyPage from "./components/page/MyPage/MainMyPage";
 import Body from "./components/page/Body/Body";
 import Point from "./components/page/Point/Point";
@@ -37,6 +37,9 @@ import SignUpSocial from "./components/page/user/SignUp/SignUpSocial";
 import { AuthSocialProvider } from "./components/page/Context/AuthSocialContext";
 import ErrorPage from "./components/page/ErrorPage/ErrorPage";
 import ReportEdit from "./components/page/Board/ReportPage/ReportWrite/ReportEdit";
+import PaymentHistoryPage from "./components/page/PaymentHistoryPage/PaymentHistoryPage";
+import ReservationComponent from "./components/page/Body/module/ReservationComponent";
+import RentHistoryPage from "./components/page/RentHistoryPage/RentHistoryPage";
 
 function App() {
     return (
@@ -62,6 +65,8 @@ function App() {
                         </Route>
                         <Route path="/rent" element={<CarRentPage />} />
                         <Route path="/rent/:id" element={<RentalReservation />} />
+                        <Route path="/payment-history" element={<PaymentHistoryPage />} />
+                        <Route path="/rent-history" element={<RentHistoryPage />} />
                         <Route path="/mypage" element={<Body />} />
                         <Route path="/modify" element={<MainMyPage />} />
                         <Route path="/point" element={<Point />} />
