@@ -2,6 +2,10 @@ import { useNavigate } from 'react-router-dom';
 import './RentHistoryComponent.css';
 
 
+const Arrow = () =>{
+    return <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="#ffffff"><path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"/></svg>
+}
+
 const RentHistoryComponent = () =>{
 
     const navi = useNavigate();
@@ -13,6 +17,7 @@ const RentHistoryComponent = () =>{
     return(
         <>
             <div id="rent-history-list">
+                <p className="more-btn" onClick={gotoHistoryPage}>전체보기<Arrow/><Arrow/></p>
                 {/* 렌트 내역 보여지는 부분
                     반복문 돌리면 됨 
                     ex) rentHistory.map((rent) => ()) */}
@@ -46,9 +51,6 @@ const RentHistoryComponent = () =>{
                         <p className="price">결제금액 | <b>10020원</b></p>
                     </div>
                 </div>
-                
-                {/* 예약 내역이 3개 초과시 보이기 */}
-                <button className="goto-rentHistoryPage" onClick={gotoHistoryPage}>더보기</button>
             </div>
 
 

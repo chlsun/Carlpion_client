@@ -32,6 +32,23 @@
    display: flex;
    flex-direction: column;
    align-items: center;
+   position: relative;
+}
+
+.more-btn{
+    position: absolute;
+    top: -34px;
+    right: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #333333;
+}
+.more-btn > svg{
+    fill: #333333;
+    margin-right: -8px;
 }
 
 #reservation-container .reservation-info{
@@ -114,14 +131,6 @@
 }
 #reservation-container .cancel-btn:hover{
     background-color: #727272;
-}
-#reservation-container .goto-rentHistoryPage{
-    padding: 10px 30px;
-    background-color: #adadad;
-    color: #ffffff;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.1s;
 }
 
 #no-search{

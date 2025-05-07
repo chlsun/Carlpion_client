@@ -95,17 +95,6 @@
     color: #4266dd;
 }
 
-#rent-history-list .goto-rentHistoryPage{
-    padding: 10px 30px;
-    background-color: #adadad;
-    color: #ffffff;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.1s;
-}
-#rent-history-list .goto-rentHistoryPage:hover{
-    background-color: #636363;
-}
 #no-search{
     display: flex;
     flex-direction: column;

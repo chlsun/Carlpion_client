@@ -16,6 +16,8 @@ const RentHistoryPage = () =>{
     const [reservationList, setReservationList] = useState([]);
     const [reservationHistory, setReservationHistory] = useState(null);
     const [limit, setLimit] = useState(0);
+    const [errMsg, setErrMsg] = useState("");
+    const [isPageLoad, setIsPageLoad] = useState(true);
 
     const gotoBack = () =>{
         navi(-1);
@@ -40,7 +42,7 @@ const RentHistoryPage = () =>{
                 console.log(error);
             })
         }
-    },[auth.accessToken])
+    },[auth.accessToken, isPageLoad])
 
     useEffect(()=>{
         if(auth.accessToken){
@@ -58,6 +60,29 @@ const RentHistoryPage = () =>{
             })
         }
     },[auth.accessToken, limit])
+
+    useEffect(()=>{
+        if(errMsg.length != 0){
+            alert(errMsg);
+            setErrMsg("");
+        }
+    }, [errMsg])
+
+    const DeleteHandler = (impUID) =>{
+        axios
+            .delete(`http://localhost/rents/reservation/${impUID}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${auth.accessToken}`,
+                    },
+                }
+            ).then((result)=>{
+                setErrMsg("삭제되었습니다.");
+                setIsPageLoad(!isPageLoad);
+            }).catch((error)=>{
+                setErrMsg(error.response.data);
+            })
+    }
 
     function changeDate(date){
         return date.slice(0, -3);
@@ -80,14 +105,18 @@ const RentHistoryPage = () =>{
         return (rentalDateType < currentDate ? true : false)
     }    
 
-    // if(reservationHistory == null) return null;
+    if(!reservationHistory) return null;
 
     return(
         <>
-            
-                <div id="rent-history">
-                    {reservationHistory && reservationList.length != 0 ? (
-                    <>
+            <div id="rent-history">
+                {reservationHistory.historyList.length == 0 && reservationList.length == 0 ? (
+                    <div className='rentHistory-not-found'>
+                        <img src="/img/notFound_car.png" alt="" />
+                        <p className="msg">칼피온 예약 내역이 없습니다.</p>
+                    </div>
+                    ) : (
+                        <>
                         <div className="back-btn" onClick={gotoBack}>
                             <Arrow/>
                         </div>
@@ -118,7 +147,7 @@ const RentHistoryPage = () =>{
                                         <p className="price"><b>{reservation.totalPrice}원</b></p>
                                     </div>
                                     <div className="absolute">
-                                    {!getStatus(reservation.rentalDate) && <button className="cancel-btn">예약 취소</button>}
+                                        {!getStatus(reservation.rentalDate) && <button type='button' className="cancel-btn" onClick={()=>DeleteHandler(reservation.impUID)}>예약 취소</button>}
                                         <div className={`status`}><p>{getStatus(reservation.rentalDate) ? "대여중" : "예약"}</p><Arrow/><Arrow/><Arrow/></div>
                                     </div>
                                 </div>
@@ -159,11 +188,7 @@ const RentHistoryPage = () =>{
                             {reservationHistory.historyList.length < reservationHistory.historyCount && <button className="more-btn" onClick={()=>{setLimit(limit + 4)}}>더보기</button>}
                         </div>
                     </>
-                    ) : (
-                        <div className='rentHistory-not-found'>
-                            <img src="/img/notFound_car.png" alt="" />
-                            <p className="msg">칼피온 예약 내역이 없습니다.</p>
-                        </div>
+                        
                     )}
                 </div>
             

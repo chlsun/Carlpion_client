@@ -1,27 +1,24 @@
 import { useNavigate } from 'react-router-dom';
 import './ReservationComponent.css';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import axios from 'axios';
+import { AuthContext } from '../../Context/AuthContext';
 
 const Arrow = () =>{
     return <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="#ffffff"><path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"/></svg>
 }
 
-const ReservationComponent = ({reservationList}) =>{
+const ReservationComponent = ({reservationList, setIsPageLoad, isPageLoad}) =>{
 
     const navi = useNavigate();
+
+    const { auth } = useContext(AuthContext);
 
     const gotoHistoryPage = () =>{
         navi("/rent-history");
     }
 
-    if(reservationList == null){
-        return(
-            <div id="no-search">
-                <img src="/img/notFound_car.png" alt="" />
-                <p className="msg">칼피온 예약 내역이 없습니다.</p>
-            </div> 
-        )
-    }
+    const [errMsg, setErrMsg] = useState("");
 
     function changeDate(date){
         return date.slice(0, -3);
@@ -44,13 +41,44 @@ const ReservationComponent = ({reservationList}) =>{
 
         return (rentalDateType < currentDate ? true : false)
     }    
-    
-    
+
+    useEffect(()=>{
+        if(errMsg.length != 0){
+            alert(errMsg);
+            setErrMsg("");
+        }
+    }, [errMsg])
+
+    const DeleteHandler = (impUID) =>{
+        axios
+            .delete(`http://localhost/rents/reservation/${impUID}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${auth.accessToken}`,
+                    },
+                }
+            ).then((result)=>{
+                setErrMsg("삭제되었습니다.");
+                setIsPageLoad(!isPageLoad);
+            }).catch((error)=>{
+                setErrMsg(error.response.data);
+            })
+      }
+
+
+    if(reservationList == null){
+        return(
+            <div id="no-search">
+                <img src="/img/notFound_car.png" alt="" />
+                <p className="msg">칼피온 예약 내역이 없습니다.</p>
+            </div> 
+        )
+    }
 
     return(
         <>
-            
             <div id="reservation-container">
+                <p className="more-btn" onClick={gotoHistoryPage}>전체보기<Arrow/><Arrow/></p>
                 {reservationList.reservation.map((reservation)=>(
                     <div className="reservation-info" key={reservation.carId}>
                     <h3 className="model-name">{reservation.carModel}</h3>
@@ -69,12 +97,10 @@ const ReservationComponent = ({reservationList}) =>{
                     </div>
 
                     <div className={`status`}><p>{getStatus(reservation.rentalDate) ? "대여중" : "예약"}</p><Arrow/><Arrow/><Arrow/></div>
-                    <button className="cancel-btn">예약 취소</button>
+                    <button className="cancel-btn" type='button' onClick={()=>DeleteHandler(reservation.impUID)}>예약 취소</button>
+                    {!getStatus(reservation.rentalDate) && <button className="cancel-btn" type='button' onClick={()=>DeleteHandler(reservation.impUID)}>예약 취소</button>}
                 </div>
                 ))}
-                
-                    
-                {reservationList.reservationCount > 3 && <button className="goto-rentHistoryPage" onClick={gotoHistoryPage}>더보기</button>}
             </div>
 
            
