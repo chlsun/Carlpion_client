@@ -1,194 +1,194 @@
-
 @import url("https://webfontworld.github.io/pretendard/Pretendard.css");
 
 #rent-history a {
-   text-decoration: none;
+  text-decoration: none;
 }
 
 #rent-history input::placeholder {
-   font-family: "pretendard";
+  font-family: "pretendard";
 }
 #rent-history img {
-   width: 100%;
-   height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 #rent-history button {
-   border: none;
+  border: none;
 }
 #rent-history {
-   margin: 0;
-   padding: 0;
-   font-family: "pretendard";
-   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "pretendard";
+  box-sizing: border-box;
 
-   display: flex;
-    justify-content: center;
-    background-color: #eeeeee;
-    min-height: calc(100vh - 100px);
-    overflow: hidden;
-    position: relative;
-}
-
-#rent-history .back-btn > svg{
-    position: absolute;
-    top: 160px;
-    left: 380px;
-    transform: rotate(180deg) translateY(-10%);
-    cursor: pointer;
-}#rent-history .back-btn > svg{
-    fill: #000000;
-    width: 34px;
-    height: 34px;
+  display: flex;
+  justify-content: center;
+  background-color: #eeeeee;
+  min-height: calc(100vh - 100px);
+  overflow: hidden;
+  position: relative;
 }
 
-#rent-history .container{
-    width: 1200px;
-    background-color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    padding: 160px 100px 100px;
-    box-shadow: 0 0 16px 16px #b6b6b6;
+#rent-history .back-btn > svg {
+  position: absolute;
+  top: 160px;
+  left: 380px;
+  transform: rotate(180deg) translateY(-10%);
+  cursor: pointer;
+}
+#rent-history .back-btn > svg {
+  fill: #000000;
+  width: 34px;
+  height: 34px;
 }
 
-#rent-history .container > .title{
-    font-size: 30px;
-    font-weight: 700;
-    color: #000000;
-    margin-bottom: 30px;
+#rent-history .container {
+  width: 1200px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  padding: 160px 100px 100px;
+  box-shadow: 0 0 16px 16px #b6b6b6;
 }
 
-#rent-history .rent-component{
-    width: 100%;
-
-   padding: 24px;
-   border-radius: 12px;
-   /* border: 1px solid #919191; */
-   box-shadow: inset 0 0 2px 2px #919191;
-   background-color: #cccccc5e;
-   position: relative;
-   margin-bottom: 30px;
-}
-#rent-history .rent-component_ing .rent-component{
-    /* border: 2px solid #4ab1ec; */
-    box-shadow: inset 0 0 2px 2px #4ab1ec;
-    background-color: #ffffff;
+#rent-history .container > .title {
+  font-size: 30px;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 30px;
 }
 
-#rent-history .wall{
-    width: 100%;
-    height: 2px;
-    background-color: #b4b4b4;
-    margin-top: 10px;
-    margin-bottom: 40px;
+#rent-history .rent-component {
+  width: 100%;
+
+  padding: 24px;
+  border-radius: 12px;
+  /* border: 1px solid #919191; */
+  box-shadow: inset 0 0 2px 2px #919191;
+  background-color: #cccccc5e;
+  position: relative;
+  margin-bottom: 30px;
+}
+#rent-history .rent-component_ing .rent-component {
+  /* border: 2px solid #4ab1ec; */
+  box-shadow: inset 0 0 2px 2px #4ab1ec;
+  background-color: #ffffff;
 }
 
-#rent-history .car-info{
-    display: flex;
-    align-items: center;
-    margin-bottom: 12px;
+#rent-history .wall {
+  width: 100%;
+  height: 2px;
+  background-color: #b4b4b4;
+  margin-top: 10px;
+  margin-bottom: 40px;
 }
 
-#rent-history .model-name{
-    font-size: 24px;
-    font-weight: 600;
-    color: #000000;
-    margin-right: 10px;
-}
-#rent-history .car-num{
-    font-size: 20px;
-    font-weight: 600;
-    color: #000000;
-}
-#rent-history .box{
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 6px;
+#rent-history .car-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
 }
 
-#rent-history .box .title{
-    font-size: 16px;
-    font-weight: 500;
-    color: #696969;
+#rent-history .model-name {
+  font-size: 24px;
+  font-weight: 600;
+  color: #000000;
+  margin-right: 10px;
 }
-#rent-history .box > p{
-    font-size: 16px;
-    font-weight: 500;
-    color: #000000;
+#rent-history .car-num {
+  font-size: 20px;
+  font-weight: 600;
+  color: #000000;
 }
-#rent-history .box > p > b{
-    font-size: 16px;
-    font-weight: 600;
-    color: #4266dd;
-}
-#rent-history .absolute{
-    position: absolute;
-    top: 24px;
-    right: 24px;
-    display: flex;
-    align-items: center;
-}
-#rent-history .status{
-    display: flex;
-    align-items: center;
-    padding: 4px 5px 4px 10px;
-    background-color: #808080;
-    border-radius: 8px;
-    width: fit-content;
-}
-#rent-history .rent-component_ing .status{
-    background-color: #93abec;
-}
-#rent-history .status > p{
-    margin-right: 12px;
-    font-size: 14px;
-    color: #ffffff;
-}
-#rent-history .status > svg{
-    margin-left: -7px;
+#rent-history .box {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
 }
 
-#rent-history .cancel-btn{
-    padding: 4px 10px;
-    font-size: 14px;
-    background-color: #969696;
-    color: #ffffff;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: 0.1s;
-    margin-right: 10px;
+#rent-history .box .title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #696969;
 }
-#rent-history .cancel-btn:hover{
-    background-color: #727272;
+#rent-history .box > p {
+  font-size: 16px;
+  font-weight: 500;
+  color: #000000;
+}
+#rent-history .box > p > b {
+  font-size: 16px;
+  font-weight: 600;
+  color: #4266dd;
+}
+#rent-history .absolute {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+}
+#rent-history .status {
+  display: flex;
+  align-items: center;
+  padding: 4px 5px 4px 10px;
+  background-color: #808080;
+  border-radius: 8px;
+  width: fit-content;
+}
+#rent-history .rent-component_ing .status {
+  background-color: #93abec;
+}
+#rent-history .status > p {
+  margin-right: 12px;
+  font-size: 14px;
+  color: #ffffff;
+}
+#rent-history .status > svg {
+  margin-left: -7px;
 }
 
-#rent-history .more-btn{
-    font-size: 20px;
-    width: 100%;
-    padding: 10px 0;
-    background-color: #adadad;
-    color: #ffffff;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.1s;
+#rent-history .cancel-btn {
+  padding: 4px 10px;
+  font-size: 14px;
+  background-color: #969696;
+  color: #ffffff;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: 0.1s;
+  margin-right: 10px;
 }
-#rent-history .more-btn:hover{
-    background-color: #636363;
+#rent-history .cancel-btn:hover {
+  background-color: #727272;
 }
 
-#rent-history .rentHistory-not-found{
-    height: calc(100vh - 100px);
-    align-self: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+#rent-history .more-btn {
+  font-size: 20px;
+  width: 100%;
+  padding: 10px 0;
+  background-color: #adadad;
+  color: #ffffff;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.1s;
 }
-#rent-history .rentHistory-not-found > img{
-    width: 160px;
-    height: 160px;
+#rent-history .more-btn:hover {
+  background-color: #636363;
 }
-#rent-history .rentHistory-not-found > p{
-    font-size: 26px;
-    font-weight: 600;
+
+#rent-history .rentHistory-not-found {
+  height: calc(100vh - 100px);
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+#rent-history .rentHistory-not-found > img {
+  width: 160px;
+  height: 160px;
+}
+#rent-history .rentHistory-not-found > p {
+  font-size: 26px;
+  font-weight: 600;
 }
