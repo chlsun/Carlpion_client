@@ -67,16 +67,46 @@
 .toastui-editor-mode-switch {
   display: none !important;
 }
-.previewImageWrapper {
+
+.previewImages {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 15px;
   margin-top: 20px;
 }
 
+.previewImageWrapper {
+  position: relative;
+  width: 240px; /* 고정된 너비 */
+  max-height: 240px; /* 최대 높이 설정 */
+}
+
 .previewImage {
-  width: 150px;
-  height: auto;
-  border: 1px solid #ccc;
+  width: 100%;
+  height: auto; /* 비율 유지 */
+  max-height: 100%; /* 최대 높이를 wrapper의 최대 높이에 맞게 제한 */
   border-radius: 8px;
+  object-fit: cover;
+}
+
+.removeImageButton {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.3s;
+}
+
+.removeImageButton:hover {
+  background-color: #dc3545;
 }
