@@ -240,7 +240,6 @@ const ModelPage = () => {
             setIsPageLoad(!isPageLoad);
          })
          .catch((error) => {
-            
             alert(error.response.data);
          });
    };
@@ -351,7 +350,13 @@ const ModelPage = () => {
             </div>
 
             <div className="model-list">
-               {pageInfo.endPage == 0 && <div className="not-found">차량 모델이 존재하지 않습니다.<br/>차량 모델을 추가해주세요.</div>}
+               {pageInfo.endPage == 0 && (
+                  <div className="not-found">
+                     차량 모델이 존재하지 않습니다.
+                     <br />
+                     차량 모델을 추가해주세요.
+                  </div>
+               )}
                {carModelList.map((carModel, index) => (
                   <div
                      className={`model ${
