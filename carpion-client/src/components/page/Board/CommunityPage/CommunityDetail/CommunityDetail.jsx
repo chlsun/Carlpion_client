@@ -82,7 +82,7 @@ function CommunityDetail() {
 
         <div className={cdstyles.infoRow}>
           <span className={cdstyles.meta}>
-            {post.nickname} · {new Date(post.createDate).toLocaleDateString()}
+            {post.nickName} · {new Date(post.createDate).toLocaleDateString()}
           </span>
           <button
             className={`${cdstyles.likeBtn} ${liked ? cdstyles.liked : ""}`}
@@ -121,16 +121,12 @@ function CommunityDetail() {
         </div>
 
         <div className={cdstyles.bottomButtonGroup}>
-          {post.hasPermission && (
-            <>
-              <Link to={`/ce/${reviewNo}`} className={cdstyles.editBtn}>
-                수정
-              </Link>
-              <button className={cdstyles.deleteBtn} onClick={handleDelete}>
-                삭제
-              </button>
-            </>
-          )}
+          <Link to={`/ce/${reviewNo}`} className={cdstyles.editBtn}>
+            수정
+          </Link>
+          <button className={cdstyles.deleteBtn} onClick={handleDelete}>
+            삭제
+          </button>
         </div>
 
         <div className={cdstyles.commentPlaceholder}>
