@@ -60,11 +60,12 @@ const ModelPage = () => {
                }
                setPageNumbers(pageArray);
 
-               if (result.data.carModelList.length == 0) {
+               if (result.data.carModelList.length == 0 && page > 1) {
                   navi(`/admin/model/${page - 1}`);
                }
             })
             .catch((error) => {
+               console.log(error);
                if (error.response.status == 403) {
                   navi("/");
                   alert("운영자만 이용가능한 페이지입니다.");
@@ -72,6 +73,7 @@ const ModelPage = () => {
             });
       }
    }, [auth, page, isPageLoad]);
+
    const setCarModelHandler = (e) => {
       console.log(carModelInfo);
       e.preventDefault();
@@ -203,7 +205,6 @@ const ModelPage = () => {
             console.log(error);
          });
    };
-
    const zoomImageHandler = (e) => {
       const imageSrc = e.target.src;
       setZoomedImage(imageSrc);
@@ -239,12 +240,12 @@ const ModelPage = () => {
             alert("삭제되었습니다.");
          })
          .catch((error) => {
-            console.log(error);
+            
+            alert(error.response.data);
          });
    };
 
    const pageHandler = (e) => {
-      console.log(e.target.textContent);
       navi(`/admin/model/${e.target.textContent}`);
    };
 
@@ -336,7 +337,21 @@ const ModelPage = () => {
             <div className={`model-preview ${preview ? "active" : ""}`}>
                <img src={preview} alt="" />
             </div>
+
+            <div className="pagination">
+               {pageNumbers.map((num) => (
+                  <div
+                     className={`page-num ${page == num ? "active" : ""}`}
+                     onClick={pageHandler}
+                     key={num}
+                  >
+                     {num}
+                  </div>
+               ))}
+            </div>
+
             <div className="model-list">
+               {pageInfo.endPage == 0 && <div className="not-found">차량 모델이 존재하지 않습니다.<br/>차량 모델을 추가해주세요.</div>}
                {carModelList.map((carModel, index) => (
                   <div
                      className={`model ${
@@ -480,17 +495,6 @@ const ModelPage = () => {
                            </button>
                         )}
                      </div>
-                  </div>
-               ))}
-            </div>
-            <div className="pagination">
-               {pageNumbers.map((num) => (
-                  <div
-                     className={`page-num ${page == num ? "active" : ""}`}
-                     onClick={pageHandler}
-                     key={num}
-                  >
-                     {num}
                   </div>
                ))}
             </div>

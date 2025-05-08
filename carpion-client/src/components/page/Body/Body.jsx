@@ -21,45 +21,37 @@ import {
   ReservationBox,
   ReservationContainer,
 } from "./Body.styles";
-import { useNavigate } from "react-router-dom";
+import { data, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
 import { AuthContext } from "../Context/AuthContext";
 import MainMyPage from "../MyPage/MainMyPage";
+import ReservationComponent from "./module/ReservationComponent";
+import RentHistoryComponent from "./module/RentHistoryComponent";
 
 const Body = () => {
   const { auth, updateNickName } = useContext(AuthContext);
   const [activeForm, setActiveForm] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
   const [tempImage, setTempImage] = useState("");
   const [nickName, setNickName] = useState("");
   const [modifyNickName, setModifyNickName] = useState("");
   const [isUpdate, setIsUpdate] = useState(false);
+  const [isPageLoad, setIsPageLoad] = useState(true);
 
+  const [reservationList, setReservationList] = useState(null);
+  const [reservations, setReservations] = useState([]);
   const navi = useNavigate();
 
-  useEffect(() => {
+  /*  useEffect(() => {
     setSelectedImage("/img/mypage/profile.logo.png");
-  }, []);
+  }, []); */
   useEffect(() => {
     if (activeForm === "profile") {
       setTempImage(null);
     }
   }, [activeForm]);
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        setTempImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setSelectedImage("/img/mypage/profile.logo.png");
-    }
-  };
 
   const submitProfile = (e) => {
     e.preventDefault();
@@ -81,35 +73,47 @@ const Body = () => {
     setNickName(modifyNickName);
     setActiveForm(null);
   };
-  const handleProfileSubmit = () => {
+  /*  const handleProfileSubmit = () => {
     if (tempImage) {
       setSelectedImage(tempImage);
     }
     setTempImage(null);
     setActiveForm(null);
-  };
+  }; */
   const handleCancel = () => {
     setActiveForm(null);
   };
 
-  const [reservations, setReservations] = useState([]);
-
   useEffect(() => {
     if (auth.accessToken) {
       axios
-        .get("http://localhost/mypage/reservations", {
+        .get("http://localhost/mypage/use", {
           headers: {
             Authorization: `Bearer ${auth.accessToken}`,
           },
         })
         .then((response) => {
+          //console.log("DB에서 받아온 예약 내역 ", response.data);
           setReservations(response.data);
         })
         .catch((error) => {
           console.error("예약조회 실패 : ", error);
         });
+      axios
+        .get("http://localhost/mypage/reservation", {
+          headers: {
+            Authorization: `Bearer ${auth.accessToken}`,
+          },
+        })
+        .then((result) => {
+          console.log(result);
+          setReservationList(result.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
-  }, [auth.accessToken]);
+  }, [auth.accessToken, isPageLoad]);
 
   useEffect(() => {
     if (isUpdate && auth.accessToken) {
@@ -158,18 +162,75 @@ const Body = () => {
     }
   };
 
+  useEffect(() => {
+    if (auth.accessToken) {
+      axios
+        .get("http://localhost/users/getUserInfo", {
+          headers: { Authorization: `Bearer ${auth.accessToken}` },
+        })
+        .then((res) => {
+          const url = res.data.fileUrl;
+          console.log("DB에서 받아온 이미지:", url);
+          setSelectedImage(url || "/img/mypage/profile.logo.png");
+        })
+        .catch(() => {
+          setSelectedImage("/img/mypage/profile.logo.png");
+        });
+    }
+  }, [auth.accessToken]);
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setSelectedImage(URL.createObjectURL(file));
+    }
+  };
+  const handleProfileSubmit = () => {
+    const formData = new FormData();
+    formData.append("file", imageFile);
+    console.log("토큰 확인:", auth.accessToken);
+    if (auth.accessToken) {
+      axios
+        .put("http://localhost/users/update-profile", formData, {
+          headers: {
+            Authorization: `Bearer ${auth.accessToken}`,
+          },
+        })
+        .then((response) => {
+          console.log("사진업데이트", response.data.fileUrl);
+          console.log("사진업데이트", response.data);
+          const newUrl = response.data.fileUrl;
+          setSelectedImage(newUrl);
+          localStorage.setItem("profileImg_${auth.username}", newUrl);
+          setActiveForm(null);
+        })
+        .catch((error) => {
+          console.log("업로드 에러", error);
+        });
+    }
+  };
+
   return (
     <Container>
       <div>
-        <GradeText>님 안녕하세요</GradeText>
+        <GradeText>{auth.realname}님 안녕하세요</GradeText>
       </div>
 
       <Box>
         <FirstBox>
-          <img
-            src={selectedImage}
-            style={{ width: "250px", height: "250px", borderRadius: "10px" }}
-          />
+          {selectedImage ? (
+            <img
+              src={selectedImage}
+              alt="프로필 이미지"
+              style={{ width: "250px", height: "250px", borderRadius: "10px" }}
+            />
+          ) : (
+            <img
+              src="/img/mypage/profile.logo.png"
+              alt="기본 이미지"
+              style={{ width: "250px", height: "250px", borderRadius: "10px" }}
+            />
+          )}
           <ProfileTextBox>
             <div>닉네임 : {nickName}</div>
             <Button
@@ -190,7 +251,7 @@ const Body = () => {
         </FirstBox>
 
         <InfoSection>
-          <GradeText>XXX 님 등급은 브론즈입니다</GradeText>
+          <GradeText>{auth.realname}님 등급은 브론즈 입니다.</GradeText>
         </InfoSection>
 
         {activeForm === "nickName" && (
@@ -223,7 +284,7 @@ const Body = () => {
                 <Input type="file" onChange={handleFileChange} />
                 {selectedImage && (
                   <div>
-                    <img src={tempImage || selectedImage} alt="나오나" />
+                    <img src={selectedImage} alt="프로필 이미지" />
                   </div>
                 )}
                 <ButtonWrapper>
@@ -246,82 +307,16 @@ const Body = () => {
           <InfoButton onClick={() => navi("/point")}>포인트</InfoButton>
         </ThirdBox>
       </Box>
-      <GradeText>예약 현황</GradeText>
+      <GradeText>예약 정보</GradeText>
 
-      <ReservationContainer>
-        <ReservationBox>
-          <ReservationTitle>예약 현황</ReservationTitle>
-          {reservations.map((item) => (
-            <div key={item.reservationNo}>
-              <ReservationRow>
-                <ReservationLabel>예약 ID</ReservationLabel>
-                <ReservationValue>{item.reservationNo}</ReservationValue>
-              </ReservationRow>
-              <ReservationRow>
-                <ReservationLabel>차량번호 / 모델</ReservationLabel>
-                <ReservationValue>
-                  {item.carId} / {item.carModel}
-                </ReservationValue>
-              </ReservationRow>
-              <ReservationRow>
-                <ReservationLabel>대여일 ~ 반납일</ReservationLabel>
-                <ReservationValue>
-                  {item.rentalDate} ~ {item.returnDate}
-                </ReservationValue>
-              </ReservationRow>
-              <ReservationRow>
-                <ReservationLabel>결제금액</ReservationLabel>
-                <ReservationValue>{item.totalPrice}</ReservationValue>
-              </ReservationRow>
-              <ReservationRow>
-                <ReservationLabel>결제완료</ReservationLabel>
-                <ReservationValue>{item.paymentCompletedAt}</ReservationValue>
-              </ReservationRow>
-              <ReservationRow>
-                <ReservationLabel>주차장</ReservationLabel>
-                <ReservationValue>
-                  {item.parkingTitle} ({item.parkingAddr})
-                </ReservationValue>
-              </ReservationRow>
-            </div>
-          ))}
+      <ReservationComponent
+        reservationList={reservationList}
+        setIsPageLoad={setIsPageLoad}
+        isPageLoad={isPageLoad}
+      />
+      <GradeText>이용 내역</GradeText>
+      <RentHistoryComponent rentHistory={reservations} />
 
-          <ReservationMoreButton>더보기</ReservationMoreButton>
-        </ReservationBox>
-      </ReservationContainer>
-
-      <GradeText>사용 내역</GradeText>
-
-      <ReservationBox>
-        <ReservationTitle>사용 내역</ReservationTitle>
-
-        <ReservationRow>
-          <ReservationLabel>차량번호 / 모델</ReservationLabel>
-          <ReservationValue>23허4567 / K3</ReservationValue>
-        </ReservationRow>
-
-        <ReservationRow>
-          <ReservationLabel>대여일 ~ 반납일</ReservationLabel>
-          <ReservationValue>2025-03-20 ~ 2025-03-22</ReservationValue>
-        </ReservationRow>
-
-        <ReservationRow>
-          <ReservationLabel>결제금액</ReservationLabel>
-          <ReservationValue>80,000원</ReservationValue>
-        </ReservationRow>
-
-        <ReservationRow>
-          <ReservationLabel>결제완료시각</ReservationLabel>
-          <ReservationValue>2025-03-20 11:23</ReservationValue>
-        </ReservationRow>
-
-        <ReservationRow>
-          <ReservationLabel>주차장</ReservationLabel>
-          <ReservationValue>PI044 / 부산역주차장 / 부산 동구</ReservationValue>
-        </ReservationRow>
-
-        <ReservationMoreButton>더보기</ReservationMoreButton>
-      </ReservationBox>
       <GradeText>내 활동</GradeText>
       <Box>
         <Button onClick={() => navi("/reply")}>작성한 댓글 조회</Button>

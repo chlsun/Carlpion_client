@@ -26,7 +26,7 @@ const Login = () => {
             errorMessage: "잘못된 아이디 입니다.",
         },
         password: {
-            regExp: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]).\S{8,30}$/,
+            regExp: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]).\S{7,29}$/,
             errorMessage: "잘못된 비밀번호 입니다.",
         },
     };
@@ -56,6 +56,8 @@ const Login = () => {
 
     const [exceptionMessage, setExceptionMessage] = useState(null);
 
+    const [isProgress, setIsProgress] = useState(false);
+
     const { login } = useContext(AuthContext);
 
     const navi = useNavigate();
@@ -66,7 +68,7 @@ const Login = () => {
         const { id, value } = e.target;
         setInputValues({ ...inputValues, [id]: value });
         setIsEmptyMessage({ ...isEmptyMessage, [id]: "" });
-
+        zz;
         const field = inputFields.find((f) => f.id === id);
         const validation = validationRules[field.id];
 
@@ -144,25 +146,33 @@ const Login = () => {
         }
     };
 
+    const handleLoginGoogle = () => {
+        window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=430311231437-p5htp79gao25qmgsqrt26t8q2hkjjuue.apps.googleusercontent.com&scope=openid email profile&response_type=code&redirect_uri=http://localhost:5173/login-redirect`;
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (isProgress) return;
         if (!validateForm()) return;
+        setIsProgress(true);
         axios
             .post(`http://localhost:80/auth/login`, inputValues)
             .then((result) => {
                 const { username, nickname, realname, email, accessToken, refreshToken } = result.data;
                 login(username, nickname, realname, email, accessToken, refreshToken);
+
                 navi("/");
             })
             .catch((error) => {
                 setExceptionMessage(error.response.data.cause);
+                setIsProgress(false);
             });
     };
 
     return (
         <>
-            <div className="size-full min-h-screen bg-gray-100 flex justify-center select-none">
-                <div className="w-xl px-24 my-48 bg-white border-2 border-maincolor rounded-2xl flex flex-col justify-center items-center">
+            <div className="size-full min-h-screen bg-gray-100 dark:bg-gray-900 flex justify-center select-none">
+                <div className="w-xl px-24 my-48 bg-white dark:bg-gray-800 border-2 border-maincolor rounded-2xl flex flex-col justify-center items-center">
                     <section className="mt-24 mb-16 font-maintheme text-5xl text-maincolor">로그인</section>
                     <section className="w-full h-auto">
                         <ul className="flex flex-col gap-6">
@@ -201,7 +211,9 @@ const Login = () => {
                     <section className="w-full h-auto flex justify-center">
                         <button
                             onClick={handleSubmit}
-                            className="w-56 h-24 mt-12 mb-8 border-2 border-maincolor rounded-full font-maintheme text-maincolor text-3xl hover:bg-maincolor hover:text-white cursor-pointer"
+                            className={`w-56 h-24 mt-12 mb-8 border-2 border-maincolor rounded-full font-maintheme text-maincolor text-3xl ${
+                                isProgress ? "opacity-50 cursor-progress" : "hover:bg-maincolor hover:text-white cursor-pointer"
+                            }`}
                         >
                             로그인
                         </button>
@@ -231,7 +243,7 @@ const Login = () => {
                             </div>
                             <div className="font-maintheme text-lg text-gray-500 tracking-wider">또는</div>
                             <div className="flex items-center gap-2">
-                                <button className="size-12 border-2 border-gray-300 rounded-md cursor-pointer">
+                                <button onClick={handleLoginGoogle} type="button" className="size-12 border-2 border-gray-300 rounded-md cursor-pointer">
                                     <img src={Icon_Google} alt="Icon_Google" />
                                 </button>
                                 <div className="font-maintheme text-lg text-gray-500 tracking-wider">로 시작하기</div>
