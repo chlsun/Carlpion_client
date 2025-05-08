@@ -1,122 +1,122 @@
 @import url("https://webfontworld.github.io/pretendard/Pretendard.css");
 
 #rent-history-list a {
-   text-decoration: none;
+  text-decoration: none;
 }
 
 #rent-history-list input::placeholder {
-   font-family: "pretendard";
+  font-family: "pretendard";
 }
 
 #img-modal img {
-   width: 100%;
-   height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 #rent-history-list button {
-   border: none;
+  border: none;
 }
 
 #rent-history-list {
-   margin: 0;
-   padding: 0;
-   font-family: "pretendard";
-   box-sizing: border-box;
-   width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: "pretendard";
+  box-sizing: border-box;
+  width: 100%;
 
-   padding: 24px;
-   border-radius: 12px;
-   border: 1px solid #ccc;
-   background-color: #fdfdfd;
-   position: relative;
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  background-color: #fdfdfd;
+  position: relative;
 
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-}
-
-#rent-history-list .rent-history{
-    border-bottom: 1px solid #afafaf;
-    display: flex;
-    justify-content: space-between;
-    padding-bottom: 14px;
-    margin-bottom: 14px;
-    width: 100%;
-}
-#rent-history-list .rent-history:last-child{
-    margin-bottom: 0;
-    border-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-#rent-history-list .model-name{
-    display: flex;
-    align-items: center;
+#rent-history-list .rent-history {
+  border-bottom: 1px solid #afafaf;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  width: 100%;
 }
-#rent-history-list .model-name > h3{
-    font-size: 22px;
-    font-weight: 600;
-    color: #333333;
+/* #rent-history-list .rent-history:last-child {
+  margin-bottom: 0;
+  border-bottom: 0;
+} */
+
+#rent-history-list .model-name {
+  display: flex;
+  align-items: center;
 }
-#rent-history-list .model-name .status{
-    font-size: 14px;
-    font-weight: 4  00;
-    background-color: #808080;
-    color: #ffffff;
-    padding: 1px 5px;
-    border-radius: 3px;
-    margin-left: 7px;
+#rent-history-list .model-name > h3 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #333333;
 }
-#rent-history-list .car-num{
-    font-size: 20px;
-    font-weight: 500;
-    color: #000000;
+#rent-history-list .model-name .status {
+  font-size: 14px;
+  font-weight: 400;
+  background-color: #808080;
+  color: #ffffff;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-left: 7px;
 }
-#rent-history-list .right{
-    margin-top: 10px;
+#rent-history-list .car-num {
+  font-size: 20px;
+  font-weight: 500;
+  color: #000000;
 }
-#rent-history-list .right > p{
-    text-align: right;
-    font-size: 15px;
-    font-weight: 400;
-    color: #696969;
-    margin-bottom: 2px;
+#rent-history-list .right {
+  margin-top: 10px;
 }
-#rent-history-list .right .addr{
-    color: #1d1d1d;
-    font-weight: 400;
+#rent-history-list .right > p {
+  text-align: right;
+  font-size: 15px;
+  font-weight: 400;
+  color: #696969;
+  margin-bottom: 2px;
 }
-#rent-history-list .right .price{
-    margin-bottom: 0;
-    color: #696969;
+#rent-history-list .right .addr {
+  color: #1d1d1d;
+  font-weight: 400;
 }
-#rent-history-list .right > p > b{
-    font-size: 16px;
-    font-weight: 500;
-    color: #4266dd;
+#rent-history-list .right .price {
+  margin-bottom: 0;
+  color: #696969;
+}
+#rent-history-list .right > p > b {
+  font-size: 16px;
+  font-weight: 500;
+  color: #4266dd;
 }
 
-#no-search{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+#no-search {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-    margin: 0;
-    padding: 0;
-    font-family: "pretendard";
-    box-sizing: border-box;
-    width: 100%;
-    padding: 40px 0;
+  margin: 0;
+  padding: 0;
+  font-family: "pretendard";
+  box-sizing: border-box;
+  width: 100%;
+  padding: 40px 0;
 
-    padding: 24px;
-    border-radius: 12px;
-    border: 1px solid #ccc;
-    background-color: #fdfdfd;
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  background-color: #fdfdfd;
 }
-#no-search > img{
-    width: 160px;
-    height: 160px;
+#no-search > img {
+  width: 160px;
+  height: 160px;
 }
-#no-search > p{
-    font-size: 26px;
-    font-weight: 600;
+#no-search > p {
+  font-size: 26px;
+  font-weight: 600;
 }
