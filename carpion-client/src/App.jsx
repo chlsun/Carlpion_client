@@ -44,7 +44,7 @@ import MainPage2 from "./components/page/mainpage/MainPage2";
 
 function App() {
    return (
-      <>
+      <div id="mypage" style={{ backgroundColor: "#fdfdfd" }}>
          <AuthProvider>
             <AuthSocialProvider>
                <Header />
@@ -93,7 +93,7 @@ function App() {
                <Footer />
             </AuthSocialProvider>
          </AuthProvider>
-      </>
+      </div>
    );
 }
 
