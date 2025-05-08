@@ -9,30 +9,42 @@ import wpstyles from "./NoticeWrite.module.css";
 
 function NoticeEdit() {
   const editorRef = useRef();
-  const { noticeNo } = useParams();
   const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
   const { accessToken } = auth;
+  const { noticeNo } = useParams();
   const [loading, setLoading] = useState(true);
+
+  const [imageFile, setImageFile] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+
   const [post, setPost] = useState({
     title: "",
     content: "",
+    fileUrl: "",
   });
 
-  // 게시글 가져오기
   useEffect(() => {
     const fetchPost = async () => {
       try {
         const res = await axios.get(`http://localhost:80/notice/${noticeNo}`);
-        setPost({
-          title: res.data.title,
-          content: res.data.content,
-        });
+        setPost(res.data);
+
+        if (res.data.fileUrl) {
+          const imageUrl = `http://localhost:80/uploads/${res.data.fileUrl}`;
+          setPreviewImage(imageUrl);
+
+          const response = await fetch(imageUrl);
+          const blob = await response.blob();
+          const file = new File([blob], "existing_image.jpg", {
+            type: blob.type,
+          });
+          setImageFile(file);
+        }
       } catch (err) {
-        console.error("게시글 불러오기 실패:", err);
+        console.error("fetchPost error:", err);
       }
     };
-
     fetchPost();
   }, [noticeNo]);
 
@@ -49,49 +61,25 @@ function NoticeEdit() {
     }
   }, [auth, loading, navigate, accessToken]);
 
-  // 이미지 URL 추출 함수
-  const extractImageUrls = (markdown) => {
-    const regex = /!\[.*?\]\((.*?)\)/g;
-    const urls = [];
-    let match;
-    while ((match = regex.exec(markdown)) !== null) {
-      urls.push(match[1]);
+  const handleAddImage = (blob, callback) => {
+    if (imageFile) {
+      alert("이미지는 한 개만 업로드할 수 있습니다.");
+      callback("");
+      return;
     }
-    return urls;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreviewImage(reader.result);
+    };
+    reader.readAsDataURL(blob);
+    setImageFile(blob);
+    callback("");
   };
 
-  // 글 제출 처리
-  const handleSubmit = async () => {
-    const editorInstance = editorRef.current.getInstance();
-    const updatedContent = editorInstance.getMarkdown();
-    const imageUrls = extractImageUrls(updatedContent);
-
-    const formData = new FormData();
-    formData.append("title", post.title);
-    formData.append("content", updatedContent);
-    formData.append("fileUrls", JSON.stringify(imageUrls)); // 여러 이미지 전송
-
-    // 콘솔 출력용
-    console.log("수정 요청 데이터 확인:");
-    for (let pair of formData.entries()) {
-      console.log(`content:`, pair[1]);
-    }
-
-    alert("※ 실제 요청은 전송되지 않았고 콘솔에 데이터만 출력되었습니다.");
-
-    // 실제 PUT 요청은 주석 처리
-    // try {
-    //   await axios.put(`http://localhost:80/notice/${noticeNo}`, formData, {
-    //     headers: {
-    //       Authorization: `Bearer ${accessToken}`,
-    //     },
-    //   });
-    //   alert("수정 완료!");
-    //   navigate(`/nd/${noticeNo}`);
-    // } catch (error) {
-    //   console.error("수정 실패:", error.response?.data || error);
-    //   alert("수정 중 오류가 발생했습니다.");
-    // }
+  const handleRemoveImage = () => {
+    setPreviewImage(null);
+    setImageFile(null);
   };
 
   const handleChange = (e) => {
@@ -100,6 +88,48 @@ function NoticeEdit() {
       ...prevPost,
       [name]: value,
     }));
+  };
+
+  const handleSubmit = async () => {
+    const editorInstance = editorRef.current.getInstance();
+    const updatedContent = editorInstance.getMarkdown();
+
+    if (!post.title.trim()) {
+      alert("제목을 입력하세요");
+      return;
+    }
+
+    if (!updatedContent.trim()) {
+      alert("내용을 입력하세요");
+      return;
+    }
+
+    if (!accessToken) {
+      alert("로그인 후 글쓰기가 가능합니다.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("title", post.title);
+    formData.append("content", updatedContent);
+
+    if (imageFile) {
+      formData.append("file", imageFile);
+    }
+
+    try {
+      await axios.put(`http://localhost:80/notice/${noticeNo}`, formData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      alert("수정 완료!");
+      navigate(`/nd/${noticeNo}`);
+    } catch (error) {
+      console.error("submit error:", error);
+      alert("수정 중 오류가 발생했습니다.");
+    }
   };
 
   return (
@@ -126,19 +156,27 @@ function NoticeEdit() {
             language="ko"
             useCommandShortcut={false}
             hideModeSwitch={true}
+            hooks={{
+              addImageBlobHook: handleAddImage,
+            }}
           />
         )}
 
-        {post.content && extractImageUrls(post.content).length > 0 && (
-          <div className={wpstyles.previewImageWrapper}>
-            {extractImageUrls(post.content).map((url, idx) => (
+        {previewImage && (
+          <div className={wpstyles.previewImages}>
+            <div className={wpstyles.previewImageWrapper}>
               <img
-                key={idx}
-                src={url}
-                alt={`미리보기 이미지 ${idx + 1}`}
+                src={previewImage}
+                alt="미리보기"
                 className={wpstyles.previewImage}
               />
-            ))}
+              <button
+                className={wpstyles.removeImageButton}
+                onClick={handleRemoveImage}
+              >
+                x
+              </button>
+            </div>
           </div>
         )}
 

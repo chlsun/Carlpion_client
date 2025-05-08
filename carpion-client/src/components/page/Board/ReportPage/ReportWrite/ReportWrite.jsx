@@ -9,11 +9,13 @@ import wpstyles from "./ReportWrite.module.css";
 
 function ReportWrite() {
   const editorRef = useRef();
-  const imageMapRef = useRef([]);
   const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
   const { accessToken } = auth;
   const [loading, setLoading] = useState(true);
+
+  const [imageFile, setImageFile] = useState(null); // 단일 이미지 상태
+  const [previewImage, setPreviewImage] = useState(null); // 미리보기 상태
 
   useEffect(() => {
     if (auth && auth.isAuthenticated !== undefined) {
@@ -28,42 +30,51 @@ function ReportWrite() {
     }
   }, [auth, loading, navigate]);
 
+  // 이미지 업로드 함수
   const handleAddImage = async (blob, callback) => {
-    const formData = new FormData();
-    formData.append("image", blob);
-
-    try {
-      const response = await axios.post(
-        "http://localhost:80/upload",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      const imageUrl = response.data.imageUrl;
-      const markdownImageTag = `![이미지](${imageUrl})`;
-    } catch (error) {
-      console.error("이미지 업로드 실패:", error);
-      alert("이미지 업로드 중 오류가 발생했습니다.");
+    if (imageFile) {
+      alert("이미지는 한 개만 업로드할 수 있습니다.");
+      callback(""); // 기존 이미지 블롭을 지우기
+      return;
     }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreviewImage(reader.result); // 미리보기 설정
+    };
+    reader.readAsDataURL(blob);
+
+    setImageFile(blob); // 이미지 파일 상태 설정
+    callback(""); // 기존 이미지 블롭을 지우기
   };
 
+  // 글 등록 함수
   const handleSubmit = async () => {
     const title = document.querySelector("#post-title").value;
+    const content = editorRef.current.getInstance().getMarkdown();
 
-    let content = editorRef.current.getInstance().getMarkdown();
+    if (!title.trim()) {
+      alert("제목을 입력하세요");
+      return;
+    }
+
+    if (!content.trim()) {
+      alert("내용을 입력하세요");
+      return;
+    }
+
+    if (!accessToken) {
+      alert("로그인 후 글쓰기가 가능합니다.");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
 
-    if (!accessToken) {
-      alert("로그인 후 글쓰기가 가능합니다.");
-      return;
+    // 이미지가 있을 경우에만 파일을 폼 데이터에 추가
+    if (imageFile) {
+      formData.append("file", imageFile);
     }
 
     try {
@@ -73,6 +84,7 @@ function ReportWrite() {
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -85,9 +97,10 @@ function ReportWrite() {
     }
   };
 
+  // 취소 버튼 클릭 시
   const handleCancel = () => {
     if (window.confirm("작성 중인 내용이 사라집니다. 취소하시겠습니까?")) {
-      navigate(-1);
+      navigate("/rb");
     }
   };
 
@@ -114,6 +127,28 @@ function ReportWrite() {
             addImageBlobHook: handleAddImage,
           }}
         />
+
+        {/* 미리보기 이미지가 있을 경우에만 표시 */}
+        {previewImage && (
+          <div className={wpstyles.previewImages}>
+            <div className={wpstyles.previewImageWrapper}>
+              <img
+                src={previewImage}
+                alt="미리보기"
+                className={wpstyles.previewImage}
+              />
+              <button
+                className={wpstyles.removeImageButton}
+                onClick={() => {
+                  setPreviewImage(null);
+                  setImageFile(null); // 이미지 상태 초기화
+                }}
+              >
+                x
+              </button>
+            </div>
+          </div>
+        )}
 
         <div className={wpstyles.submitButtonWrapper}>
           <button className={wpstyles.submitButton} onClick={handleSubmit}>

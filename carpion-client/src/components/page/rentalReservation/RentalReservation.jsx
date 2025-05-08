@@ -34,10 +34,9 @@ const RentalReservation = () => {
    }, [id]);
 
    const handlePayment = async () => {
-      console.log("하이?");
-
       if (!auth.accessToken) {
          alert("로그인 후 다시 시도해주세요");
+         navi("/start");
          return;
       }
 
@@ -90,7 +89,7 @@ const RentalReservation = () => {
                            }
                         );
                         alert("결제 성공!");
-                        navi("/rent");
+                        navi("/payment-history", {state: {impUID : rsp.imp_uid}});
                      } else {
                         alert("결제 실패: " + rsp.error_msg);
                      }

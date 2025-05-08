@@ -149,4 +149,9 @@
    background-color: #68c6ec;
    border-radius: 12px;
    color: #ffffff;
+   cursor: pointer;
+   transition: 0.1s;
+}
+#map .reservation-info .rent-btn > button:hover{
+   background-color: #23a5d8;
 }

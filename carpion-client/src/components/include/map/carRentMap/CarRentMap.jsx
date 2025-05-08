@@ -61,7 +61,7 @@ const CarRentMap = ({
       } else {
          options = {
             center: new kakao.maps.LatLng(37.5642135, 127.0016985),
-            level: 8,
+            level: 9,
          };
       }
 
@@ -110,63 +110,65 @@ const CarRentMap = ({
       <>
          <div id="map">
             <div className={`rental-list ${isRentalInfo && "active"}`}>
-               {chooseRentCarList && (
-                  <>
-                     <div
-                        className="close-btn"
-                        onClick={() => setIsRentalInfo(!isRentalInfo)}
-                     >
-                        <svg
-                           xmlns="http://www.w3.org/2000/svg"
-                           height="24px"
-                           viewBox="0 -960 960 960"
-                           width="24px"
-                           fill="#e3e3e3"
+               <div className="list-container">
+                  {chooseRentCarList && (
+                     <>
+                        <div
+                           className="close-btn"
+                           onClick={() => setIsRentalInfo(!isRentalInfo)}
                         >
-                           <path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z" />
-                        </svg>
-                     </div>
-
-                     <div className={`parking-info`}>
-                        <h3>{chooseRentCarList[0].parking.parkingTitle}</h3>
-                        <p>{chooseRentCarList[0].parking.parkingAddr}</p>
-                     </div>
-                     <div className="wall"></div>
-                     <div className="car-info-list">
-                        {chooseRentCarList.map((rentCar) => (
-                           <div
-                              key={rentCar.carNo}
-                              className={`rentcar-info ${
-                                 rentCar.reservationRental ? "active" : ""
-                              }`}
+                           <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              height="24px"
+                              viewBox="0 -960 960 960"
+                              width="24px"
+                              fill="#e3e3e3"
                            >
-                              <div className="car-img">
-                                 <img src={rentCar.carModel.imgURL} alt="" />
-                              </div>
+                              <path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z" />
+                           </svg>
+                        </div>
 
-                              <div className="car-info">
-                                 <p className="model">
-                                    {rentCar.carModel.carModel} /{" "}
-                                    {rentCar.carModel.seatCount}인승
-                                 </p>
-                                 <p className="charge">
-                                    {rentCar.carModel.chargeType}
-                                 </p>
-                                 <p className="price">
-                                    {rentCar.carModel.rentPrice}원 /{" "}
-                                    {rentCar.carModel.hourPrice}원/h
-                                 </p>
-                              </div>
+                        <div className={`parking-info`}>
+                           <h3>{chooseRentCarList[0].parking.parkingTitle}</h3>
+                           <p>{chooseRentCarList[0].parking.parkingAddr}</p>
+                        </div>
+                        <div className="wall"></div>
+                        <div className="car-info-list">
+                           {chooseRentCarList.map((rentCar) => (
+                              <div
+                                 key={rentCar.carNo}
+                                 className={`rentcar-info ${
+                                    rentCar.reservationRental ? "active" : ""
+                                 }`}
+                              >
+                                 <div className="car-img">
+                                    <img src={rentCar.carModel.imgURL} alt="" />
+                                 </div>
 
-                              <button className="rent-btn">예약하기</button>
-                              <div className="no-rent">
-                                 <div className="txt">예약불가</div>
+                                 <div className="car-info">
+                                    <p className="model">
+                                       {rentCar.carModel.carModel} /{" "}
+                                       {rentCar.carModel.seatCount}인승
+                                    </p>
+                                    <p className="charge">
+                                       {rentCar.carModel.chargeType}
+                                    </p>
+                                    <p className="price">
+                                       {rentCar.carModel.rentPrice}원 /{" "}
+                                       {rentCar.carModel.hourPrice}원/h
+                                    </p>
+                                 </div>
+
+                                 <button className="rent-btn">예약하기</button>
+                                 <div className="no-rent">
+                                    <div className="txt">예약불가</div>
+                                 </div>
                               </div>
-                           </div>
-                        ))}
-                     </div>
-                  </>
-               )}
+                           ))}
+                        </div>
+                     </>
+                  )}
+               </div>
             </div>
          </div>
       </>
