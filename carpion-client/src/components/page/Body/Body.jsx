@@ -158,6 +158,7 @@ const Body = () => {
         })
         .catch((error) => {
           console.error("닉네임 변경 실패 : ", error);
+          alert("이미 존재하는 닉네임 입니다");
         });
     }
   };
@@ -213,7 +214,7 @@ const Body = () => {
   return (
     <Container>
       <div>
-        <GradeText>{auth.realname}님 안녕하세요</GradeText>
+        <GradeText>{auth.nickname}님 안녕하세요</GradeText>
       </div>
 
       <Box>
@@ -232,7 +233,7 @@ const Body = () => {
             />
           )}
           <ProfileTextBox>
-            <div>닉네임 : {nickName}</div>
+            <div>이름 : {auth.realname}</div>
             <Button
               onClick={() => {
                 setActiveForm("nickName");
@@ -251,7 +252,7 @@ const Body = () => {
         </FirstBox>
 
         <InfoSection>
-          <GradeText>{auth.realname}님 등급은 브론즈 입니다.</GradeText>
+          <GradeText>{auth.nickname}님 등급은 브론즈 입니다.</GradeText>
         </InfoSection>
 
         {activeForm === "nickName" && (
@@ -319,7 +320,7 @@ const Body = () => {
 
       <GradeText>내 활동</GradeText>
       <Box>
-        <Button onClick={() => navi("/reply")}>작성한 댓글 조회</Button>
+        <Button onClick={() => navi("/reply")}>리뷰게시글 댓글 조회</Button>
         <Button onClick={() => navi("/inquiryCheck")}>
           작성한 문의 게시글 조회
         </Button>
