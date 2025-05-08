@@ -40,6 +40,7 @@ import ReportEdit from "./components/page/Board/ReportPage/ReportWrite/ReportEdi
 import PaymentHistoryPage from "./components/page/PaymentHistoryPage/PaymentHistoryPage";
 import ReservationComponent from "./components/page/Body/module/ReservationComponent";
 import RentHistoryPage from "./components/page/RentHistoryPage/RentHistoryPage";
+import BanPage from "./components/page/adminpage/BanPage/BanPage";
 
 function App() {
     return (
@@ -58,6 +59,7 @@ function App() {
                         <Route path="/find-id" element={<FindId />} />
                         <Route path="/find-pw" element={<FindPw />} />
                         <Route path="/find-pw-done" element={<FindPwCompleted />} />
+                        <Route path="/ban" element={<BanPage />} />
                         <Route path="/admin" element={<AdminPage />}>
                             <Route index element={<Navigate to="model/1" replace />} />
                             <Route path="model/:page" element={<ModelPage />} />

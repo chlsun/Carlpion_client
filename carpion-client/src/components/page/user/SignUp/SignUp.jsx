@@ -293,7 +293,7 @@ const SignUp = () => {
                 password: inputValues.password,
                 nickname: inputValues.nickname,
                 realname: inputValues.realname,
-                email: inputValues.realname,
+                email: inputValues.email,
                 code: verifyCode,
             })
             .then(() => {
