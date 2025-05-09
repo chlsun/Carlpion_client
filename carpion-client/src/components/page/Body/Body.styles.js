@@ -8,12 +8,12 @@ export const Container = styled.div`
 
 export const Box = styled.div`
   display: flex;
+  background-color: #ffffff;
   border: 1px solid #ddd;
   justify-content: center;
   align-items: center;
   padding: 40px;
   border-radius: 12px;
-  margin: 40px;
   min-width: 600px;
   max-width: 1000px;
 `;

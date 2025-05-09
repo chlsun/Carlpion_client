@@ -11,24 +11,33 @@ import { AuthContext } from "../Context/AuthContext";
 const Reply = () => {
   const { auth } = useContext(AuthContext);
   const [replyList, setReplyList] = useState([]);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [limit] = useState(3);
   useEffect(() => {
+    const offset = (currentPage - 1) * limit;
     if (auth.accessToken) {
       axios
         .get("http://localhost/mypage/comments", {
           headers: {
             Authorization: `Bearer ${auth.accessToken}`,
           },
+          params: {
+            limit: limit,
+            offset: offset,
+          },
         })
         .then((response) => {
+          const { replyList, totalCount } = response.data;
           console.log("받아온 데이터:", response.data);
-          setReplyList(response.data);
+          setReplyList(replyList);
+          setTotalPages(Math.ceil(totalCount / limit));
         })
         .catch((error) => {
           console.error("댓글게시판조회 실패 : ", error);
         });
     }
-  }, [auth.accessToken]);
+  }, [auth.accessToken, currentPage, limit]);
 
   return (
     <>
@@ -38,8 +47,9 @@ const Reply = () => {
         >
           댓글 조회
         </h2>
-        {replyList.map((item) => (
-          <ReplyBox key={item}>
+        {replyList.map((item, index) => (
+          <ReplyBox key={item.commentNo}>
+            <Field> 게시판 번호 : {index + 1} </Field>
             <Field> 게시판 제목 : {item.title} </Field>
             <Field> 댓글 : {item.content}</Field>
             <Field> 작성일: {item.createDate}</Field>
@@ -48,10 +58,20 @@ const Reply = () => {
         ))}
 
         <PaginationWrapper>
-          <PageButton>{"<"}</PageButton>
-          {[1, 2, 3, 4, 5].map((num) => (
-            <PageButton key={num}>{num}</PageButton>
-          ))}
+          {totalPages > 0 &&
+            Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+              <PageButton
+                key={num}
+                onClick={() => {
+                  if (currentPage !== num) setCurrentPage(num);
+                }}
+                style={{
+                  fontWeight: currentPage === num ? "bold" : "normal",
+                }}
+              >
+                {num}
+              </PageButton>
+            ))}
         </PaginationWrapper>
       </Container>
     </>

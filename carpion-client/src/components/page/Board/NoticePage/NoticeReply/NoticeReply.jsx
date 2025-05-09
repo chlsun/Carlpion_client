@@ -4,13 +4,13 @@ import nrstyles from "./NoticeReply.module.css";
 import { AuthContext } from "../../../Context/AuthContext";
 
 function NoticeReply({ noticeNo }) {
-  const { auth } = useContext(AuthContext);
-  const { accessToken, isAuthenticated, user } = auth;
+  const { auth, isAdmin } = useContext(AuthContext);
+  const { accessToken, nickname } = auth;
   const [comments, setComments] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [openMenuId, setOpenMenuId] = useState(null);
 
-  const nickName = user ? user.nickName : "사용자";
-  const isAdmin = isAuthenticated;
+  const nickName = nickname || "사용자";
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -26,7 +26,6 @@ function NoticeReply({ noticeNo }) {
               }
             : {}
         );
-        console.log(response.data);
         setComments(response.data);
       } catch (error) {
         console.error("댓글 불러오기 실패:", error);
@@ -50,7 +49,6 @@ function NoticeReply({ noticeNo }) {
     };
 
     try {
-      // 댓글을 추가합니다.
       await axios.post(
         "http://localhost:80/notice/comments",
         newComment,
@@ -63,7 +61,6 @@ function NoticeReply({ noticeNo }) {
           : {}
       );
 
-      // 댓글 추가 후 새로운 댓글 목록을 가져옵니다.
       const response = await axios.get(
         `http://localhost:80/notice/comments?noticeNo=${noticeNo}`,
         accessToken
@@ -75,9 +72,8 @@ function NoticeReply({ noticeNo }) {
           : {}
       );
 
-      // 댓글 목록을 새로 업데이트합니다.
       setComments(response.data);
-      setInputValue(""); // 입력창 초기화
+      setInputValue("");
     } catch (error) {
       console.error("댓글 추가 실패:", error);
     }
@@ -116,8 +112,10 @@ function NoticeReply({ noticeNo }) {
               key={comment.commentNo}
               comment={comment}
               onDelete={handleDelete}
-              isAdmin={isAdmin} // 관리자 여부 전달
-              currentUserNickName={nickName} // 현재 사용자 닉네임 전달
+              isAdmin={isAdmin}
+              currentUserNickName={nickName}
+              openMenuId={openMenuId}
+              setOpenMenuId={setOpenMenuId}
             />
           ))}
         </div>
@@ -140,15 +138,19 @@ function NoticeReply({ noticeNo }) {
   );
 }
 
-function CommentItem({ comment, onDelete, isAdmin, currentUserNickName }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-
+function CommentItem({
+  comment,
+  onDelete,
+  isAdmin,
+  currentUserNickName,
+  openMenuId,
+  setOpenMenuId,
+}) {
   const handleMenuToggle = () => {
-    setMenuOpen(!menuOpen);
+    setOpenMenuId(openMenuId === comment.commentNo ? null : comment.commentNo);
   };
 
-  // 댓글 작성자가 현재 로그인된 사용자이거나 관리자일 때 삭제 버튼을 보이도록 함
-  const isOwnerOrAdmin = comment.nickname === currentUserNickName || isAdmin;
+  const isOwnerOrAdmin = comment.nickName === currentUserNickName || isAdmin;
 
   return (
     <div className={nrstyles.comment}>
@@ -165,7 +167,7 @@ function CommentItem({ comment, onDelete, isAdmin, currentUserNickName }) {
                 &#x22EE;
               </button>
             )}
-            {menuOpen && (
+            {openMenuId === comment.commentNo && (
               <div className={nrstyles.menuDropdown}>
                 <button
                   className={`${nrstyles.menuItem} ${nrstyles.menuItemDelete}`}

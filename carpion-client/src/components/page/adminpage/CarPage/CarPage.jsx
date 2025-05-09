@@ -4,11 +4,12 @@ import { useContext, useEffect, useRef, useState } from "react";
 import ParkingModal from "./parkingModal/ParkingModal";
 import { AuthContext } from "../../Context/AuthContext";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const CarPage = () => {
    const { page } = useParams();
    const { auth } = useContext(AuthContext);
+   const navi = useNavigate();
    const [updateFormNum, setUpdateFormNum] = useState(-1);
    const [isPageLoad, setIsPageLoad] = useState(true);
    const [pageInfo, setPageInfo] = useState(null);
@@ -89,6 +90,9 @@ const CarPage = () => {
                setSelectedModelNo(null);
             })
             .catch((error) => {
+               const errors = error.response.data;
+               const firstErrorMessage = Object.values(errors)[0];
+               alert(firstErrorMessage);
                alert(error.response.data);
             });
       }
@@ -115,6 +119,9 @@ const CarPage = () => {
                const option = modelList.map((model) => {
                   return { value: model.modelNo, label: model.carModel };
                });
+               setOptions([...options, ...option]);
+            })
+            .catch((error) => {
                setOptions([...option]);
             })
             .catch((error) => {
@@ -251,10 +258,11 @@ const CarPage = () => {
    };
 
    const pageHandler = (e) => {
-      navi(`/admin/model/${e.target.textContent}`);
+      navi(`/admin/car/${e.target.textContent}`);
    };
 
-   if(options.length == 0) return <div id="not-found">차량 모델을 먼저 추가해주세요</div>
+   if (options.length == 0)
+      return <div id="not-found">차량 모델을 먼저 추가해주세요</div>;
 
    return (
       <>
@@ -333,7 +341,9 @@ const CarPage = () => {
                            {updateFormNum == index ? (
                               <input
                                  type="text"
-                                 onChange={(e) => setUpdateRentCar(e.target.value)}
+                                 onChange={(e) =>
+                                    setUpdateRentCar(e.target.value)
+                                 }
                                  value={updateRentCar}
                               ></input>
                            ) : (
@@ -382,7 +392,9 @@ const CarPage = () => {
                                  <button
                                     type="button"
                                     className="update-request"
-                                    onClick={() => updateRequestHandler(rentCar)}
+                                    onClick={() =>
+                                       updateRequestHandler(rentCar)
+                                    }
                                  >
                                     수정
                                  </button>
@@ -401,7 +413,11 @@ const CarPage = () => {
                   ))}
                </div>
             ) : (
-               <div id="not-found">렌트 차량이 존재하지 않습니다.<br/>렌트 차량을 추가해주세요.</div>
+               <div id="not-found">
+                  렌트 차량이 존재하지 않습니다.
+                  <br />
+                  렌트 차량을 추가해주세요.
+               </div>
             )}
          </main>
 

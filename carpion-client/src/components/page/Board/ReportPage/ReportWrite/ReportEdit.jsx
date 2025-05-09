@@ -9,27 +9,42 @@ import wpstyles from "./ReportWrite.module.css";
 
 function ReportEdit() {
   const editorRef = useRef();
-  const { reportNo } = useParams();
   const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
   const { accessToken } = auth;
+  const { reportNo } = useParams();
   const [loading, setLoading] = useState(true);
+
+  const [imageFile, setImageFile] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+
   const [post, setPost] = useState({
     title: "",
     content: "",
+    fileUrl: "", // 단일 파일 URL로 수정
   });
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
         const res = await axios.get(`http://localhost:80/reports/${reportNo}`);
-        console.log("Fetched Post Data:", res.data);
         setPost(res.data);
+
+        if (res.data.fileUrl) {
+          const imageUrl = `http://localhost:80/uploads/${res.data.fileUrl}`;
+          setPreviewImage(imageUrl);
+
+          const response = await fetch(imageUrl);
+          const blob = await response.blob();
+          const file = new File([blob], "existing_image.jpg", {
+            type: blob.type,
+          });
+          setImageFile(file);
+        }
       } catch (err) {
-        console.error("게시글 불러오기 실패:", err);
+        console.error("fetchPost error:", err);
       }
     };
-
     fetchPost();
   }, [reportNo]);
 
@@ -46,58 +61,25 @@ function ReportEdit() {
     }
   }, [auth, loading, navigate, accessToken]);
 
-  const handleAddImage = async (blob, callback) => {
-    const formData = new FormData();
-    formData.append("image", blob);
-
-    try {
-      const response = await axios.post(
-        "http://localhost:80/upload",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      const imageUrl = response.data.imageUrl;
-      callback(imageUrl);
-    } catch (error) {
-      console.error(
-        "이미지 업로드 실패:",
-        error.response ? error.response.data : error
-      );
-      alert("이미지 업로드 중 오류가 발생했습니다.");
+  const handleAddImage = (blob, callback) => {
+    if (imageFile) {
+      alert("이미지는 한 개만 업로드할 수 있습니다.");
+      callback("");
+      return;
     }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreviewImage(reader.result);
+    };
+    reader.readAsDataURL(blob);
+    setImageFile(blob);
+    callback("");
   };
 
-  const handleSubmit = async () => {
-    const editorInstance = editorRef.current.getInstance();
-    const updatedContent = editorInstance.getMarkdown();
-
-    console.log("Posting updated data:", {
-      title: post.title,
-      content: updatedContent,
-    });
-
-    const formData = new FormData();
-    formData.append("title", post.title);
-    formData.append("content", updatedContent);
-
-    try {
-      await axios.put(`http://localhost:80/reports/${reportNo}`, formData, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      alert("수정 완료!");
-      navigate(`/rd/${reportNo}`);
-    } catch (error) {
-      console.error("수정 실패:", error.response ? error.response.data : error);
-      alert("수정 중 오류가 발생했습니다.");
-    }
+  const handleRemoveImage = () => {
+    setPreviewImage(null);
+    setImageFile(null);
   };
 
   const handleChange = (e) => {
@@ -108,10 +90,52 @@ function ReportEdit() {
     }));
   };
 
+  const handleSubmit = async () => {
+    const editorInstance = editorRef.current.getInstance();
+    const updatedContent = editorInstance.getMarkdown();
+
+    if (!post.title.trim()) {
+      alert("제목을 입력하세요");
+      return;
+    }
+
+    if (!updatedContent.trim()) {
+      alert("내용을 입력하세요");
+      return;
+    }
+
+    if (!accessToken) {
+      alert("로그인 후 글쓰기가 가능합니다.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("title", post.title);
+    formData.append("content", updatedContent);
+
+    if (imageFile) {
+      formData.append("file", imageFile);
+    }
+
+    try {
+      await axios.put(`http://localhost:80/reports/${reportNo}`, formData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      alert("수정 완료!");
+      navigate(`/rd/${reportNo}`);
+    } catch (error) {
+      console.error("submit error:", error);
+      alert("수정 중 오류가 발생했습니다.");
+    }
+  };
+
   return (
     <div className={wpstyles.writePageOuter}>
       <div className={wpstyles.writePageContainer}>
-        <h2 className={wpstyles.writePageTitle}>공지사항 수정</h2>
+        <h2 className={wpstyles.writePageTitle}>글 수정</h2>
 
         <input
           type="text"
@@ -136,6 +160,24 @@ function ReportEdit() {
               addImageBlobHook: handleAddImage,
             }}
           />
+        )}
+
+        {previewImage && (
+          <div className={wpstyles.previewImages}>
+            <div className={wpstyles.previewImageWrapper}>
+              <img
+                src={previewImage}
+                alt="미리보기"
+                className={wpstyles.previewImage}
+              />
+              <button
+                className={wpstyles.removeImageButton}
+                onClick={handleRemoveImage}
+              >
+                x
+              </button>
+            </div>
+          </div>
         )}
 
         <div className={wpstyles.submitButtonWrapper}>

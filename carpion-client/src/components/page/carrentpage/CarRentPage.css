@@ -34,7 +34,7 @@
 #car-rent-page .map {
    height: 540px;
    width: 88%;
-   background-color: #b3ccf4;
+   background-color: #bfcbdf;
    border-radius: 30px;
    margin-bottom: 64px;
    overflow: hidden;
@@ -53,7 +53,7 @@
    align-items: center;
    margin-bottom: 30px;
 }
-#car-rent-page .select-container .css-1nmdiq5-menu{
+#car-rent-page .select-container .css-1nmdiq5-menu {
    z-index: 5;
 }
 #car-rent-page .dateMessage-box {

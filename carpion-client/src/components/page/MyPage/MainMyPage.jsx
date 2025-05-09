@@ -19,9 +19,10 @@ import { LeftBox, RightBox, Font, Input } from "./MainMypage.style";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthContext";
 import axios from "axios";
+import { useTheme } from "styled-components";
 
 const MainMyPage = () => {
-  const { auth, updateUser } = useContext(AuthContext);
+  const { auth, updateUser, logout } = useContext(AuthContext);
   const [activeForm, setActiveForm] = useState(null);
   const [modifyName, setModifyName] = useState("");
   const [modifyFile, setModifyFile] = useState("");
@@ -52,13 +53,13 @@ const MainMyPage = () => {
   const submitName = (e) => {
     e.preventDefault();
     const regexName = /^([a-zA-Z]{2,30}|[\uAC00-\uD7A3]{2,5})$/;
-    if (!regexName.test(modifyName)) {
+    if (modifyName && !regexName.test(modifyName)) {
       alert("한글 이름 2~5자, 영어 이름 2~30자 입력해주세요.");
       return;
     }
 
     const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!regexEmail.test(modifyEmail)) {
+    if (modifyEmail && !regexEmail.test(modifyEmail)) {
       alert("영어 이메일 형식만 가능합니다.");
       return;
     }
@@ -85,7 +86,7 @@ const MainMyPage = () => {
     setChecked(checkBox);
   };
 
-  const submitCheckPw = (e) => {
+  /*  const submitCheckPw = (e) => {
     e.preventDefault();
     if (!passwordCheck) {
       alert("비밀번호를 확인해주세요.");
@@ -93,7 +94,7 @@ const MainMyPage = () => {
     }
 
     setActiveForm(null);
-  };
+  }; */
 
   useEffect(() => {
     if (auth.realname) {
@@ -143,8 +144,8 @@ const MainMyPage = () => {
         .put(
           "http://localhost/users/update-realname",
           {
-            realName: modifyName,
-            email: modifyEmail,
+            realName: modifyName || auth.realname,
+            email: modifyEmail || auth.email,
           },
           {
             headers: {
@@ -153,6 +154,7 @@ const MainMyPage = () => {
           }
         )
         .then((response) => {
+          alert("변경에 성공하셨습니다.");
           setIsUpdate(true);
         })
         .catch((error) => {
@@ -205,6 +207,38 @@ const MainMyPage = () => {
             alert(`변경실패 : ${error.response.data}`);
           } else {
             alert("알 수 없는 오류가 발생했습니다.");
+          }
+        });
+    }
+  };
+  const submitCheckPw = (e) => {
+    e.preventDefault();
+    if (!passwordCheck) {
+      alert("비밀번호를 확인해주세요.");
+      return;
+    }
+
+    if (auth.accessToken) {
+      axios
+        .delete("http://localhost/users", {
+          headers: {
+            Authorization: `Bearer ${auth.accessToken}`,
+          },
+          data: {
+            password: passwordCheck,
+          },
+        })
+        .then((response) => {
+          console.log("탈퇴 성공", response.data);
+          alert("탈퇴에 성공하셨습니다.");
+          logout();
+        })
+        .catch((error) => {
+          console.log("탈퇴에러", error);
+          if (error.response && error.response.data) {
+            alert(`변경실패 : ${error.response.data}`);
+          } else {
+            console.log("탈퇴에러", error);
           }
         });
     }
@@ -300,9 +334,8 @@ const MainMyPage = () => {
                   />
                 </div>
                 <div>
-                  <Button onClick={handlePw} type="submit">
-                    비밀번호 변경
-                  </Button>
+                  <Button type="submit">비밀번호 변경</Button>
+
                   <Button type="button" onClick={() => setActiveForm(null)}>
                     취소
                   </Button>
@@ -323,7 +356,7 @@ const MainMyPage = () => {
               <Header>회원탈퇴</Header>
               <div>서비스 탈퇴전 주의사항을 확인해주세요</div>
               <DeleteBox>
-                <DeleteText> 탈퇴할 계정</DeleteText>
+                <DeleteText> 탈퇴할 계정 : {userName}</DeleteText>
               </DeleteBox>
               <hr />
               <div>
@@ -345,12 +378,6 @@ const MainMyPage = () => {
                   가입할 수 있습니다.
                 </p>
                 <p>단, 기존 정보는 파기되어 복구할 수 없습니다.</p>
-              </DeleteBox>
-              <DeleteBox>
-                <div>
-                  탈퇴사유
-                  <Area placeholder="내용을 입력해주세요."></Area>
-                </div>
               </DeleteBox>
 
               <CheckBox>
@@ -388,7 +415,7 @@ const MainMyPage = () => {
                   안전한 탈퇴 진행을 위해 비밀번호를 한번더 입력해 주세요.
                 </div>
                 <DeleteBox>
-                  <DeleteText>탈퇴 할 계정</DeleteText>
+                  <DeleteText>탈퇴 할 계정 : {userName}</DeleteText>
                 </DeleteBox>
                 <div>
                   <DeleteText>비밀번호 재 확인 </DeleteText>

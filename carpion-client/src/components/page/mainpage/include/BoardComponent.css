@@ -1,0 +1,79 @@
+#main-page-board {
+   width: 500px;
+   min-height: 437px;
+   border: 1px solid #ccc;
+   padding: 20px;
+   box-sizing: border-box;
+   overflow-y: auto;
+   background-color: #fff;
+   border-radius: 20px;
+   box-shadow: 0 0 3px 3px #ccc;
+   position: relative;
+}
+
+#main-page-board .more-btn {
+   position: absolute;
+   display: flex;
+   align-items: center;
+   top: 25px;
+   right: 20px;
+   color: #333;
+   font-size: 15px;
+   font-weight: 500;
+   cursor: pointer;
+}
+#main-page-board .more-btn > p {
+   margin-right: 5px;
+}
+#main-page-board .more-btn > svg {
+   width: 14px;
+   height: 14px;
+   margin-bottom: 2px;
+   fill: #333;
+   margin-left: -6px;
+}
+
+#main-page-board .review-title {
+   font-size: 20px;
+   font-weight: bold;
+   margin-bottom: 16px;
+}
+
+#main-page-board .post-list {
+   list-style: none;
+   padding: 0;
+   margin: 0;
+}
+
+#main-page-board .post-item {
+   display: flex;
+   align-items: center;
+   padding-top: 10px;
+   padding-bottom: 10px;
+   border-bottom: 1px solid #ddd;
+   font-size: 16px;
+}
+#main-page-board .post-item:last-child {
+   border-bottom: 0;
+   padding-bottom: 0;
+}
+
+#main-page-board .category {
+   font-weight: 500;
+   margin-right: 8px;
+   color: #ffffff;
+   display: block;
+   padding: 4px 10px;
+   background-color: #3571f2;
+   border-radius: 10px;
+}
+
+#main-page-board .title {
+   flex: 1;
+   color: #333;
+   font-weight: 500;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   cursor: pointer;
+}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./CarRentMap.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const { kakao } = window;
 
@@ -10,6 +11,7 @@ const CarRentMap = ({
    rentalDateYMDH,
    returnDateYMDH,
 }) => {
+   const navi = useNavigate();
    const [isRentalInfo, setIsRentalInfo] = useState(false);
 
    const [chooseRentCarList, setChooseRentCarList] = useState(null);
@@ -106,68 +108,108 @@ const CarRentMap = ({
       });
    }, []);
 
+   function getDiffHour(rentalDateYMDH, returnDateYMDH) {
+      const rentalDateYMDHM = rentalDateYMDH.replaceAll("/", "-") + ":00";
+      const returnDateYMDHM = returnDateYMDH.replaceAll("/", "-") + ":00";
+      const rentalDateCng = new Date(rentalDateYMDHM.replace(" ", "T"));
+      const returnDateCng = new Date(returnDateYMDHM.replace(" ", "T"));
+
+      console.log(rentalDateCng);
+
+      const diffMSec = returnDateCng.getTime() - rentalDateCng.getTime();
+      const diffHour = diffMSec / (60 * 60 * 1000);
+
+      console.log(diffHour);
+
+      return diffHour;
+   }
+
+   const goToReservation = (carNo) => {
+      navi(`/rent/${carNo}`, {
+         state: {
+            diffHour: getDiffHour(rentalDateYMDH, returnDateYMDH),
+            rentalDateYMDH: rentalDateYMDH.slice(2),
+            returnDateYMDH: returnDateYMDH.slice(2),
+         },
+      });
+   };
+
    return (
       <>
          <div id="map">
             <div className={`rental-list ${isRentalInfo && "active"}`}>
-               <div className="list-container">
-                  {chooseRentCarList && (
-                     <>
-                        <div
-                           className="close-btn"
-                           onClick={() => setIsRentalInfo(!isRentalInfo)}
-                        >
-                           <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              height="24px"
-                              viewBox="0 -960 960 960"
-                              width="24px"
-                              fill="#e3e3e3"
+               <div>
+                  <div className="list-container">
+                     {chooseRentCarList && (
+                        <>
+                           <div
+                              className="close-btn"
+                              onClick={() => setIsRentalInfo(!isRentalInfo)}
                            >
-                              <path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z" />
-                           </svg>
-                        </div>
-
-                        <div className={`parking-info`}>
-                           <h3>{chooseRentCarList[0].parking.parkingTitle}</h3>
-                           <p>{chooseRentCarList[0].parking.parkingAddr}</p>
-                        </div>
-                        <div className="wall"></div>
-                        <div className="car-info-list">
-                           {chooseRentCarList.map((rentCar) => (
-                              <div
-                                 key={rentCar.carNo}
-                                 className={`rentcar-info ${
-                                    rentCar.reservationRental ? "active" : ""
-                                 }`}
+                              <svg
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 height="24px"
+                                 viewBox="0 -960 960 960"
+                                 width="24px"
+                                 fill="#e3e3e3"
                               >
-                                 <div className="car-img">
-                                    <img src={rentCar.carModel.imgURL} alt="" />
-                                 </div>
+                                 <path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z" />
+                              </svg>
+                           </div>
 
-                                 <div className="car-info">
-                                    <p className="model">
-                                       {rentCar.carModel.carModel} /{" "}
-                                       {rentCar.carModel.seatCount}인승
-                                    </p>
-                                    <p className="charge">
-                                       {rentCar.carModel.chargeType}
-                                    </p>
-                                    <p className="price">
-                                       {rentCar.carModel.rentPrice}원 /{" "}
-                                       {rentCar.carModel.hourPrice}원/h
-                                    </p>
-                                 </div>
+                           <div className={`parking-info`}>
+                              <h3>
+                                 {chooseRentCarList[0].parking.parkingTitle}
+                              </h3>
+                              <p>{chooseRentCarList[0].parking.parkingAddr}</p>
+                           </div>
+                           <div className="wall"></div>
+                           <div className="car-info-list">
+                              {chooseRentCarList.map((rentCar) => (
+                                 <div
+                                    key={rentCar.carNo}
+                                    className={`rentcar-info ${
+                                       rentCar.reservationRental ? "active" : ""
+                                    }`}
+                                 >
+                                    <div className="car-img">
+                                       <img
+                                          src={rentCar.carModel.imgURL}
+                                          alt=""
+                                       />
+                                    </div>
 
-                                 <button className="rent-btn">예약하기</button>
-                                 <div className="no-rent">
-                                    <div className="txt">예약불가</div>
+                                    <div className="car-info">
+                                       <p className="model">
+                                          {rentCar.carModel.carModel} /{" "}
+                                          {rentCar.carModel.seatCount}인승
+                                       </p>
+                                       <p className="charge">
+                                          {rentCar.carModel.chargeType}
+                                       </p>
+                                       <p className="price">
+                                          {rentCar.carModel.rentPrice}원 /{" "}
+                                          {rentCar.carModel.hourPrice}원/h
+                                       </p>
+                                    </div>
+
+                                    <button
+                                       className="rent-btn"
+                                       onClick={() =>
+                                          goToReservation(rentCar.carNo)
+                                       }
+                                    >
+                                       예약하기
+                                    </button>
+                                    <div className="no-rent">
+                                       <div className="txt">예약불가</div>
+                                    </div>
                                  </div>
-                              </div>
-                           ))}
-                        </div>
-                     </>
-                  )}
+                              ))}
+                           </div>
+                        </>
+                     )}
+                  </div>
                </div>
             </div>
          </div>

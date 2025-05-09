@@ -69,23 +69,21 @@ const CarRentPage = () => {
       return { value: `${hour}:00:00`, label: `${hour}:00` };
    });
 
-   const getRentalHour = (startHour) =>{
-
+   const getRentalHour = (startHour) => {
       const paramHour = parseInt(startHour);
 
       return Array.from({ length: 24 - paramHour - 1 }, (_, i) => {
          const hour = (paramHour + i + 1).toString().padStart(2, "0");
          return { value: `${hour}:00:00`, label: `${hour}:00` };
       });
-   }
+   };
 
    const getReturnHour = (startHour) => {
-      
-      if(startHour == -1){
+      if (startHour == -1) {
          const defaultHour = 0;
 
          return Array.from({ length: 24 }, (_, i) => {
-            const hour = (i).toString().padStart(2, "0");
+            const hour = i.toString().padStart(2, "0");
             return { value: `${hour}:00:00`, label: `${hour}:00` };
          });
       }
@@ -144,14 +142,14 @@ const CarRentPage = () => {
    };
 
    useEffect(() => {
-      if (rentalDate){
+      if (rentalDate) {
          const date = new Date();
          const matchDate = toStringByDate2(date);
 
-         if(matchDate == rentalDate.value){
+         if (matchDate == rentalDate.value) {
             const hour = String(date.getHours()).padStart(2, "0");
-            setRentalHourOption(getRentalHour(hour))
-         }else{
+            setRentalHourOption(getRentalHour(hour));
+         } else {
             setRentalHourOption(defaultRentalHourOption);
          }
 
@@ -254,6 +252,15 @@ const CarRentPage = () => {
       return `${year}/${month}/${day} ${hour}`;
    }
 
+   function requestToStringByDate2(date) {
+      const year = String(date.getFullYear());
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const hour = String(date.getHours()).padStart(2, "0");
+
+      return `${year}/${month}/${day} ${hour}`;
+   }
+
    const goToReservation = (carNo) => {
       navi(`/rent/${carNo}`, {
          state: {
@@ -273,8 +280,8 @@ const CarRentPage = () => {
                      <CarRentMap
                         rentCarList={rentCarList}
                         searchAddr={searchAddr}
-                        rentalDateYMDH={requestToStringByDate(rentalDateYMDH)}
-                        returnDateYMDH={requestToStringByDate(returnDateYMDH)}
+                        rentalDateYMDH={requestToStringByDate2(rentalDateYMDH)}
+                        returnDateYMDH={requestToStringByDate2(returnDateYMDH)}
                      />
                   ) : (
                      <h2>
@@ -371,7 +378,8 @@ const CarRentPage = () => {
                            <div className="info">
                               <p className="car-model">
                                  {rentCar.carModel.carModel} /{" "}
-                                 {rentCar.carModel.seatCount}인승
+                                 {rentCar.carModel.seatCount}
+                                 인승
                               </p>
                               <p className="rent-price">
                                  {rentCar.carModel.rentPrice}원
