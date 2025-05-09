@@ -42,6 +42,7 @@ import ReservationComponent from "./components/page/Body/module/ReservationCompo
 import RentHistoryPage from "./components/page/RentHistoryPage/RentHistoryPage";
 import MainPage2 from "./components/page/mainpage/MainPage2";
 import Map from "./components/page/Board/Map/Map";
+import BanPage from "./components/page/adminpage/BanPage/BanPage";
 
 function App() {
   return (
