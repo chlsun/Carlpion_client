@@ -22,12 +22,21 @@ const RentHistoryComponent = (props) => {
    const gotoHistoryPage = () => {
       navi("/rent-history");
    };
-   const getRentalHours = (start, end) => {
-      const startTime = new Date(start);
-      const endTime = new Date(end);
-      const diffHours = (endTime - startTime) / (1000 * 60 * 60);
-      return diffHours;
-   };
+   function getDiffHour(rentalDate, returnDate) {
+      console.log("rentalDate : ", rentalDate);
+
+      const rentalDateType = new Date(rentalDate.replace(" ", "T"));
+      const returnDateType = new Date(returnDate.replace(" ", "T"));
+
+      const diffMSec = returnDateType.getTime() - rentalDateType.getTime();
+      const diffHour = diffMSec / (60 * 60 * 1000);
+
+      return diffHour;
+   }
+
+   function changeDate(date) {
+      return date.slice(0, -3);
+   }
 
    if (props.rentHistory.length == 0) {
       return (
@@ -59,14 +68,15 @@ const RentHistoryComponent = (props) => {
                   <div className="right">
                      <p className="addr">{rent.parkingAddr}</p>
                      <p className="date">
-                        {rent.rentalDate} ~ {rent.returnDate} |{" "}
+                        {changeDate(rent.rentalDate)} ~{" "}
+                        {changeDate(rent.returnDate)} |{" "}
                         <b>
-                           총 {getRentalHours(rent.rentalDate, rent.returnDate)}
+                           총 {getDiffHour(rent.rentalDate, rent.returnDate)}
                            시간
                         </b>
                      </p>
                      <p className="price">
-                        결제금액 | <b>{rent.totalPrice.toLocaleString()}</b>
+                        결제금액 | <b>{rent.totalPrice.toLocaleString()}원</b>
                      </p>
                   </div>
                </div>
