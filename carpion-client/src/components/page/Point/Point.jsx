@@ -63,9 +63,7 @@ const Point = () => {
   return (
     <div id="point-table">
       <TableContainer>
-        <div className="header">
-          <h3>포인트정보</h3>
-        </div>
+        <div className="header">포인트정보</div>
         <Table>
           <thead className="thead">
             <tr className="th">

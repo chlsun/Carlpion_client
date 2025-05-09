@@ -57,3 +57,8 @@
 #point-table .td .td-date {
   width: 20%;
 }
+.header {
+  margin-bottom: 25px;
+  font-size: 18px;
+  font-weight: bold;
+}

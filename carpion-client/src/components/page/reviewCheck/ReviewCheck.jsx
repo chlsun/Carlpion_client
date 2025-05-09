@@ -8,6 +8,7 @@ import {
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const ReviewCheck = () => {
   const { auth } = useContext(AuthContext);
@@ -15,6 +16,11 @@ const ReviewCheck = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [limit] = useState(3);
+
+  const navigate = useNavigate();
+  const goToDetail = (reviewNo) => {
+    navigate(`/cd/${reviewNo}`);
+  };
 
   useEffect(() => {
     const offset = (currentPage - 1) * limit;
@@ -52,7 +58,10 @@ const ReviewCheck = () => {
           리뷰 게시글 조회
         </h2>
         {reviewList.map((item, index) => (
-          <ReviewBox key={item.reviewNo}>
+          <ReviewBox
+            key={item.reviewNo}
+            onClick={() => goToDetail(item.reviewNo)}
+          >
             <Field> 게시글번호: {index + 1} </Field>
             <Field> 제목: {item.title}</Field>
             <Field> 작성일: {item.createDate} </Field>

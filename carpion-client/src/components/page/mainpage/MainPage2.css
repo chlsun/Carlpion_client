@@ -23,3 +23,8 @@
 
    width: 100%;
 }
+#main-page .board-container {
+   display: flex;
+   justify-content: space-between;
+   padding: 60px 140px;
+}

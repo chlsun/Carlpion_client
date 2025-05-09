@@ -8,12 +8,18 @@ import {
 } from "./InquiryCheck.styles";
 import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
 const InquiryCheck = () => {
   const { auth } = useContext(AuthContext);
   const [inquiryList, setInquiryList] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [limit] = useState(3);
+
+  const navigate = useNavigate();
+  const goToDetail = (reportNo) => {
+    navigate(`/rd/${reportNo}`);
+  };
 
   useEffect(() => {
     const offset = (currentPage - 1) * limit;
@@ -50,7 +56,10 @@ const InquiryCheck = () => {
           문의 게시글 조회
         </h2>
         {inquiryList.map((item, index) => (
-          <InquiryBox key={item.reportNo}>
+          <InquiryBox
+            key={item.reportNo}
+            onClick={() => goToDetail(item.reportNo)}
+          >
             <Field> 게시글번호: {index + 1} </Field>
             <Field> 제목: {item.title} </Field>
             <Field> 작성일: {item.createDate} </Field>

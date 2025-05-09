@@ -10,7 +10,7 @@ export const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 40px;
+  font-size: 30px;
   font-weight: bold;
 `;
 
@@ -25,7 +25,7 @@ export const Box = styled.div`
 export const LeftBox = styled.div`
   flex: 1;
   padding: 10px;
-  font-size: 40px;
+  font-size: 25px;
 `;
 export const RightBox = styled.div`
   flex: 3;

@@ -8,12 +8,19 @@ import {
 } from "./Reply.style";
 import axios from "axios";
 import { AuthContext } from "../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
 const Reply = () => {
   const { auth } = useContext(AuthContext);
   const [replyList, setReplyList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [limit] = useState(3);
+
+  const navigate = useNavigate();
+  const goToDetail = (reviewNo) => {
+    navigate(`/cd/${reviewNo}`);
+  };
+
   useEffect(() => {
     const offset = (currentPage - 1) * limit;
     if (auth.accessToken) {
@@ -43,12 +50,19 @@ const Reply = () => {
     <>
       <Container>
         <h2
-          style={{ textAlign: "center", marginTop: "80px", fontWeight: "bold" }}
+          style={{
+            textAlign: "center",
+            marginTop: "80px",
+            fontWeight: "bold",
+          }}
         >
           댓글 조회
         </h2>
         {replyList.map((item, index) => (
-          <ReplyBox key={item.commentNo}>
+          <ReplyBox
+            key={item.commentNo}
+            onClick={() => goToDetail(item.reviewNo)}
+          >
             <Field> 게시판 번호 : {index + 1} </Field>
             <Field> 게시판 제목 : {item.title} </Field>
             <Field> 댓글 : {item.content}</Field>
