@@ -1,0 +1,59 @@
+#point-table {
+  box-sizing: border-box;
+}
+
+#point-table .thead {
+  width: 100%;
+}
+
+#point-table .th {
+  height: 60px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+#point-table .th > th {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10%;
+  border: 1px solid gray;
+  height: 100%;
+}
+#point-table .th .th-reason {
+  width: 60%;
+}
+
+#point-table .th .th-date {
+  width: 20%;
+}
+
+#point-table .tbody {
+  width: 100%;
+}
+
+#point-table .td {
+  height: 60px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+#point-table .td > td {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10%;
+  border: 1px solid gray;
+  height: 100%;
+}
+#point-table .td > .td-reason {
+  width: 60%;
+  justify-self: flex-start;
+  padding-left: 20px;
+  text-align: left;
+}
+
+#point-table .td .td-date {
+  width: 20%;
+}

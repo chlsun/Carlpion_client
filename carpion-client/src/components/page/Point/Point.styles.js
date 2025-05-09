@@ -2,14 +2,13 @@ import styled from "styled-components";
 
 export const TableContainer = styled.div`
   display: flex;
-  padding: 40px;
+  padding: 196px 0 100px;
   align-items: center;
   flex-direction: column;
 `;
 
 export const Table = styled.table`
-  witdh: 100%px;
-  margin: 20px;
+  width: 1000px;
 `;
 
 export const Th = styled.th`

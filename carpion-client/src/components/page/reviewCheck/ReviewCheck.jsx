@@ -11,25 +11,37 @@ import { AuthContext } from "../Context/AuthContext";
 
 const ReviewCheck = () => {
   const { auth } = useContext(AuthContext);
-  const [review, setReview] = useState([]);
+  const [reviewList, setReviewList] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit] = useState(3);
 
   useEffect(() => {
+    const offset = (currentPage - 1) * limit;
     if (auth.accessToken) {
       axios
         .get("http://localhost/mypage/reviews", {
           headers: {
             Authorization: `Bearer ${auth.accessToken}`,
           },
+          params: {
+            limit: limit,
+            offset: offset,
+          },
         })
         .then((response) => {
+          const { reviewList, totalCount } = response.data;
           console.log("받아온 데이터:", response.data);
-          setReview(response.data);
+
+          setReviewList(reviewList);
+          setTotalPages(Math.ceil(totalCount / limit));
+          console.log("토탈", totalCount);
         })
         .catch((error) => {
           console.error("리뷰게시판조회 실패 : ", error);
         });
     }
-  }, [auth.accessToken]);
+  }, [auth.accessToken, currentPage, limit]);
 
   return (
     <>
@@ -39,24 +51,30 @@ const ReviewCheck = () => {
         >
           리뷰 게시글 조회
         </h2>
-        {review.map((item) => (
+        {reviewList.map((item, index) => (
           <ReviewBox key={item.reviewNo}>
-            <Field> 게시글번호: {item.reviewNo} </Field>
+            <Field> 게시글번호: {index + 1} </Field>
             <Field> 제목: {item.title}</Field>
             <Field> 작성일: {item.createDate} </Field>
             <Field> 조회수: {item.count}</Field>
-            <Field>
-              파일 URL: {item.fileUrl}
-              <a></a>
-            </Field>
           </ReviewBox>
         ))}
 
         <PaginationWrapper>
-          <PageButton>{"<"}</PageButton>
-          {[1, 2, 3, 4, 5].map((num) => (
-            <PageButton key={num}>{num}</PageButton>
-          ))}
+          {totalPages > 0 &&
+            Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+              <PageButton
+                key={num}
+                onClick={() => {
+                  if (currentPage !== num) setCurrentPage(num);
+                }}
+                style={{
+                  fontWeight: currentPage === num ? "bold" : "normal",
+                }}
+              >
+                {num}
+              </PageButton>
+            ))}
         </PaginationWrapper>
       </Container>
     </>

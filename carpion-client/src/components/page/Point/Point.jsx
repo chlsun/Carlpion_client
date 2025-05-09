@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthContext";
 import { useMemo } from "react";
 import axios from "axios";
+import "./point.css";
 
 const Point = () => {
   const navi = useNavigate();
@@ -60,31 +61,27 @@ const Point = () => {
   }, [auth.accessToken, currentPage, limit]);
 
   return (
-    <>
+    <div id="point-table">
       <TableContainer>
-        <h3>포인트정보</h3>
+        <div className="header">
+          <h3>포인트정보</h3>
+        </div>
         <Table>
-          <thead>
-            <tr>
-              <Th>이력번호</Th>
-              <Th>게시물 번호</Th>
-              <Th>등급</Th>
-              <Th>변동내역</Th>
-              <Th>변동사유</Th>
-              <Th>포인트</Th>
-              <Th>일시</Th>
+          <thead className="thead">
+            <tr className="th">
+              <th className="th-num">이력번호</th>
+              <th className="th-change-point">변동내역</th>
+              <th className="th-reason">변동사유</th>
+              <th className="th-date">일시</th>
             </tr>
           </thead>
-          <tbody>
-            {pointListWithTotal.map((item) => (
-              <tr key={item.historyNo}>
-                <Td>{item.historyNo}</Td>
-                <Td>{item.reviewNo}</Td>
-                <Td>{item.userLevel}</Td>
-                <Td>{item.pointChange}</Td>
-                <Td>{item.reason}</Td>
-                <Td>{item.totalPoint}</Td>
-                <Td>{item.createDate}</Td>
+          <tbody className="tbody">
+            {pointListWithTotal.map((item, index) => (
+              <tr key={item.historyNo} className="td">
+                <td className="td-num">{index + 1}</td>
+                <td className="td-change-point">{item.pointChange}</td>
+                <td className="td-reason">{item.reason}</td>
+                <td className="td-date">{item.createDate}</td>
               </tr>
             ))}
           </tbody>
@@ -97,14 +94,16 @@ const Point = () => {
                 onClick={() => {
                   if (currentPage !== num) setCurrentPage(num);
                 }}
-                style={{ fontWeight: currentPage === num ? "bold" : "normal" }}
+                style={{
+                  fontWeight: currentPage === num ? "bold" : "normal",
+                }}
               >
                 {num}
               </PageButton>
             ))}
         </PaginationWrapper>
       </TableContainer>
-    </>
+    </div>
   );
 };
 export default Point;
