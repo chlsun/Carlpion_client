@@ -240,6 +240,7 @@ const ModelPage = () => {
             setIsPageLoad(!isPageLoad);
          })
          .catch((error) => {
+            console.log(error);
             alert(error.response.data);
          });
    };
