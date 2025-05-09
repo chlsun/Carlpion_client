@@ -22,7 +22,7 @@ import axios from "axios";
 import { useTheme } from "styled-components";
 
 const MainMyPage = () => {
-  const { auth, updateUser } = useContext(AuthContext);
+  const { auth, updateUser, logout } = useContext(AuthContext);
   const [activeForm, setActiveForm] = useState(null);
   const [modifyName, setModifyName] = useState("");
   const [modifyFile, setModifyFile] = useState("");
@@ -53,13 +53,13 @@ const MainMyPage = () => {
   const submitName = (e) => {
     e.preventDefault();
     const regexName = /^([a-zA-Z]{2,30}|[\uAC00-\uD7A3]{2,5})$/;
-    if (!regexName.test(modifyName)) {
+    if (modifyName && !regexName.test(modifyName)) {
       alert("한글 이름 2~5자, 영어 이름 2~30자 입력해주세요.");
       return;
     }
 
     const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!regexEmail.test(modifyEmail)) {
+    if (modifyEmail && !regexEmail.test(modifyEmail)) {
       alert("영어 이메일 형식만 가능합니다.");
       return;
     }
@@ -144,8 +144,8 @@ const MainMyPage = () => {
         .put(
           "http://localhost/users/update-realname",
           {
-            realName: modifyName,
-            email: modifyEmail,
+            realName: modifyName || auth.realname,
+            email: modifyEmail || auth.email,
           },
           {
             headers: {
@@ -154,6 +154,7 @@ const MainMyPage = () => {
           }
         )
         .then((response) => {
+          alert("변경에 성공하셨습니다.");
           setIsUpdate(true);
         })
         .catch((error) => {
@@ -229,14 +230,15 @@ const MainMyPage = () => {
         })
         .then((response) => {
           console.log("탈퇴 성공", response.data);
-          setActiveForm(null);
+          alert("탈퇴에 성공하셨습니다.");
+          logout();
         })
         .catch((error) => {
           console.log("탈퇴에러", error);
           if (error.response && error.response.data) {
             alert(`변경실패 : ${error.response.data}`);
           } else {
-            alert("알 수 없는 오류가 발생했습니다.");
+            console.log("탈퇴에러", error);
           }
         });
     }
@@ -333,9 +335,7 @@ const MainMyPage = () => {
                 </div>
                 <div>
                   <Button type="submit">비밀번호 변경</Button>
-                  <Button onClick={submitModfyPw} type="submit">
-                    비밀번호 변경
-                  </Button>
+
                   <Button type="button" onClick={() => setActiveForm(null)}>
                     취소
                   </Button>
