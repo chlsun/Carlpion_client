@@ -104,10 +104,7 @@ const MainMyPage = () => {
   }, [auth.realname]);
 
   useEffect(() => {
-    // console.log("isUpdate:", isUpdate);
-    //console.log("accessToken:", auth.accessToken);
     if (isUpdate && auth.accessToken) {
-      //console.log(" 요청 보냅니다");
       axios
         .get("http://localhost/users/getUserInfo", {
           headers: {
@@ -115,7 +112,6 @@ const MainMyPage = () => {
           },
         })
         .then((result) => {
-          //console.log("getUserInfo 응답 :", result.data);
           updateUser(result.data.realName, result.data.email);
           setIsUpdate(false);
         });
@@ -275,12 +271,12 @@ const MainMyPage = () => {
                     onChange={handleName}
                     placeholder="변경 할 이름 입력"
                   />
-                  <Input
+                  {/* <Input
                     type="email"
                     value={modifyEmail}
                     onChange={handelEmail}
                     placeholder="변경 할 이메일 입력"
-                  />
+                  /> */}
                 </div>
                 <div>
                   <Button onClick={handleModify} type="submit">

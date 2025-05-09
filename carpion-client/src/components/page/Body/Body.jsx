@@ -39,6 +39,7 @@ const Body = () => {
   const [modifyNickName, setModifyNickName] = useState("");
   const [isUpdate, setIsUpdate] = useState(false);
   const [isPageLoad, setIsPageLoad] = useState(true);
+  const [userLevel, setUserLevel] = useState("");
 
   const [reservationList, setReservationList] = useState(null);
   const [reservations, setReservations] = useState([]);
@@ -163,12 +164,22 @@ const Body = () => {
   useEffect(() => {
     if (auth.accessToken) {
       axios
+        .get("http://localhost/mypage/selectNickname", {
+          headers: { Authorization: `Bearer ${auth.accessToken}` },
+        })
+        .then((res) => {
+          setUserLevel(res.data.userLevel);
+        });
+    }
+  }, [auth.accessToken]);
+  useEffect(() => {
+    if (auth.accessToken) {
+      axios
         .get("http://localhost/users/getUserInfo", {
           headers: { Authorization: `Bearer ${auth.accessToken}` },
         })
         .then((res) => {
           const url = res.data.fileUrl;
-          console.log("DB에서 받아온 이미지:", url);
           setSelectedImage(url || "/img/mypage/profile.logo.png");
         })
         .catch(() => {
@@ -186,7 +197,6 @@ const Body = () => {
   const handleProfileSubmit = () => {
     const formData = new FormData();
     formData.append("file", imageFile);
-    console.log("토큰 확인:", auth.accessToken);
     if (auth.accessToken) {
       axios
         .put("http://localhost/users/update-profile", formData, {
@@ -195,8 +205,6 @@ const Body = () => {
           },
         })
         .then((response) => {
-          console.log("사진업데이트", response.data.fileUrl);
-          console.log("사진업데이트", response.data);
           const newUrl = response.data.fileUrl;
           setSelectedImage(newUrl);
           localStorage.setItem("profileImg_${auth.username}", newUrl);
@@ -220,7 +228,7 @@ const Body = () => {
   return (
     <Container>
       <div>
-        <GradeText>{auth.nickname}님 안녕하세요</GradeText>
+        <GradeText>{nickName}님 안녕하세요</GradeText>
       </div>
 
       <Box>
@@ -258,7 +266,9 @@ const Body = () => {
         </FirstBox>
 
         <InfoSection>
-          <GradeText>{auth.nickname}님 등급은 브론즈 입니다.</GradeText>
+          <GradeText>
+            {nickName}님 등급은 {userLevel} 입니다.
+          </GradeText>
         </InfoSection>
 
         {activeForm === "nickName" && (
