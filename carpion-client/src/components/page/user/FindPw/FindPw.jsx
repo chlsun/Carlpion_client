@@ -179,125 +179,131 @@ const FindPw = () => {
             }
         });
 
-        const handleSendVerifyEmail = () => {
-            if (isProgressSendEmail) return;
-            if (!isValid.email) {
-                document.getElementById("email").focus();
-                return;
-            }
+        if (focusedElement) {
+            focusedElement.focus();
+        }
 
-            setShowVerifyCodeInput(true);
-            setIsProgressSendEmail(true);
-            axios
-                .post(`http://localhost:80/auth/send-email`, { email: inputValues.email, type: "비밀번호 찾기" })
-                .then(() => {
-                    setIsSendVerifyEmail(true);
-                    setIsProgressSendEmail(false);
-                    setSendVerifyEmailMessage("인증 메일이 전송 되었습니다.");
-                })
-                .catch((error) => {
-                    setIsSendVerifyEmail(false);
-                    setIsProgressSendEmail(false);
-                    setSendVerifyEmailMessage(error.response.data.cause);
-                });
-        };
-
-        const handleSubmit = (e) => {
-            e.preventDefault();
-            if (isProgress) return;
-            if (!validateForm()) return;
-            setIsProgress(true);
-            axios
-                .post(`http://localhost:80/auth/find-pw`, { ...inputValues, code: verifyCode })
-                .then(() => {
-                    navi("/find-pw-done", { state: { email: inputValues.email } });
-                })
-                .catch((error) => {
-                    error.response.data.code && setExceptionMessage(error.response.data.code);
-                    error.response.data.cause && setExceptionMessage(error.response.data.cause);
-                    setIsProgress(false);
-                });
-        };
-
-        return (
-            <>
-                <div className="size-full min-h-screen bg-gray-100 dark:bg-gray-900 flex justify-center select-none">
-                    <div className="w-xl px-24 my-48 bg-white dark:bg-gray-800 border-2 border-maincolor rounded-2xl flex flex-col justify-center items-center">
-                        <section className="mt-24 mb-16 font-maintheme text-5xl text-maincolor">비밀번호 찾기</section>
-                        <section className="w-full h-auto">
-                            <ul className="flex flex-col gap-6">
-                                {inputFields.map((field) => (
-                                    <li key={field.id} className="flex flex-col">
-                                        <label htmlFor={field.id} className="ml-1 font-maintheme text-2xl text-maincolor">
-                                            {field.label}
-                                        </label>
-                                        <input
-                                            id={field.id}
-                                            type={field.type}
-                                            placeholder={field.placeholder}
-                                            value={inputValues[field.id]}
-                                            onChange={handleChange}
-                                            className="p-2 mt-1 border-2 border-gray-300 rounded-md font-Pretendard text-lg"
-                                        />
-                                        {field.id === "email" ? (
-                                            <>
-                                                <div className="w-full mt-2 flex justify-between">
-                                                    <button
-                                                        type="button"
-                                                        onClick={handleSendVerifyEmail}
-                                                        className={`px-2 py-1 border-2 border-maincolor rounded-md font-maintheme text-md text-maincolor tracking-wider ${
-                                                            isProgressSendEmail
-                                                                ? "opacity-50 cursor-progress"
-                                                                : "hover:underline hover:decoration-2 hover:underline-offset-3 active:bg-maincolor active:text-white cursor-pointer"
-                                                        }`}
-                                                    >
-                                                        이메일 인증
-                                                    </button>
-                                                    {showVerifyCodeInput ? (
-                                                        <input
-                                                            id="code"
-                                                            type="text"
-                                                            onChange={handleCodeChange}
-                                                            placeholder="메일로 발송된 인증번호를 입력하세요."
-                                                            className="w-68 px-2 py-1 border-2 border-gray-300 rounded-md font-Pretendard text-md"
-                                                        />
-                                                    ) : (
-                                                        <></>
-                                                    )}
-                                                </div>
-                                                {sendVerifyEmailMessage && (
-                                                    <p className={`mt-1 ml-1 font-Pretendard text-lg ${isSendVerifyEmail ? "text-green-500" : "text-red-500"}`}>{sendVerifyEmailMessage}</p>
-                                                )}
-                                            </>
-                                        ) : (
-                                            <></>
-                                        )}
-                                        {isEmptyMessage[field.id] && <p className="mt-1 ml-1 text-red-500 font-Pretendard text-lg">{isEmptyMessage[field.id]}</p>}
-                                        {fieldMessages[field.id] && <p className={`mt-1 ml-1 font-Pretendard text-lg text-red-500`}>{isValid[field.id] ? "" : fieldMessages[field.id]}</p>}
-                                    </li>
-                                ))}
-                            </ul>
-                        </section>
-                        {exceptionMessage && (
-                            <section className="mt-12 flex justify-center">
-                                <p className="font-Pretendard text-lg text-red-500">{exceptionMessage}</p>
-                            </section>
-                        )}
-                        <section className="w-full h-auto flex justify-center">
-                            <button
-                                onClick={handleSubmit}
-                                className={`w-56 h-24 mt-12 mb-8 border-2 border-maincolor rounded-full font-maintheme text-maincolor text-3xl ${
-                                    isProgress ? "opacity-50 cursor-progress" : "hover:bg-maincolor hover:text-white cursor-pointer"
-                                }`}
-                            >
-                                비밀번호 찾기
-                            </button>
-                        </section>
-                    </div>
-                </div>
-            </>
-        );
+        return isValid;
     };
+
+    const handleSendVerifyEmail = () => {
+        if (isProgressSendEmail) return;
+        if (!isValid.email) {
+            document.getElementById("email").focus();
+            return;
+        }
+
+        setShowVerifyCodeInput(true);
+        setIsProgressSendEmail(true);
+        axios
+            .post(`http://localhost:80/auth/send-email`, { email: inputValues.email, type: "비밀번호 찾기" })
+            .then(() => {
+                setIsSendVerifyEmail(true);
+                setIsProgressSendEmail(false);
+                setSendVerifyEmailMessage("인증 메일이 전송 되었습니다.");
+            })
+            .catch((error) => {
+                setIsSendVerifyEmail(false);
+                setIsProgressSendEmail(false);
+                setSendVerifyEmailMessage(error.response.data.cause);
+            });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (isProgress) return;
+        if (!validateForm()) return;
+        setIsProgress(true);
+        axios
+            .post(`http://localhost:80/auth/find-pw`, { ...inputValues, code: verifyCode })
+            .then(() => {
+                navi("/find-pw-done", { state: { email: inputValues.email } });
+            })
+            .catch((error) => {
+                error.response.data.code && setExceptionMessage(error.response.data.code);
+                error.response.data.cause && setExceptionMessage(error.response.data.cause);
+                setIsProgress(false);
+            });
+    };
+
+    return (
+        <>
+            <div className="size-full min-h-screen bg-gray-100 dark:bg-gray-900 flex justify-center select-none">
+                <div className="w-xl px-24 my-48 bg-white dark:bg-gray-800 border-2 border-maincolor rounded-2xl flex flex-col justify-center items-center">
+                    <section className="mt-24 mb-16 font-maintheme text-5xl text-maincolor">비밀번호 찾기</section>
+                    <section className="w-full h-auto">
+                        <ul className="flex flex-col gap-6">
+                            {inputFields.map((field) => (
+                                <li key={field.id} className="flex flex-col">
+                                    <label htmlFor={field.id} className="ml-1 font-maintheme text-2xl text-maincolor">
+                                        {field.label}
+                                    </label>
+                                    <input
+                                        id={field.id}
+                                        type={field.type}
+                                        placeholder={field.placeholder}
+                                        value={inputValues[field.id]}
+                                        onChange={handleChange}
+                                        className="p-2 mt-1 border-2 border-gray-300 rounded-md font-Pretendard text-lg"
+                                    />
+                                    {field.id === "email" ? (
+                                        <>
+                                            <div className="w-full mt-2 flex justify-between">
+                                                <button
+                                                    type="button"
+                                                    onClick={handleSendVerifyEmail}
+                                                    className={`px-2 py-1 border-2 border-maincolor rounded-md font-maintheme text-md text-maincolor tracking-wider ${
+                                                        isProgressSendEmail
+                                                            ? "opacity-50 cursor-progress"
+                                                            : "hover:underline hover:decoration-2 hover:underline-offset-3 active:bg-maincolor active:text-white cursor-pointer"
+                                                    }`}
+                                                >
+                                                    이메일 인증
+                                                </button>
+                                                {showVerifyCodeInput ? (
+                                                    <input
+                                                        id="code"
+                                                        type="text"
+                                                        onChange={handleCodeChange}
+                                                        placeholder="메일로 발송된 인증번호를 입력하세요."
+                                                        className="w-68 px-2 py-1 border-2 border-gray-300 rounded-md font-Pretendard text-md"
+                                                    />
+                                                ) : (
+                                                    <></>
+                                                )}
+                                            </div>
+                                            {sendVerifyEmailMessage && (
+                                                <p className={`mt-1 ml-1 font-Pretendard text-lg ${isSendVerifyEmail ? "text-green-500" : "text-red-500"}`}>{sendVerifyEmailMessage}</p>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <></>
+                                    )}
+                                    {isEmptyMessage[field.id] && <p className="mt-1 ml-1 text-red-500 font-Pretendard text-lg">{isEmptyMessage[field.id]}</p>}
+                                    {fieldMessages[field.id] && <p className={`mt-1 ml-1 font-Pretendard text-lg text-red-500`}>{isValid[field.id] ? "" : fieldMessages[field.id]}</p>}
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                    {exceptionMessage && (
+                        <section className="mt-12 flex justify-center">
+                            <p className="font-Pretendard text-lg text-red-500">{exceptionMessage}</p>
+                        </section>
+                    )}
+                    <section className="w-full h-auto flex justify-center">
+                        <button
+                            onClick={handleSubmit}
+                            className={`w-56 h-24 mt-12 mb-8 border-2 border-maincolor rounded-full font-maintheme text-maincolor text-3xl ${
+                                isProgress ? "opacity-50 cursor-progress" : "hover:bg-maincolor hover:text-white cursor-pointer"
+                            }`}
+                        >
+                            비밀번호 찾기
+                        </button>
+                    </section>
+                </div>
+            </div>
+        </>
+    );
 };
 
 export default FindPw;
