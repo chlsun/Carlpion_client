@@ -41,12 +41,33 @@ function CommunityDetail() {
     fetchPost();
   }, [reviewNo]);
 
-  const handleLike = () => {
-    if (!liked) {
+  const handleLike = async () => {
+    if (!reviewNo) return;
+
+    if (liked) {
+      alert("이미 추천하셨습니다!");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await axios.post(
+        `http://localhost:80/reviews/${reviewNo}`,
+        {},
+        {
+          headers: accessToken
+            ? { Authorization: `Bearer ${accessToken}` }
+            : {},
+        }
+      );
+
       setLikes(likes + 1);
       setLiked(true);
-    } else {
-      alert("이미 추천하셨습니다!");
+    } catch (err) {
+      console.error("추천 실패:", err);
+      alert("추천을 처리하는 데 실패했습니다.");
+    } finally {
+      setLoading(false);
     }
   };
 

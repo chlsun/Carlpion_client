@@ -41,60 +41,59 @@ import PaymentHistoryPage from "./components/page/PaymentHistoryPage/PaymentHist
 import ReservationComponent from "./components/page/Body/module/ReservationComponent";
 import RentHistoryPage from "./components/page/RentHistoryPage/RentHistoryPage";
 import MainPage2 from "./components/page/mainpage/MainPage2";
+import Map from "./components/page/Board/Map/Map";
 
 function App() {
-   return (
-      <div id="mypage" style={{ backgroundColor: "#fdfdfd" }}>
-         <AuthProvider>
-            <AuthSocialProvider>
-               <Header />
-               <Routes>
-                  <Route path="/" element={<MainPage2 />} />
-                  <Route path="/error" element={<ErrorPage />} />
-                  <Route path="/start" element={<Login />} />
-                  <Route path="/login-redirect" element={<LoginRedirect />} />
-                  <Route path="/sign-up" element={<SignUp />} />
-                  <Route path="/sign-up-done" element={<SignUpCompleted />} />
-                  <Route path="/sign-up-social" element={<SignUpSocial />} />
-                  <Route path="/find-id" element={<FindId />} />
-                  <Route path="/find-pw" element={<FindPw />} />
-                  <Route path="/find-pw-done" element={<FindPwCompleted />} />
-                  <Route path="/admin" element={<AdminPage />}>
-                     <Route index element={<Navigate to="model/1" replace />} />
-                     <Route path="model/:page" element={<ModelPage />} />
-                     <Route path="car/:page" element={<CarPage />} />
-                  </Route>
-                  <Route path="/rent" element={<CarRentPage />} />
-                  <Route path="/rent/:id" element={<RentalReservation />} />
-                  <Route
-                     path="/payment-history"
-                     element={<PaymentHistoryPage />}
-                  />
-                  <Route path="/rent-history" element={<RentHistoryPage />} />
-                  <Route path="/mypage" element={<Body />} />
-                  <Route path="/modify" element={<MainMyPage />} />
-                  <Route path="/point" element={<Point />} />
-                  <Route path="/reply" element={<Reply />} />
-                  <Route path="/cb" element={<CommunityBoard />} />
-                  <Route path="/cd/:reviewNo" element={<CommunityDetail />} />
-                  <Route path="/cw" element={<CommunityWrite />} />
-                  <Route path="/ce/:reviewNo" element={<CommunityEdit />} />
-                  <Route path="/nb" element={<NoticeBoard />} />
-                  <Route path="/nd/:noticeNo" element={<NoticeDetail />} />
-                  <Route path="/nw" element={<NoticeWrite />} />
-                  <Route path="/ne/:noticeNo" element={<NoticeEdit />} />
-                  <Route path="/rb" element={<ReportBoard />} />
-                  <Route path="/rd/:reportNo" element={<ReportDetail />} />
-                  <Route path="/rw" element={<ReportWrite />} />
-                  <Route path="/re/:reportNo" element={<ReportEdit />} />
-                  <Route path="/inquiryCheck" element={<InquiryCheck />} />
-                  <Route path="/reviewCheck" element={<ReviewCheck />} />
-               </Routes>
-               <Footer />
-            </AuthSocialProvider>
-         </AuthProvider>
-      </div>
-   );
+  return (
+    <div id="mypage" style={{ backgroundColor: "#fdfdfd" }}>
+      <AuthProvider>
+        <AuthSocialProvider>
+          <Header />
+          <Routes>
+            <Route path="/" element={<MainPage2 />} />
+            <Route path="/error" element={<ErrorPage />} />
+            <Route path="/start" element={<Login />} />
+            <Route path="/login-redirect" element={<LoginRedirect />} />
+            <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/sign-up-done" element={<SignUpCompleted />} />
+            <Route path="/sign-up-social" element={<SignUpSocial />} />
+            <Route path="/find-id" element={<FindId />} />
+            <Route path="/find-pw" element={<FindPw />} />
+            <Route path="/find-pw-done" element={<FindPwCompleted />} />
+            <Route path="/admin" element={<AdminPage />}>
+              <Route index element={<Navigate to="model/1" replace />} />
+              <Route path="model/:page" element={<ModelPage />} />
+              <Route path="car/:page" element={<CarPage />} />
+            </Route>
+            <Route path="/rent" element={<CarRentPage />} />
+            <Route path="/rent/:id" element={<RentalReservation />} />
+            <Route path="/payment-history" element={<PaymentHistoryPage />} />
+            <Route path="/rent-history" element={<RentHistoryPage />} />
+            <Route path="/mypage" element={<Body />} />
+            <Route path="/modify" element={<MainMyPage />} />
+            <Route path="/point" element={<Point />} />
+            <Route path="/reply" element={<Reply />} />
+            <Route path="/cb" element={<CommunityBoard />} />
+            <Route path="/cd/:reviewNo" element={<CommunityDetail />} />
+            <Route path="/cw" element={<CommunityWrite />} />
+            <Route path="/ce/:reviewNo" element={<CommunityEdit />} />
+            <Route path="/nb" element={<NoticeBoard />} />
+            <Route path="/nd/:noticeNo" element={<NoticeDetail />} />
+            <Route path="/nw" element={<NoticeWrite />} />
+            <Route path="/ne/:noticeNo" element={<NoticeEdit />} />
+            <Route path="/rb" element={<ReportBoard />} />
+            <Route path="/rd/:reportNo" element={<ReportDetail />} />
+            <Route path="/rw" element={<ReportWrite />} />
+            <Route path="/re/:reportNo" element={<ReportEdit />} />
+            <Route path="/inquiryCheck" element={<InquiryCheck />} />
+            <Route path="/reviewCheck" element={<ReviewCheck />} />
+            <Route path="/station-info" element={<Map />} />
+          </Routes>
+          <Footer />
+        </AuthSocialProvider>
+      </AuthProvider>
+    </div>
+  );
 }
 
 export default App;

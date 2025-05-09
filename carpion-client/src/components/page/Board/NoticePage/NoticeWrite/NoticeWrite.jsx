@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../Context/AuthContext";
 import { Editor } from "@toast-ui/react-editor";
+import axios from "axios";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/i18n/ko-kr";
 import wpstyles from "./NoticeWrite.module.css";
