@@ -6,103 +6,86 @@ import { AuthContext } from "../../page/Context/AuthContext";
 import { AuthSocialContext } from "../../page/Context/AuthSocialContext";
 
 const Header = () => {
-   const navi = useNavigate();
+    const navi = useNavigate();
 
-   const [nickname, setNickname] = useState(null);
+    const [nickname, setNickname] = useState(null);
 
-   const [longNickname, setLongNickname] = useState(null);
+    const [longNickname, setLongNickname] = useState(null);
 
-   const [isScrolled, setIsScrolled] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
 
-   const [openMenu, setOpenMenu] = useState(0);
+    const [openMenu, setOpenMenu] = useState(0);
 
-   const { auth, isAdmin, logout } = useContext(AuthContext);
+    const { auth, isAdmin, logout } = useContext(AuthContext);
 
-   const { authSocial, socialLogout } = useContext(AuthSocialContext);
+    const { authSocial, socialLogout } = useContext(AuthSocialContext);
 
-   const handleScroll = useCallback(() => {
-      window.requestAnimationFrame(() => {
-         setIsScrolled(window.scrollY > 0);
-      });
-   }, []);
+    const handleScroll = useCallback(() => {
+        window.requestAnimationFrame(() => {
+            setIsScrolled(window.scrollY > 0);
+        });
+    }, []);
 
-   useEffect(() => {
-      window.addEventListener("scroll", handleScroll);
+    useEffect(() => {
+        window.addEventListener("scroll", handleScroll);
 
-      return () => {
-         window.removeEventListener("scroll", handleScroll);
-      };
-   }, [handleScroll]);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, [handleScroll]);
 
-   useEffect(() => {
-      if (!auth.nickname) {
-         setNickname(null);
-         setLongNickname(null);
-         return;
-      }
+    useEffect(() => {
+        if (!auth.nickname) {
+            setNickname(null);
+            setLongNickname(null);
+            return;
+        }
 
-      if (auth.nickname.length < 6) {
-         setNickname(auth.nickname);
-         setLongNickname(null);
-         return;
-      }
+        if (auth.nickname.length < 6) {
+            setNickname(auth.nickname);
+            setLongNickname(null);
+            return;
+        }
 
-      setLongNickname(auth.nickname.substring(0, 4) + "...");
-   }, [auth]);
+        setLongNickname(auth.nickname.substring(0, 4) + "...");
+    }, [auth]);
 
-   useEffect(() => {
-      if (!authSocial.nickname) {
-         setNickname(null);
-         setLongNickname(null);
-         return;
-      }
+    useEffect(() => {
+        if (!authSocial.nickname) {
+            setNickname(null);
+            setLongNickname(null);
+            return;
+        }
 
-      if (authSocial.nickname.length < 6) {
-         setNickname(authSocial.nickname);
-         setLongNickname(null);
-         return;
-      }
+        if (authSocial.nickname.length < 6) {
+            setNickname(authSocial.nickname);
+            setLongNickname(null);
+            return;
+        }
 
-      setLongNickname(authSocial.nickname.substring(0, 4) + "...");
-   }, [authSocial]);
+        setLongNickname(authSocial.nickname.substring(0, 4) + "...");
+    }, [authSocial]);
 
-   return (
-      <header
-         className={`w-full z-50 flex justify-center bg-white dark:bg-gray-800 shadow-sm border-b-2 border-maincolor fixed top-0 left-0 right-0 select-none ${
-            isScrolled ? "h-12" : "h-24"
-         }`}
-      >
-         <div className="w-7xl h-full flex justify-center">
-            <section className="w-2/6 h-full">
-               <div
-                  onClick={() => navi("/")}
-                  className="h-full flex justify-start items-center cursor-pointer"
-               >
-                  <img
-                     className={`cursor-pointer ${
-                        isScrolled ? "w-1/2 ml-8" : "w-full"
-                     }`}
-                     src={isScrolled ? Carlpion_Logo_TextOnly : Carlpion_Logo}
-                     alt="Carlpion_Logo"
-                  />
-               </div>
-            </section>
-            <section className="w-3/6 h-full flex justify-end items-center">
-               <ul className="w-144 h-full flex justify-evenly items-center">
-                  <li
-                     onMouseEnter={() => setOpenMenu(1)}
-                     onMouseLeave={() => setOpenMenu(0)}
-                     className="h-full flex items-center"
-                  >
-                     <label
-                        htmlFor=""
-                        className={`h-full flex items-center font-maintheme text-maincolor cursor-pointer hover:underline hover:decoration-2 hover:underline-offset-3 ${
-                           isScrolled ? "text-xl" : "text-3xl"
-                        }`}
-                     >
-                        칼피온
-                     </label>
-                     {openMenu === 1 && (
+    return (
+        <header className={`w-full z-50 flex justify-center bg-white dark:bg-gray-800 shadow-sm border-b-2 border-maincolor fixed top-0 left-0 right-0 select-none ${isScrolled ? "h-12" : "h-24"}`}>
+            <div className="w-7xl h-full flex justify-center">
+                <section className="w-2/6 h-full">
+                    <div onClick={() => navi("/")} className="h-full flex justify-start items-center cursor-pointer">
+                        <img className={`cursor-pointer ${isScrolled ? "w-1/2 ml-8" : "w-full"}`} src={isScrolled ? Carlpion_Logo_TextOnly : Carlpion_Logo} alt="Carlpion_Logo" />
+                    </div>
+                </section>
+                <section className="w-3/6 h-full flex justify-end items-center">
+                    <ul className="w-144 h-full flex justify-evenly items-center">
+                        <li onMouseEnter={() => setOpenMenu(1)} onMouseLeave={() => setOpenMenu(0)} className="h-full flex items-center">
+                            <label
+                                htmlFor=""
+                                className={`h-full flex items-center font-maintheme text-maincolor cursor-pointer hover:underline hover:decoration-2 hover:underline-offset-3 ${
+                                    isScrolled ? "text-xl" : "text-3xl"
+                                }`}
+                            >
+                                칼피온
+                            </label>
+                            {openMenu === 1 && (
                         <div
                            className={`w-full flex justify-center bg-white dark:bg-gray-800 border-b-2 border-maincolor shadow-sm absolute top-full left-0`}
                         >

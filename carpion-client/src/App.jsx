@@ -41,6 +41,7 @@ import PaymentHistoryPage from "./components/page/PaymentHistoryPage/PaymentHist
 import ReservationComponent from "./components/page/Body/module/ReservationComponent";
 import RentHistoryPage from "./components/page/RentHistoryPage/RentHistoryPage";
 import MainPage2 from "./components/page/mainpage/MainPage2";
+import BanPage from "./components/page/adminpage/BanPage/BanPage";
 
 function App() {
    return (
