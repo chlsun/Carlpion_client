@@ -13,6 +13,7 @@ export const InquiryBox = styled.div`
   margin-bottom: 24px;
   background-color: #f9f9f9;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
 `;
 
 export const Field = styled.div`

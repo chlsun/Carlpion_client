@@ -44,9 +44,6 @@ const Body = () => {
   const [reservations, setReservations] = useState([]);
   const navi = useNavigate();
 
-  /*  useEffect(() => {
-    setSelectedImage("/img/mypage/profile.logo.png");
-  }, []); */
   useEffect(() => {
     if (activeForm === "profile") {
       setTempImage(null);
@@ -210,6 +207,15 @@ const Body = () => {
         });
     }
   };
+
+  useEffect(() => {
+    if (!sessionStorage.getItem("accessToken")) {
+      alert("로그인이 필요합니다.");
+      navi("/start");
+    }
+  }, [auth.accessToken]);
+
+  if (auth.accessToken == null) return null;
 
   return (
     <Container>

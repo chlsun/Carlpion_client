@@ -3,7 +3,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
- 
   const inputFields = [
     {
       id: "username",
@@ -170,11 +169,17 @@ const SignUp = () => {
           [id]: validation.helpMessage || "",
         });
         setIsValid({ ...isValid, [id]: false });
-        setFieldMessages({ ...fieldMessages, [id]: validation.errorMessage });
+        setFieldMessages({
+          ...fieldMessages,
+          [id]: validation.errorMessage,
+        });
       } else {
         setHelpMessages({ ...helpMessages, [id]: "" });
         setIsValid({ ...isValid, [id]: true });
-        setFieldMessages({ ...fieldMessages, [id]: validation.successMessage });
+        setFieldMessages({
+          ...fieldMessages,
+          [id]: validation.successMessage,
+        });
       }
     }
   };

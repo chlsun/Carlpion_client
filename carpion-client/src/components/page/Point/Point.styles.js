@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const TableContainer = styled.div`
   display: flex;
-  padding: 196px 0 100px;
+  padding: 150px 0 100px;
   align-items: center;
   flex-direction: column;
 `;
