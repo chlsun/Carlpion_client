@@ -268,7 +268,6 @@ const SignUp = () => {
         isValidate = false;
       }
     });
-
     if (focusedElement) {
       focusedElement.focus();
     }
