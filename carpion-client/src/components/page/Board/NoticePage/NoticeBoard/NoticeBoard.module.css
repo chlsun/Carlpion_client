@@ -24,7 +24,7 @@
 
 .container {
   max-width: 900px;
-  margin: 0 auto 0;
+  margin: 0 auto;
   padding: 60px 32px;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
@@ -50,18 +50,18 @@
 }
 
 .writeButton {
-  padding: 12px 24px;
-  font-size: 16px;
-  background-color: #007bff;
+  background-color: #3498db;
   color: white;
+  padding: 10px 16px;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
+  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.3s ease;
 }
 
 .writeButton:hover {
-  background-color: #0062cc;
+  background-color: #2980b9;
 }
 
 .list {
@@ -106,6 +106,8 @@
   font-size: 14px;
   color: #888;
 }
+
+/* 페이지네이션 통일된 스타일 */
 .paginationWrapper {
   display: flex;
   justify-content: center;
@@ -120,7 +122,8 @@
   background-color: #fff;
   color: #333;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-size: 14px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .paginationButton:hover {
@@ -130,13 +133,17 @@
 .paginationButton.active {
   background-color: #3498db;
   color: white;
+  font-weight: bold;
+  border-color: #3498db;
 }
 
 .paginationButton:disabled {
   background-color: #f0f0f0;
+  color: #aaa;
   cursor: not-allowed;
 }
 
+/* 검색 관련 스타일 - 필요한 경우 */
 .searchWrapper {
   display: flex;
   flex-wrap: wrap;
@@ -170,19 +177,4 @@
 
 .searchButton:hover {
   background-color: #1a252f;
-}
-
-.writeButton {
-  background-color: #3498db;
-  color: white;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.writeButton:hover {
-  background-color: #2980b9;
 }

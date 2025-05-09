@@ -23,13 +23,12 @@ const PostCard = React.memo(
     createDate,
     count,
     likes,
-    reviewNo, // reviewNo를 받아옵니다
+    reviewNo,
     type,
   }) => {
-    const [fileUrls, setFileUrls] = useState([]); // fileUrls 상태 추가
+    const [fileUrls, setFileUrls] = useState([]);
 
     useEffect(() => {
-      // reviewNo를 사용해서 상세 정보를 가져옵니다.
       const fetchFileUrls = async () => {
         try {
           const response = await axios.get(
@@ -37,7 +36,6 @@ const PostCard = React.memo(
           );
           const data = response.data;
 
-          // 받은 데이터에서 fileUrls를 설정
           setFileUrls(data.fileUrls || []);
         } catch (err) {
           console.error("❌ 이미지 로딩 실패:", err);
@@ -47,11 +45,10 @@ const PostCard = React.memo(
       fetchFileUrls();
     }, [reviewNo]);
 
-    // 이미지 URL 설정
     const mainImage =
       fileUrls.length > 0
         ? `http://localhost:80/uploads/${fileUrls[0]}`
-        : defaultImg; // 기본 이미지
+        : defaultImg;
 
     const formattedDate = formatDate(createDate);
     const likeCount = likes ?? 0;

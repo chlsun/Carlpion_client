@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import nbstyles from "./NoticeBoard.module.css";
 import CustomerBanner from "/img/notice/안내.jpg";
-import { AuthContext } from "../../../Context/AuthContext"; // AuthContext import
+import { AuthContext } from "../../../Context/AuthContext";
 
 const NoticeItem = ({ notice }) => (
   <li className={nbstyles.item}>
@@ -19,22 +19,69 @@ const NoticeItem = ({ notice }) => (
 );
 
 const NoticeBoard = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialPage = parseInt(searchParams.get("page")) || 1;
+
   const [notices, setNotices] = useState([]);
-  const { isAdmin } = useContext(AuthContext); // AuthContext에서 isAdmin 값 가져오기
+  const [currentPage, setCurrentPage] = useState(initialPage);
+  const [totalPages, setTotalPages] = useState(1);
+  const [startBtn, setStartBtn] = useState(1);
+  const [endBtn, setEndBtn] = useState(1);
+  const itemsPerPage = 10;
+
+  const { isAdmin } = useContext(AuthContext);
 
   useEffect(() => {
-    const fetchNotices = async () => {
-      try {
-        const response = await axios.get("http://localhost:80/notice");
-        console.log(response.data);
-        setNotices(response.data.list);
-      } catch (error) {
-        console.error("데이터 로딩 실패:", error);
-      }
-    };
+    fetchNotices(currentPage);
+  }, [currentPage]);
 
-    fetchNotices();
-  }, []);
+  const fetchNotices = async (page) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:80/notice?page=${page}`
+      );
+      const data = response.data;
+      console.log("공지사항 응답:", data);
+      setNotices(data.list);
+      setTotalPages(data.maxPage);
+      setStartBtn(data.startBtn);
+      setEndBtn(data.endBtn);
+    } catch (error) {
+      console.error("데이터 로딩 실패:", error);
+    }
+  };
+
+  const handlePageChange = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+    setSearchParams({ page });
+  };
+
+  const getPageNumbers = () => {
+    let pages = [];
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        pages = [1, 2, 3, "...", totalPages];
+      } else if (currentPage >= totalPages - 2) {
+        pages = [1, "...", totalPages - 2, totalPages - 1, totalPages];
+      } else {
+        pages = [
+          1,
+          "...",
+          currentPage - 1,
+          currentPage,
+          currentPage + 1,
+          "...",
+          totalPages,
+        ];
+      }
+    }
+    return pages;
+  };
 
   return (
     <div className={nbstyles.noticeBoard}>
@@ -51,8 +98,7 @@ const NoticeBoard = () => {
             className={nbstyles.titleIcon}
           />
           <h2 className={nbstyles.title}>공지사항</h2>
-
-          {isAdmin && ( // isAdmin이 true일 때만 작성 버튼 보이기
+          {isAdmin && (
             <Link to="/nw" className={nbstyles.writeButton}>
               작성
             </Link>
@@ -68,6 +114,56 @@ const NoticeBoard = () => {
             ))
           )}
         </ul>
+
+        {/* Pagination */}
+        <div className={nbstyles.paginationWrapper}>
+          {currentPage > 3 && totalPages > 5 && (
+            <button
+              onClick={() => handlePageChange(1)}
+              className={nbstyles.paginationButton}
+            >
+              {"«"}
+            </button>
+          )}
+
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className={nbstyles.paginationButton}
+          >
+            {"<"}
+          </button>
+
+          {getPageNumbers().map((page, index) => (
+            <button
+              key={index}
+              onClick={() => handlePageChange(page)}
+              className={`${nbstyles.paginationButton} ${
+                currentPage === page ? nbstyles.active : ""
+              }`}
+              disabled={page === "..."}
+            >
+              {page}
+            </button>
+          ))}
+
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className={nbstyles.paginationButton}
+          >
+            {">"}
+          </button>
+
+          {currentPage < totalPages - 2 && totalPages > 5 && (
+            <button
+              onClick={() => handlePageChange(totalPages)}
+              className={nbstyles.paginationButton}
+            >
+              {"»"}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
