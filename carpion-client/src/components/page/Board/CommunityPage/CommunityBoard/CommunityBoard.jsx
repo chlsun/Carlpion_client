@@ -23,11 +23,36 @@ const PostCard = React.memo(
     createDate,
     count,
     likes,
-    images = [],
+    reviewNo, // reviewNo를 받아옵니다
     type,
-    reviewNo,
   }) => {
-    const mainImage = images.length > 0 ? images[0] : defaultImg;
+    const [fileUrls, setFileUrls] = useState([]); // fileUrls 상태 추가
+
+    useEffect(() => {
+      // reviewNo를 사용해서 상세 정보를 가져옵니다.
+      const fetchFileUrls = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:80/reviews/${reviewNo}`
+          );
+          const data = response.data;
+
+          // 받은 데이터에서 fileUrls를 설정
+          setFileUrls(data.fileUrls || []);
+        } catch (err) {
+          console.error("❌ 이미지 로딩 실패:", err);
+        }
+      };
+
+      fetchFileUrls();
+    }, [reviewNo]);
+
+    // 이미지 URL 설정
+    const mainImage =
+      fileUrls.length > 0
+        ? `http://localhost:80/uploads/${fileUrls[0]}`
+        : defaultImg; // 기본 이미지
+
     const formattedDate = formatDate(createDate);
     const likeCount = likes ?? 0;
 
@@ -84,7 +109,7 @@ const PostCard = React.memo(
 const CommunityBoard = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialPage = parseInt(searchParams.get("page")) || 1;
-  const initialViewType = searchParams.get("viewType") || "grid"; // URL에서 viewType을 가져옴
+  const initialViewType = searchParams.get("viewType") || "grid";
 
   const [viewType, setViewType] = useState(initialViewType);
   const [currentPage, setCurrentPage] = useState(initialPage);
@@ -122,7 +147,7 @@ const CommunityBoard = () => {
     (pageNumber) => {
       if (pageNumber < 1 || pageNumber > totalPages) return;
       setCurrentPage(pageNumber);
-      setSearchParams({ page: pageNumber, viewType }); // viewType을 URL에 저장
+      setSearchParams({ page: pageNumber, viewType });
     },
     [totalPages, setSearchParams, viewType]
   );
@@ -157,17 +182,11 @@ const CommunityBoard = () => {
 
   const handleViewTypeChange = (type) => {
     setViewType(type);
-    setSearchParams({ page: currentPage, viewType: type }); // viewType을 URL에 저장
+    setSearchParams({ page: currentPage, viewType: type });
   };
 
   return (
     <div className={cbstyles.BoardContainer}>
-      <div className={cbstyles.ActionWrapper}>
-        <Link to="/cw">
-          <button className={cbstyles.WriteButton}>작성하기</button>
-        </Link>
-      </div>
-
       <div className={cbstyles.ButtonGroup}>
         <button
           className={`${cbstyles.ViewButton} ${

@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import nbstyles from "./NoticeBoard.module.css";
 import CustomerBanner from "/img/notice/안내.jpg";
+import { AuthContext } from "../../../Context/AuthContext"; // AuthContext import
 
 const NoticeItem = ({ notice }) => (
   <li className={nbstyles.item}>
@@ -19,13 +20,14 @@ const NoticeItem = ({ notice }) => (
 
 const NoticeBoard = () => {
   const [notices, setNotices] = useState([]);
+  const { isAdmin } = useContext(AuthContext); // AuthContext에서 isAdmin 값 가져오기
 
   useEffect(() => {
     const fetchNotices = async () => {
       try {
         const response = await axios.get("http://localhost:80/notice");
-        console.log(response.data); // 데이터 구조 확인
-        setNotices(response.data.list); // 'list'에 해당하는 배열을 상태로 저장
+        console.log(response.data);
+        setNotices(response.data.list);
       } catch (error) {
         console.error("데이터 로딩 실패:", error);
       }
@@ -50,9 +52,11 @@ const NoticeBoard = () => {
           />
           <h2 className={nbstyles.title}>공지사항</h2>
 
-          <Link to="/nw" className={nbstyles.writeButton}>
-            작성
-          </Link>
+          {isAdmin && ( // isAdmin이 true일 때만 작성 버튼 보이기
+            <Link to="/nw" className={nbstyles.writeButton}>
+              작성
+            </Link>
+          )}
         </div>
 
         <ul className={nbstyles.list}>

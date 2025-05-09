@@ -31,7 +31,7 @@
    position: relative;
 }
 
-.more-btn {
+#rent-history-list .more-btn {
    position: absolute;
    top: -34px;
    right: 10px;
@@ -42,7 +42,23 @@
    cursor: pointer;
    color: #333333;
 }
-.more-btn > svg {
+#rent-history-list .more-btn > svg {
+   fill: #333333;
+   margin-right: -8px;
+}
+
+#reservation-container .more-btn {
+   position: absolute;
+   top: -34px;
+   right: 10px;
+   font-size: 16px;
+   font-weight: 500;
+   display: flex;
+   align-items: center;
+   cursor: pointer;
+   color: #333333;
+}
+#reservation-container .more-btn > svg {
    fill: #333333;
    margin-right: -8px;
 }
