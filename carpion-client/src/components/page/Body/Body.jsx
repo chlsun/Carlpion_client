@@ -91,7 +91,6 @@ const Body = () => {
           },
         })
         .then((response) => {
-          //console.log("DB에서 받아온 예약 내역 ", response.data);
           setReservations(response.data);
         })
         .catch((error) => {
@@ -104,7 +103,6 @@ const Body = () => {
           },
         })
         .then((result) => {
-          console.log(result);
           setReservationList(result.data);
         })
         .catch((error) => {
@@ -115,7 +113,7 @@ const Body = () => {
 
   useEffect(() => {
     if (isUpdate && auth.accessToken) {
-      console.log(" 닉네임요청 보냅니다");
+
       axios
         .get("http://localhost/mypage/selectNickname", {
           headers: {
@@ -123,7 +121,7 @@ const Body = () => {
           },
         })
         .then((result) => {
-          console.log("selectNickname 응답 :", result.data);
+
           updateNickName(result.data.nickName);
         });
       setIsUpdate(false);
@@ -151,7 +149,6 @@ const Body = () => {
           }
         )
         .then((response) => {
-          console.log("받아온 데이터:", response.data);
           setIsUpdate(true);
         })
         .catch((error) => {
