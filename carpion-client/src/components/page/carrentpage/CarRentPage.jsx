@@ -115,7 +115,6 @@ const CarRentPage = () => {
                },
             })
             .then((result) => {
-               console.log(result);
                setRentCarList(result.data);
             })
             .catch((error) => {

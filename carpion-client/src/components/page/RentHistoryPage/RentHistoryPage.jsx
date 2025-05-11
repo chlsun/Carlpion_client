@@ -62,7 +62,6 @@ const RentHistoryPage = () => {
           },
         })
         .then((result) => {
-          console.log(result.data);
           setReservationHistory(result.data);
         })
         .catch((error) => {
