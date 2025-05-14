@@ -36,7 +36,6 @@ const PaymentHistoryPage = () => {
             result.data.rentalDate,
             result.data.returnDate
           );
-          console.log(diffHours);
           setPaymentHistory({ ...result.data, diffHours });
         })
         .catch((error) => {

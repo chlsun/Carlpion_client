@@ -86,8 +86,6 @@ const CarRentMap = ({
          kakao.maps.event.addListener(marker, "click", function () {
             const rentCar = marker.data;
 
-            console.log(rentalDateYMDH, returnDateYMDH);
-
             axios
                .get(`http://localhost/rents/parking`, {
                   params: {
@@ -97,7 +95,6 @@ const CarRentMap = ({
                   },
                })
                .then((result) => {
-                  console.log(result.data);
                   setChooseRentCarList(result.data);
                   setIsRentalInfo(true);
                })
@@ -114,12 +111,8 @@ const CarRentMap = ({
       const rentalDateCng = new Date(rentalDateYMDHM.replace(" ", "T"));
       const returnDateCng = new Date(returnDateYMDHM.replace(" ", "T"));
 
-      console.log(rentalDateCng);
-
       const diffMSec = returnDateCng.getTime() - rentalDateCng.getTime();
       const diffHour = diffMSec / (60 * 60 * 1000);
-
-      console.log(diffHour);
 
       return diffHour;
    }

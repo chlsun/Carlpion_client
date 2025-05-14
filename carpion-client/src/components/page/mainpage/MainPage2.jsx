@@ -14,7 +14,6 @@ const MainPage2 = () => {
          .get("http://localhost/board/review")
          .then((result) => {
             setReviewList(result.data);
-            console.log(result);
          })
          .catch((error) => {
             console.log(error);
@@ -24,7 +23,6 @@ const MainPage2 = () => {
          .get("http://localhost/board/report")
          .then((result) => {
             setReportList(result.data);
-            console.log(result);
          })
          .catch((error) => {
             console.log(error);

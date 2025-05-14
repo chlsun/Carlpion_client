@@ -90,9 +90,6 @@ const CarPage = () => {
                setSelectedModelNo(null);
             })
             .catch((error) => {
-               const errors = error.response.data;
-               const firstErrorMessage = Object.values(errors)[0];
-               alert(firstErrorMessage);
                alert(error.response.data);
             });
       }
@@ -228,9 +225,7 @@ const CarPage = () => {
                setIsPageLoad(!isPageLoad);
             })
             .catch((error) => {
-               const errors = error.response.data;
-               const firstErrorMessage = Object.values(errors)[0];
-               alert(firstErrorMessage);
+               alert(error.response.data);
             });
       }
    };

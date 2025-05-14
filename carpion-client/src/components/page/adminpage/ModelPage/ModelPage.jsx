@@ -46,7 +46,6 @@ const ModelPage = () => {
                },
             })
             .then((result) => {
-               console.log(result);
                setCarModelList(result.data.carModelList);
                setPageInfo(result.data.pageInfo);
                const pageArray = [];
@@ -75,7 +74,6 @@ const ModelPage = () => {
    }, [auth, page, isPageLoad]);
 
    const setCarModelHandler = (e) => {
-      console.log(carModelInfo);
       e.preventDefault();
       if (!!!auth.accessToken) {
          alert("로그인 후 다시 시도해주세요");
@@ -106,7 +104,6 @@ const ModelPage = () => {
             },
          })
          .then((result) => {
-            console.log(result);
             setIsPageLoad(!isPageLoad);
             setCarModelInfo({
                carModel: "",
@@ -123,7 +120,7 @@ const ModelPage = () => {
             alert("차량 모델이 추가되었습니다.");
          })
          .catch((error) => {
-            console.log(error);
+            alert(error.response.data);
          });
    };
    const saveImgFile = (e) => {
@@ -161,13 +158,6 @@ const ModelPage = () => {
    };
 
    const updateRequest = () => {
-      console.log("updateImgFile : ", updateImgFile);
-      console.log("modelNo : ", updateCarModel.modelNo);
-      console.log("carModel : ", updateCarModel.carModel);
-      console.log("rentPrice : ", updateCarModel.rentPrice);
-      console.log("hourPrice : ", updateCarModel.hourPrice);
-      console.log("chargeType : ", updateCarModel.chargeType);
-      console.log("seatCount : ", updateCarModel.seatCount);
       if (
          !!!updateImgFile ||
          updateCarModel.modelNo == -1 ||
@@ -223,8 +213,6 @@ const ModelPage = () => {
          return;
       }
 
-      console.log(modelNo);
-
       axios
          .delete("http://localhost/admin/model", {
             headers: {
@@ -240,6 +228,7 @@ const ModelPage = () => {
             setIsPageLoad(!isPageLoad);
          })
          .catch((error) => {
+            console.log(error);
             alert(error.response.data);
          });
    };
