@@ -11,6 +11,7 @@ const CarRentMap = ({
    rentalDateYMDH,
    returnDateYMDH,
 }) => {
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
    const navi = useNavigate();
    const [isRentalInfo, setIsRentalInfo] = useState(false);
 
@@ -87,7 +88,7 @@ const CarRentMap = ({
             const rentCar = marker.data;
 
             axios
-               .get(`http://localhost/rents/parking`, {
+               .get(`${apiUrl}/rents/parking`, {
                   params: {
                      rentalDate: rentalDateYMDH ? rentalDateYMDH : null,
                      returnDate: returnDateYMDH ? returnDateYMDH : null,

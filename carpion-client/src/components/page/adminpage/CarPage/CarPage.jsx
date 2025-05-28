@@ -7,6 +7,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 const CarPage = () => {
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
    const { page } = useParams();
    const { auth } = useContext(AuthContext);
    const navi = useNavigate();
@@ -78,7 +79,7 @@ const CarPage = () => {
 
       if (auth.accessToken) {
          axios
-            .post("http://localhost/admin/car", rentCar, {
+            .post(`${apiUrl}/admin/car`, rentCar, {
                headers: {
                   Authorization: `Bearer ${auth.accessToken}`,
                },
@@ -106,7 +107,7 @@ const CarPage = () => {
    useEffect(() => {
       if (auth.accessToken) {
          axios
-            .get(`http://localhost/admin/model`, {
+            .get(`${apiUrl}/admin/model`, {
                headers: {
                   Authorization: `Bearer ${auth.accessToken}`,
                },
@@ -134,7 +135,7 @@ const CarPage = () => {
    useEffect(() => {
       if (auth.accessToken) {
          axios
-            .get(`http://localhost/admin/car/${page}`, {
+            .get(`${apiUrl}/admin/car/${page}`, {
                headers: {
                   Authorization: `Bearer ${auth.accessToken}`,
                },
@@ -204,7 +205,7 @@ const CarPage = () => {
       if (auth.accessToken) {
          axios
             .put(
-               "http://localhost/admin/car",
+               `${apiUrl}/admin/car`,
                {
                   carNo: rentCar.carNo,
                   modelNo: updateSelectedModelNo.value,
@@ -236,7 +237,7 @@ const CarPage = () => {
       }
       if (auth.accessToken) {
          axios
-            .delete("http://localhost/admin/car", {
+            .delete(`${apiUrl}/admin/car`, {
                params: { carNo: rentCar.carNo },
                headers: {
                   Authorization: `Bearer ${auth.accessToken}`,

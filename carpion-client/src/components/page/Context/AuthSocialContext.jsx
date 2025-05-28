@@ -4,53 +4,83 @@ import { useNavigate } from "react-router-dom";
 export const AuthSocialContext = createContext();
 
 export const AuthSocialProvider = ({ children }) => {
-    const navi = useNavigate();
+   const navi = useNavigate();
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
 
-    const [authSocial, setAuthSocial] = useState({
-        socialId: null,
-        platform: null,
-        nickname: null,
-        realname: null,
-        email: null,
-        accessToken: null,
-        isAuthenticated: false,
-    });
+   const [authSocial, setAuthSocial] = useState({
+      socialId: null,
+      platform: null,
+      nickname: null,
+      realname: null,
+      email: null,
+      accessToken: null,
+      isAuthenticated: false,
+   });
 
-    const socialLogin = (socialId, platform, nickname, realname, email, accessToken) => {
-        setAuthSocial({ socialId, platform, nickname, realname, email, accessToken, isAuthenticated: true });
+   const socialLogin = (
+      socialId,
+      platform,
+      nickname,
+      realname,
+      email,
+      accessToken
+   ) => {
+      setAuthSocial({
+         socialId,
+         platform,
+         nickname,
+         realname,
+         email,
+         accessToken,
+         isAuthenticated: true,
+      });
 
-        sessionStorage.setItem("socialId", socialId);
-        sessionStorage.setItem("platform", platform);
-        sessionStorage.setItem("nickname", nickname);
-        sessionStorage.setItem("realname", realname);
-        sessionStorage.setItem("email", email);
-        sessionStorage.setItem("accessToken", accessToken);
+      sessionStorage.setItem("socialId", socialId);
+      sessionStorage.setItem("platform", platform);
+      sessionStorage.setItem("nickname", nickname);
+      sessionStorage.setItem("realname", realname);
+      sessionStorage.setItem("email", email);
+      sessionStorage.setItem("accessToken", accessToken);
 
-        navi("/");
-    };
+      navi("/");
+   };
 
-    const socialLogout = () => {
-        const refreshToken = localStorage.getItem("refreshToken");
+   const socialLogout = () => {
+      const refreshToken = localStorage.getItem("refreshToken");
 
-        if (refreshToken && refreshToken !== "undefined") {
-            axios.post(`http://localhost:80/auth/logout`, {
-                refreshToken: refreshToken,
-            });
-        }
+      if (refreshToken && refreshToken !== "undefined") {
+         axios.post(`${apiUrl}/auth/logout`, {
+            refreshToken: refreshToken,
+         });
+      }
 
-        setAuthSocial({ socialId: null, platform: null, nickname: null, realname: null, email: null, accessToken: null, isAuthenticated: false });
+      setAuthSocial({
+         socialId: null,
+         platform: null,
+         nickname: null,
+         realname: null,
+         email: null,
+         accessToken: null,
+         isAuthenticated: false,
+      });
 
-        sessionStorage.removeItem("socialId");
-        sessionStorage.removeItem("platform");
-        sessionStorage.removeItem("nickname");
-        sessionStorage.removeItem("realname");
-        sessionStorage.removeItem("email");
-        sessionStorage.removeItem("accessToken");
-        sessionStorage.removeItem("username");
-        localStorage.removeItem("refreshToken");
+      sessionStorage.removeItem("socialId");
+      sessionStorage.removeItem("platform");
+      sessionStorage.removeItem("nickname");
+      sessionStorage.removeItem("realname");
+      sessionStorage.removeItem("email");
+      sessionStorage.removeItem("accessToken");
+      sessionStorage.removeItem("username");
+      localStorage.removeItem("refreshToken");
 
-        navi("/");
-    };
+      navi("/");
+   };
 
-    return <AuthSocialContext.Provider value={{ authSocial, socialLogin, socialLogout }}>{children}</AuthSocialContext.Provider>;
+   return (
+      <AuthSocialContext.Provider
+         value={{ authSocial, socialLogin, socialLogout }}
+      >
+         {children}
+      </AuthSocialContext.Provider>
+   );
 };

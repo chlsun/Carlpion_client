@@ -24,6 +24,7 @@ const ReservationComponent = ({
    setIsPageLoad,
    isPageLoad,
 }) => {
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
    const navi = useNavigate();
 
    const { auth } = useContext(AuthContext);
@@ -64,7 +65,7 @@ const ReservationComponent = ({
 
    const DeleteHandler = (impUID) => {
       axios
-         .delete(`http://localhost/rents/reservation/${impUID}`, {
+         .delete(`${apiUrl}/rents/reservation/${impUID}`, {
             headers: {
                Authorization: `Bearer ${auth.accessToken}`,
             },

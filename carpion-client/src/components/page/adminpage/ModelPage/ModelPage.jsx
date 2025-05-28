@@ -4,6 +4,7 @@ import "./ModelPage.css";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 const ModelPage = () => {
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
    const navi = useNavigate();
    const fileInputRef = useRef(null);
 
@@ -40,7 +41,7 @@ const ModelPage = () => {
    useEffect(() => {
       if (auth.accessToken) {
          axios
-            .get(`http://localhost/admin/model/${page}`, {
+            .get(`${apiUrl}/admin/model/${page}`, {
                headers: {
                   Authorization: `Bearer ${auth.accessToken}`,
                },
@@ -97,7 +98,7 @@ const ModelPage = () => {
       formData.append("seatCount", carModelInfo.seatCount);
       formData.append("file", imgFile);
       axios
-         .post("http://localhost/admin/model", formData, {
+         .post(`${apiUrl}/admin/model`, formData, {
             headers: {
                Authorization: `Bearer ${auth.accessToken}`,
                "Content-Type": "multipart/form-data",
@@ -179,7 +180,7 @@ const ModelPage = () => {
       formData.append("seatCount", updateCarModel.seatCount);
       formData.append("file", updateImgFile);
       axios
-         .put("http://localhost/admin/model", formData, {
+         .put(`${apiUrl}/admin/model`, formData, {
             headers: {
                Authorization: `Bearer ${auth.accessToken}`,
                "Content-Type": "multipart/form-data",
@@ -214,7 +215,7 @@ const ModelPage = () => {
       }
 
       axios
-         .delete("http://localhost/admin/model", {
+         .delete(`${apiUrl}/admin/model`, {
             headers: {
                Authorization: `Bearer ${auth.accessToken}`,
             },

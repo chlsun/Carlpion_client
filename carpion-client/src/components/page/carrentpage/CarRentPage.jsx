@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 const CarRentPage = () => {
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
    const navi = useNavigate();
 
    const [rentalDates, setRentalDates] = useState(null);
@@ -103,7 +104,7 @@ const CarRentPage = () => {
 
       if (checked && searchAddr && rentalDateYMDH && returnDateYMDH) {
          axios
-            .get("http://localhost/rents", {
+            .get(`${apiUrl}/rents`, {
                params: {
                   rentalDate: rentalDateYMDH
                      ? requestToStringByDate(rentalDateYMDH)

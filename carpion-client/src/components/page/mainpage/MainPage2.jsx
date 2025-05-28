@@ -5,13 +5,14 @@ import "./MainPage2.css";
 import axios from "axios";
 
 const MainPage2 = () => {
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
    const [reviewList, setReviewList] = useState(null);
    const [reportList, setReportList] = useState(null);
    const [noticeList, setNoticeList] = useState(null);
 
    useEffect(() => {
       axios
-         .get("http://localhost/board/review")
+         .get(`${apiUrl}/board/review`)
          .then((result) => {
             setReviewList(result.data);
          })
@@ -20,7 +21,7 @@ const MainPage2 = () => {
          });
 
       axios
-         .get("http://localhost/board/report")
+         .get(`${apiUrl}/board/report`)
          .then((result) => {
             setReportList(result.data);
          })
@@ -29,7 +30,7 @@ const MainPage2 = () => {
          });
 
       axios
-         .get("http://localhost/board/notice")
+         .get(`${apiUrl}/board/notice`)
          .then((result) => {
             setNoticeList(result.data);
          })
