@@ -34,10 +34,10 @@ const PaymentHistoryPage = () => {
             })
             .then((result) => {
                const diffHours = hourCalculator(
-                  result.data.rentalDate,
-                  result.data.returnDate
+                  result.data.item.rentalDate,
+                  result.data.item.returnDate
                );
-               setPaymentHistory({ ...result.data, diffHours });
+               setPaymentHistory({ ...result.data.item, diffHours });
             })
             .catch((error) => {
                console.log(error);

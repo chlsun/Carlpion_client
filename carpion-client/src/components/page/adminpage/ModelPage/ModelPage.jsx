@@ -47,20 +47,20 @@ const ModelPage = () => {
                },
             })
             .then((result) => {
-               setCarModelList(result.data.carModelList);
-               setPageInfo(result.data.pageInfo);
+               setCarModelList(result.data.item.carModelList);
+               setPageInfo(result.data.item.pageInfo);
                const pageArray = [];
 
                for (
-                  let i = result.data.pageInfo.startPage;
-                  i <= result.data.pageInfo.endPage;
+                  let i = result.data.item.pageInfo.startPage;
+                  i <= result.data.item.pageInfo.endPage;
                   i++
                ) {
                   pageArray.push(i);
                }
                setPageNumbers(pageArray);
 
-               if (result.data.carModelList.length == 0 && page > 1) {
+               if (result.data.item.carModelList.length == 0 && page > 1) {
                   navi(`/admin/model/${page - 1}`);
                }
             })
@@ -224,7 +224,6 @@ const ModelPage = () => {
             },
          })
          .then((result) => {
-            console.log(result);
             alert("삭제되었습니다.");
             setIsPageLoad(!isPageLoad);
          })

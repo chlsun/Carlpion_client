@@ -8,22 +8,6 @@ const ReportPage = () => {
    const [page, setPage] = useState(0);
    const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
 
-   // useEffect(() => {
-   //   axios
-   //     .get(`${apiUrl}/reports`,{
-   //       params: {
-   //         page: page,
-   //       },
-   //     })
-   //     .then((response) => {
-   //       console.log(response.data);
-   //       setBoards([...boards, ...response.data]);
-   //     })
-   //     .catch((err) => {
-   //       console.log(err);
-   //     });
-   // }, );
-
    return (
       <>
          <h3>문의 / 신고 게시판</h3>

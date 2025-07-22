@@ -26,7 +26,7 @@ const RentalReservation = () => {
          axios
             .get(`${apiUrl}/rents/details/${id}`)
             .then((result) => {
-               setRentCarInfo(result.data);
+               setRentCarInfo(result.data.item);
             })
             .catch((error) => {
                console.log(error);
@@ -60,7 +60,7 @@ const RentalReservation = () => {
                }
             );
 
-            const totalPrice = prepareRes.data.totalPrice;
+            const totalPrice = prepareRes.data.item.totalPrice;
 
             IMP.request_pay(
                {

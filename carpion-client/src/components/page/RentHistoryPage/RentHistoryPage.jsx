@@ -46,7 +46,7 @@ const RentHistoryPage = () => {
                },
             })
             .then((result) => {
-               setReservationList(result.data);
+               setReservationList(result.data.item);
             })
             .catch((error) => {
                console.log(error);
@@ -63,7 +63,7 @@ const RentHistoryPage = () => {
                },
             })
             .then((result) => {
-               setReservationHistory(result.data);
+               setReservationHistory(result.data.item);
             })
             .catch((error) => {
                console.log(error);

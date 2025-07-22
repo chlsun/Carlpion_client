@@ -92,7 +92,7 @@ const Body = () => {
                },
             })
             .then((response) => {
-               setReservations(response.data);
+               setReservations(response.data.item);
             })
             .catch((error) => {
                console.error("예약조회 실패 : ", error);
@@ -104,7 +104,7 @@ const Body = () => {
                },
             })
             .then((result) => {
-               setReservationList(result.data);
+               setReservationList(result.data.item);
             })
             .catch((error) => {
                console.log(error);

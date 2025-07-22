@@ -34,8 +34,7 @@ const Banner = () => {
       axios
          .get(`${apiUrl}/carModel`)
          .then((result) => {
-            setCarModelList(result.data);
-            console.log(result);
+            setCarModelList(result.data.item);
          })
          .catch((error) => {
             console.log(error);

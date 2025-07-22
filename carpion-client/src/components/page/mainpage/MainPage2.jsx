@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import Banner from "./include/banner";
 import BoardComponent from "./include/BoardComponent";
 import "./MainPage2.css";
 import axios from "axios";
+import Banner from "./include/Banner";
 
 const MainPage2 = () => {
    const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
+
+   console.log(apiUrl);
+   
    const [reviewList, setReviewList] = useState(null);
    const [reportList, setReportList] = useState(null);
    const [noticeList, setNoticeList] = useState(null);
@@ -14,7 +17,8 @@ const MainPage2 = () => {
       axios
          .get(`${apiUrl}/board/review`)
          .then((result) => {
-            setReviewList(result.data);
+            console.log(result.data.item);
+            setReviewList(result.data.item);
          })
          .catch((error) => {
             console.log(error);
@@ -23,7 +27,7 @@ const MainPage2 = () => {
       axios
          .get(`${apiUrl}/board/report`)
          .then((result) => {
-            setReportList(result.data);
+            setReportList(result.data.item);
          })
          .catch((error) => {
             console.log(error);
@@ -32,7 +36,7 @@ const MainPage2 = () => {
       axios
          .get(`${apiUrl}/board/notice`)
          .then((result) => {
-            setNoticeList(result.data);
+            setNoticeList(result.data.item);
          })
          .catch((error) => {
             console.log(error);

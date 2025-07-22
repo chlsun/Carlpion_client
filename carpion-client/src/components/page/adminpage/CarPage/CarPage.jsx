@@ -113,20 +113,19 @@ const CarPage = () => {
                },
             })
             .then((result) => {
-               const modelList = result.data;
+               console.log(result);
+               const modelList = result.data.item;
                const option = modelList.map((model) => {
                   return { value: model.modelNo, label: model.carModel };
                });
                setOptions([...options, ...option]);
             })
             .catch((error) => {
-               setOptions([...option]);
-            })
-            .catch((error) => {
-               console.log(error);
-               if (error.response.status == 403) {
+               if (error.response.status && error.response.status == 403) {
                   navi("/");
                   alert("운영자만 이용가능한 페이지입니다.");
+               } else {
+                  console.log(error);
                }
             });
       }
@@ -141,19 +140,19 @@ const CarPage = () => {
                },
             })
             .then((result) => {
-               setRentCarList(result.data.carModelList);
+               setRentCarList(result.data.item.carModelList);
                setRentCar({
                   modelNo: null,
                   carId: null,
                   parkingId: null,
                });
                setCarId("");
-               setPageInfo(result.data.pageInfo);
+               setPageInfo(result.data.item.pageInfo);
                const pageArray = [];
 
                for (
-                  let i = result.data.pageInfo.startPage;
-                  i <= result.data.pageInfo.endPage;
+                  let i = result.data.item.pageInfo.startPage;
+                  i <= result.data.item.pageInfo.endPage;
                   i++
                ) {
                   pageArray.push(i);

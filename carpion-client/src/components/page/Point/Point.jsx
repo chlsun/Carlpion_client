@@ -52,8 +52,6 @@ const Point = () => {
                const { pointList, totalCount } = response.data;
                setPointList(pointList);
                setTotalPages(Math.ceil(totalCount / limit));
-
-               console.log("포인트 : ", response.data);
             })
             .catch((error) => {
                console.log("포인트 실패 : ", error);

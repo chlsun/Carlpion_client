@@ -41,7 +41,7 @@ const ParkingModal = ({ setModalOpen, modalBackground, setParkingInfo }) => {
             })
             .then((result) => {
                console.log(result);
-               setParkingsInfo(result.data);
+               setParkingsInfo(result.data.item);
             })
             .catch((error) => {
                console.log(error);

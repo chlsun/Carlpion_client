@@ -116,7 +116,7 @@ const CarRentPage = () => {
                },
             })
             .then((result) => {
-               setRentCarList(result.data);
+               setRentCarList(result.data.item);
             })
             .catch((error) => {
                console.log(error);

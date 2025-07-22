@@ -96,7 +96,7 @@ const CarRentMap = ({
                   },
                })
                .then((result) => {
-                  setChooseRentCarList(result.data);
+                  setChooseRentCarList(result.data.item);
                   setIsRentalInfo(true);
                })
                .catch((error) => {

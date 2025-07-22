@@ -64,11 +64,8 @@ const ReportForm = () => {
             },
          })
          .then((result) => {
-            console.log(result);
-            if (result.status === 201 || result.status === 200) {
-               alert("게시글이 성공적으로 등록되었고 파일이 저장되었습니다!");
-               navi("/reports");
-            }
+            alert("게시글이 성공적으로 등록되었고 파일이 저장되었습니다!");
+            navi("/reports");
          })
          .catch((err) => {
             console.error(err);
