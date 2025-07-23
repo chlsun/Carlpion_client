@@ -6,7 +6,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
    const navi = useNavigate();
-   const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
+   const apiUrl = window.ENV?.API_URL || "https://my-carlpion-api-727992776618.asia-northeast3.run.app";
 
    const [auth, setAuth] = useState({
       username: null,

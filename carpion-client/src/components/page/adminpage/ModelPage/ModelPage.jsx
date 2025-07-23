@@ -4,7 +4,7 @@ import "./ModelPage.css";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 const ModelPage = () => {
-   const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
+   const apiUrl = window.ENV?.API_URL || "https://my-carlpion-api-727992776618.asia-northeast3.run.app";
    const navi = useNavigate();
    const fileInputRef = useRef(null);
 
@@ -66,7 +66,7 @@ const ModelPage = () => {
             })
             .catch((error) => {
                console.log(error);
-               if (error.response.status == 403) {
+               if (error.response?.status == 403) {
                   navi("/");
                   alert("운영자만 이용가능한 페이지입니다.");
                }
@@ -121,6 +121,7 @@ const ModelPage = () => {
             alert("차량 모델이 추가되었습니다.");
          })
          .catch((error) => {
+            console.log(error);
             alert(error.response.data);
          });
    };

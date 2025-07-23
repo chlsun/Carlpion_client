@@ -112,6 +112,7 @@
    display: flex;
    flex-wrap: wrap;
    padding: 78px 260px 0;
+   background-color: #ffffff;
 }
 
 #car-rent-page .car-list .rent-car {

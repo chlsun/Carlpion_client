@@ -5,7 +5,7 @@ export const AuthSocialContext = createContext();
 
 export const AuthSocialProvider = ({ children }) => {
    const navi = useNavigate();
-   const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
+   const apiUrl = window.ENV?.API_URL || "https://my-carlpion-api-727992776618.asia-northeast3.run.app";
 
    const [authSocial, setAuthSocial] = useState({
       socialId: null,

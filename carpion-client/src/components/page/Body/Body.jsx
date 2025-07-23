@@ -30,7 +30,7 @@ import ReservationComponent from "./module/ReservationComponent";
 import RentHistoryComponent from "./module/RentHistoryComponent";
 
 const Body = () => {
-   const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
+   const apiUrl = window.ENV?.API_URL || "https://my-carlpion-api-727992776618.asia-northeast3.run.app";
    const { auth, updateNickName } = useContext(AuthContext);
    const [activeForm, setActiveForm] = useState("");
    const [selectedImage, setSelectedImage] = useState(null);

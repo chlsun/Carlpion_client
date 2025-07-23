@@ -37,7 +37,7 @@ const RentHistoryComponent = (props) => {
       return date.slice(0, -3);
    }
 
-   if (props.rentHistory.length == 0) {
+   if (!props.rentHistory || props.rentHistory?.length == 0) {
       return (
          <div id="no-search">
             <img src="/img/notFound_car.png" alt="" />
@@ -54,7 +54,7 @@ const RentHistoryComponent = (props) => {
                <Arrow />
                <Arrow />
             </p>
-            {props.rentHistory.slice(0, 3).map((rent) => (
+            {props.rentHistory?.slice(0, 3).map((rent) => (
                <div className="rent-history" key={rent.reservationId}>
                   <div className="left">
                      <div className="model-name">

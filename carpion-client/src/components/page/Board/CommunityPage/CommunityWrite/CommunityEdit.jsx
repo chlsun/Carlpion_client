@@ -8,7 +8,7 @@ import "@toast-ui/editor/dist/i18n/ko-kr";
 import wpstyles from "./Community.module.css";
 
 function ReviewEdit() {
-   const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
+   const apiUrl = window.ENV?.API_URL || "https://my-carlpion-api-727992776618.asia-northeast3.run.app";
    const editorRef = useRef();
    const navigate = useNavigate();
    const { auth } = useContext(AuthContext);

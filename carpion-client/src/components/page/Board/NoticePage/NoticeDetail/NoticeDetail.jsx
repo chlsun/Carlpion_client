@@ -6,7 +6,7 @@ import ndstyles from "./NoticeDetail.module.css";
 import NoticeReply from "../NoticeReply/NoticeReply";
 
 function NoticeDetail() {
-   const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
+   const apiUrl = window.ENV?.API_URL || "https://my-carlpion-api-727992776618.asia-northeast3.run.app";
    const { noticeNo } = useParams();
    const { auth, isAdmin } = useContext(AuthContext);
    const { accessToken, nickname } = auth;
