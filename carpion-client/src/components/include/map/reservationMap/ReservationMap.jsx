@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 import "./ReservationMap.css";
 
-const { kakao } = window;
 const ReservationMap = ({ rentCarInfo, reservationDate, handlePayment }) => {
    const [totalPrice, setTotalPrice] = useState(0);
 
    useEffect(() => {
+      if (!window.kakao || !window.kakao.maps) {
+            return; 
+        }
+
       if (rentCarInfo) {
+         const { kakao } = window;
+
          setTotalPrice(
             rentCarInfo[0].carModel.rentPrice +
                rentCarInfo[0].carModel.hourPrice * reservationDate.diffHour

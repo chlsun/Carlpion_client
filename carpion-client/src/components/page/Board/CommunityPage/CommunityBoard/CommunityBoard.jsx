@@ -27,7 +27,7 @@ const PostCard = React.memo(
       type,
    }) => {
       const [fileUrls, setFileUrls] = useState([]);
-      const apiUrl = window.ENV?.API_URL || "https://my-carlpion-api-727992776618.asia-northeast3.run.app";
+      const apiUrl = window.ENV?.API_URL || "http://localhost:8080";
 
       useEffect(() => {
          const fetchFileUrls = async () => {

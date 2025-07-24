@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 const CarRentPage = () => {
-   const apiUrl = window.ENV?.API_URL || "https://my-carlpion-api-727992776618.asia-northeast3.run.app";
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8080";
    const navi = useNavigate();
 
    const [rentalDates, setRentalDates] = useState(null);

@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
-   const apiUrl = window.ENV?.API_URL || "https://my-carlpion-api-727992776618.asia-northeast3.run.app";
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8080";
    const inputFields = [
       {
          id: "username",

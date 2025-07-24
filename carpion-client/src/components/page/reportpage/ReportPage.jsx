@@ -6,7 +6,7 @@ const ReportPage = () => {
    const navi = useNavigate();
    const [boards, setBoards] = useState([]);
    const [page, setPage] = useState(0);
-   const apiUrl = window.ENV?.API_URL || "https://my-carlpion-api-727992776618.asia-northeast3.run.app";
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8080";
 
    return (
       <>

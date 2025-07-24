@@ -6,7 +6,7 @@ import cdstyles from "./CommunityDetail.module.css";
 import CommunityReply from "../CommunityReply/CommunityReply";
 
 function CommunityDetail() {
-   const apiUrl = window.ENV?.API_URL || "https://my-carlpion-api-727992776618.asia-northeast3.run.app";
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8080";
    const { reviewNo } = useParams();
    const { auth, isAdmin } = useContext(AuthContext);
    const { accessToken, nickname } = auth;

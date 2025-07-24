@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { AuthSocialContext } from "../../Context/AuthSocialContext";
 
 const LoginRedirect = () => {
-   const apiUrl = window.ENV?.API_URL || "https://my-carlpion-api-727992776618.asia-northeast3.run.app";
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8080";
    const navi = useNavigate();
 
    const [searchParams, setSearchParams] = useSearchParams();

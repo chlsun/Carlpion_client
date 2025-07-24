@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 
 const Login = () => {
-   const apiUrl = window.ENV?.API_URL || "https://my-carlpion-api-727992776618.asia-northeast3.run.app";
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8080";
+   console.log("API URL:", apiUrl);
    const inputFields = [
       {
          id: "username",

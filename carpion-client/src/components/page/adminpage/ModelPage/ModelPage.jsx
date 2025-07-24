@@ -4,7 +4,7 @@ import "./ModelPage.css";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 const ModelPage = () => {
-   const apiUrl = window.ENV?.API_URL || "https://my-carlpion-api-727992776618.asia-northeast3.run.app";
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8080";
    const navi = useNavigate();
    const fileInputRef = useRef(null);
 

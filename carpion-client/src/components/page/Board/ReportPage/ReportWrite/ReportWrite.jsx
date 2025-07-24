@@ -8,7 +8,7 @@ import "@toast-ui/editor/dist/i18n/ko-kr";
 import wpstyles from "./ReportWrite.module.css";
 
 function ReportWrite() {
-   const apiUrl = window.ENV?.API_URL || "https://my-carlpion-api-727992776618.asia-northeast3.run.app";
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8080";
    const editorRef = useRef();
    const navigate = useNavigate();
    const { auth } = useContext(AuthContext);

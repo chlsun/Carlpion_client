@@ -4,7 +4,7 @@ import nrstyles from "./NoticeReply.module.css";
 import { AuthContext } from "../../../Context/AuthContext";
 
 function NoticeReply({ noticeNo }) {
-   const apiUrl = window.ENV?.API_URL || "https://my-carlpion-api-727992776618.asia-northeast3.run.app";
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8080";
    const { auth, isAdmin } = useContext(AuthContext);
    const { accessToken, nickname } = auth;
    const [comments, setComments] = useState([]);

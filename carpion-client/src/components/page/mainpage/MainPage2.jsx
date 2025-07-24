@@ -5,7 +5,7 @@ import axios from "axios";
 import Banner from "./include/Banner";
 
 const MainPage2 = () => {
-   const apiUrl = window.ENV?.API_URL || "https://my-carlpion-api-727992776618.asia-northeast3.run.app";
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8080";
 
    console.log(apiUrl);
    

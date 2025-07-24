@@ -10,7 +10,7 @@ import axios from "axios";
 import { AuthContext } from "../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
 const Reply = () => {
-   const apiUrl = window.ENV?.API_URL || "https://my-carlpion-api-727992776618.asia-northeast3.run.app";
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8080";
    const { auth } = useContext(AuthContext);
    const [replyList, setReplyList] = useState([]);
    const [currentPage, setCurrentPage] = useState(1);

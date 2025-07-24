@@ -4,7 +4,7 @@ import axios from "axios";
 import rbstyles from "./ReportBoard.module.css";
 
 const ReportBoard = () => {
-   const apiUrl = window.ENV?.API_URL || "https://my-carlpion-api-727992776618.asia-northeast3.run.app";
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8080";
    const [searchParams, setSearchParams] = useSearchParams();
    const initialPage = parseInt(searchParams.get("page")) || 1;
    const [currentPage, setCurrentPage] = useState(initialPage);

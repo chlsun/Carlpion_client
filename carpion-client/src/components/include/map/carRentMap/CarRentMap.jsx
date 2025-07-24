@@ -3,15 +3,13 @@ import "./CarRentMap.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const { kakao } = window;
-
 const CarRentMap = ({
    rentCarList,
    searchAddr,
    rentalDateYMDH,
    returnDateYMDH,
 }) => {
-   const apiUrl = window.ENV?.API_URL || "https://my-carlpion-api-727992776618.asia-northeast3.run.app";
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8080";
    const navi = useNavigate();
    const [isRentalInfo, setIsRentalInfo] = useState(false);
 
@@ -46,6 +44,12 @@ const CarRentMap = ({
    ];
 
    useEffect(() => {
+      if (!window.kakao || !window.kakao.maps) {
+         return;
+      }
+
+      const { kakao } = window;
+
       var container = document.getElementById("map");
       var options;
 
@@ -104,7 +108,7 @@ const CarRentMap = ({
                });
          });
       });
-   }, []);
+   }, [searchAddr.value, rentCarList]);
 
    function getDiffHour(rentalDateYMDH, returnDateYMDH) {
       const rentalDateYMDHM = rentalDateYMDH.replaceAll("/", "-") + ":00";
