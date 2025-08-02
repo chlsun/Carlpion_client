@@ -1,9 +1,13 @@
 import { useEffect } from "react";
 
-const { kakao } = window;
-
 const ParkingMap = ({ parkingInfo }) => {
    useEffect(() => {
+      if (!window.kakao || !window.kakao.maps) {
+         return; 
+      }
+
+      const { kakao } = window;
+      
       const container = document.getElementById("map");
       const options = {
          center: new kakao.maps.LatLng(parkingInfo.lat, parkingInfo.lot),

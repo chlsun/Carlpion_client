@@ -6,8 +6,8 @@ const ReservationMap = ({ rentCarInfo, reservationDate, handlePayment }) => {
 
    useEffect(() => {
       if (!window.kakao || !window.kakao.maps) {
-            return; 
-        }
+         return; 
+      }
 
       if (rentCarInfo) {
          const { kakao } = window;

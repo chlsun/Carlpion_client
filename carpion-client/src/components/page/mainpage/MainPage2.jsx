@@ -6,8 +6,6 @@ import Banner from "./include/Banner";
 
 const MainPage2 = () => {
    const apiUrl = window.ENV?.API_URL || "http://localhost:8080";
-
-   console.log(apiUrl);
    
    const [reviewList, setReviewList] = useState(null);
    const [reportList, setReportList] = useState(null);

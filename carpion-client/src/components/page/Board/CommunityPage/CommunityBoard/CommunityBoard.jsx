@@ -113,6 +113,8 @@ const PostCard = React.memo(
 );
 
 const CommunityBoard = () => {
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8080";
+
    const [searchParams, setSearchParams] = useSearchParams();
    const initialPage = parseInt(searchParams.get("page")) || 1;
    const initialViewType = searchParams.get("viewType") || "grid";

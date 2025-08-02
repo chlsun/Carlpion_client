@@ -60,8 +60,14 @@ const Banner = () => {
       }
    }, [carModelList, currentIndex]);
 
-   if (carModelList == null || currentModel == null) return null;
-
+   if (carModelList == null || currentModel == null){
+      return(
+         <div className="loading">
+            <div className="loader"></div>
+         </div>
+      )
+   };
+   
    return (
       <>
          <div id="banner">

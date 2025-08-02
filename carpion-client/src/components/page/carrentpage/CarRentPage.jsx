@@ -30,6 +30,7 @@ const CarRentPage = () => {
    const [isHourDisabled, setIsHourDisabled] = useState(true);
 
    const [checked, setChecked] = useState(false);
+   const [loading, setLoading] = useState(false);
 
    const [diffHour, setDiffHour] = useState(0);
    const [dateError, setDateError] = useState("");
@@ -70,6 +71,7 @@ const CarRentPage = () => {
       return { value: `${hour}:00:00`, label: `${hour}:00` };
    });
 
+   // 대여일 시간대 설정
    const getRentalHour = (startHour) => {
       const paramHour = parseInt(startHour);
 
@@ -79,9 +81,9 @@ const CarRentPage = () => {
       });
    };
 
+   // 반납일 시간대 설정
    const getReturnHour = (startHour) => {
       if (startHour == -1) {
-         const defaultHour = 0;
 
          return Array.from({ length: 24 }, (_, i) => {
             const hour = i.toString().padStart(2, "0");
@@ -95,6 +97,7 @@ const CarRentPage = () => {
       });
    };
 
+   // 대여일 날짜 설정
    useEffect(() => {
       setRentalDates(getNextTenDays(new Date()));
    }, []);
@@ -103,6 +106,8 @@ const CarRentPage = () => {
       setRentCarList(null);
 
       if (checked && searchAddr && rentalDateYMDH && returnDateYMDH) {
+         setLoading(true);
+
          axios
             .get(`${apiUrl}/rents`, {
                params: {
@@ -120,6 +125,9 @@ const CarRentPage = () => {
             })
             .catch((error) => {
                console.log(error);
+            })
+            .finally(() => {
+               setLoading(false);
             });
       }
    }, [searchAddr, rentalDateYMDH, returnDateYMDH]);
@@ -203,6 +211,7 @@ const CarRentPage = () => {
       }
    }, [rentalDateYMDH, returnDateYMDH]);
 
+   // 날짜를 10일 단위로 가져오는 함수
    const getNextTenDays = (currentDate) => {
       const dates = [];
 
@@ -285,9 +294,13 @@ const CarRentPage = () => {
                      />
                   ) : (
                      <h2>
-                        {checked
-                           ? "검색 정보가 없습니다."
-                           : "원하는 대여일 반납일 지역 정보를 기입해주세요"}
+                        {loading ? (
+                           <div className="loader"></div>
+                        ) : checked ? (
+                           <p>검색 정보가 없습니다.</p>
+                        ) : (
+                           <p>원하는 대여일 반납일 지역 정보를 기입해주세요</p>
+                        )}
                      </h2>
                   )}
                </div>
