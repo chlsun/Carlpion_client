@@ -22,6 +22,7 @@ const Arrow = () => {
 };
 
 const Banner = () => {
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
    const navi = useNavigate();
 
    const [carModelList, setCarModelList] = useState(null);
@@ -31,10 +32,9 @@ const Banner = () => {
 
    useEffect(() => {
       axios
-         .get("http://localhost/carModel")
+         .get(`${apiUrl}/carModel`)
          .then((result) => {
-            setCarModelList(result.data);
-            console.log(result);
+            setCarModelList(result.data.item);
          })
          .catch((error) => {
             console.log(error);

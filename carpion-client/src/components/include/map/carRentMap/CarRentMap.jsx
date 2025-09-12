@@ -11,6 +11,7 @@ const CarRentMap = ({
    rentalDateYMDH,
    returnDateYMDH,
 }) => {
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
    const navi = useNavigate();
    const [isRentalInfo, setIsRentalInfo] = useState(false);
 
@@ -86,10 +87,8 @@ const CarRentMap = ({
          kakao.maps.event.addListener(marker, "click", function () {
             const rentCar = marker.data;
 
-            console.log(rentalDateYMDH, returnDateYMDH);
-
             axios
-               .get(`http://localhost/rents/parking`, {
+               .get(`${apiUrl}/rents/parking`, {
                   params: {
                      rentalDate: rentalDateYMDH ? rentalDateYMDH : null,
                      returnDate: returnDateYMDH ? returnDateYMDH : null,
@@ -97,8 +96,7 @@ const CarRentMap = ({
                   },
                })
                .then((result) => {
-                  console.log(result.data);
-                  setChooseRentCarList(result.data);
+                  setChooseRentCarList(result.data.item);
                   setIsRentalInfo(true);
                })
                .catch((error) => {
@@ -114,12 +112,8 @@ const CarRentMap = ({
       const rentalDateCng = new Date(rentalDateYMDHM.replace(" ", "T"));
       const returnDateCng = new Date(returnDateYMDHM.replace(" ", "T"));
 
-      console.log(rentalDateCng);
-
       const diffMSec = returnDateCng.getTime() - rentalDateCng.getTime();
       const diffHour = diffMSec / (60 * 60 * 1000);
-
-      console.log(diffHour);
 
       return diffHour;
    }

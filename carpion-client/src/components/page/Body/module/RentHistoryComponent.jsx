@@ -23,7 +23,6 @@ const RentHistoryComponent = (props) => {
       navi("/rent-history");
    };
    function getDiffHour(rentalDate, returnDate) {
-      console.log("rentalDate : ", rentalDate);
 
       const rentalDateType = new Date(rentalDate.replace(" ", "T"));
       const returnDateType = new Date(returnDate.replace(" ", "T"));

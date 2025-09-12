@@ -11,7 +11,6 @@ const ReservationMap = ({ rentCarInfo, reservationDate, handlePayment }) => {
             rentCarInfo[0].carModel.rentPrice +
                rentCarInfo[0].carModel.hourPrice * reservationDate.diffHour
          );
-         console.log(rentCarInfo);
          var container = document.getElementById("map");
          var options = {
             center: new kakao.maps.LatLng(
@@ -32,8 +31,6 @@ const ReservationMap = ({ rentCarInfo, reservationDate, handlePayment }) => {
          });
 
          marker.setMap(map);
-
-         console.log(reservationDate);
       }
    }, [rentCarInfo]);
 

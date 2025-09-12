@@ -1,39 +1,42 @@
 import { useEffect, useState } from "react";
-import Banner from "./include/banner";
 import BoardComponent from "./include/BoardComponent";
 import "./MainPage2.css";
 import axios from "axios";
+import Banner from "./include/Banner";
 
 const MainPage2 = () => {
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
+
+   console.log(apiUrl);
+   
    const [reviewList, setReviewList] = useState(null);
    const [reportList, setReportList] = useState(null);
    const [noticeList, setNoticeList] = useState(null);
 
    useEffect(() => {
       axios
-         .get("http://localhost/board/review")
+         .get(`${apiUrl}/board/review`)
          .then((result) => {
-            setReviewList(result.data);
-            console.log(result);
+            console.log(result.data.item);
+            setReviewList(result.data.item);
          })
          .catch((error) => {
             console.log(error);
          });
 
       axios
-         .get("http://localhost/board/report")
+         .get(`${apiUrl}/board/report`)
          .then((result) => {
-            setReportList(result.data);
-            console.log(result);
+            setReportList(result.data.item);
          })
          .catch((error) => {
             console.log(error);
          });
 
       axios
-         .get("http://localhost/board/notice")
+         .get(`${apiUrl}/board/notice`)
          .then((result) => {
-            setNoticeList(result.data);
+            setNoticeList(result.data.item);
          })
          .catch((error) => {
             console.log(error);

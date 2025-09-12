@@ -4,6 +4,7 @@ import "./ModelPage.css";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 const ModelPage = () => {
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
    const navi = useNavigate();
    const fileInputRef = useRef(null);
 
@@ -40,27 +41,26 @@ const ModelPage = () => {
    useEffect(() => {
       if (auth.accessToken) {
          axios
-            .get(`http://localhost/admin/model/${page}`, {
+            .get(`${apiUrl}/admin/model/${page}`, {
                headers: {
                   Authorization: `Bearer ${auth.accessToken}`,
                },
             })
             .then((result) => {
-               console.log(result);
-               setCarModelList(result.data.carModelList);
-               setPageInfo(result.data.pageInfo);
+               setCarModelList(result.data.item.carModelList);
+               setPageInfo(result.data.item.pageInfo);
                const pageArray = [];
 
                for (
-                  let i = result.data.pageInfo.startPage;
-                  i <= result.data.pageInfo.endPage;
+                  let i = result.data.item.pageInfo.startPage;
+                  i <= result.data.item.pageInfo.endPage;
                   i++
                ) {
                   pageArray.push(i);
                }
                setPageNumbers(pageArray);
 
-               if (result.data.carModelList.length == 0 && page > 1) {
+               if (result.data.item.carModelList.length == 0 && page > 1) {
                   navi(`/admin/model/${page - 1}`);
                }
             })
@@ -75,7 +75,6 @@ const ModelPage = () => {
    }, [auth, page, isPageLoad]);
 
    const setCarModelHandler = (e) => {
-      console.log(carModelInfo);
       e.preventDefault();
       if (!!!auth.accessToken) {
          alert("로그인 후 다시 시도해주세요");
@@ -99,14 +98,13 @@ const ModelPage = () => {
       formData.append("seatCount", carModelInfo.seatCount);
       formData.append("file", imgFile);
       axios
-         .post("http://localhost/admin/model", formData, {
+         .post(`${apiUrl}/admin/model`, formData, {
             headers: {
                Authorization: `Bearer ${auth.accessToken}`,
                "Content-Type": "multipart/form-data",
             },
          })
          .then((result) => {
-            console.log(result);
             setIsPageLoad(!isPageLoad);
             setCarModelInfo({
                carModel: "",
@@ -123,7 +121,7 @@ const ModelPage = () => {
             alert("차량 모델이 추가되었습니다.");
          })
          .catch((error) => {
-            console.log(error);
+            alert(error.response.data);
          });
    };
    const saveImgFile = (e) => {
@@ -161,13 +159,6 @@ const ModelPage = () => {
    };
 
    const updateRequest = () => {
-      console.log("updateImgFile : ", updateImgFile);
-      console.log("modelNo : ", updateCarModel.modelNo);
-      console.log("carModel : ", updateCarModel.carModel);
-      console.log("rentPrice : ", updateCarModel.rentPrice);
-      console.log("hourPrice : ", updateCarModel.hourPrice);
-      console.log("chargeType : ", updateCarModel.chargeType);
-      console.log("seatCount : ", updateCarModel.seatCount);
       if (
          !!!updateImgFile ||
          updateCarModel.modelNo == -1 ||
@@ -189,7 +180,7 @@ const ModelPage = () => {
       formData.append("seatCount", updateCarModel.seatCount);
       formData.append("file", updateImgFile);
       axios
-         .put("http://localhost/admin/model", formData, {
+         .put(`${apiUrl}/admin/model`, formData, {
             headers: {
                Authorization: `Bearer ${auth.accessToken}`,
                "Content-Type": "multipart/form-data",
@@ -223,10 +214,8 @@ const ModelPage = () => {
          return;
       }
 
-      console.log(modelNo);
-
       axios
-         .delete("http://localhost/admin/model", {
+         .delete(`${apiUrl}/admin/model`, {
             headers: {
                Authorization: `Bearer ${auth.accessToken}`,
             },
@@ -235,11 +224,11 @@ const ModelPage = () => {
             },
          })
          .then((result) => {
-            console.log(result);
             alert("삭제되었습니다.");
             setIsPageLoad(!isPageLoad);
          })
          .catch((error) => {
+            console.log(error);
             alert(error.response.data);
          });
    };

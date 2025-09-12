@@ -5,6 +5,7 @@ import axios from "axios";
 import ParkingMap from "../../../../include/map/parkingMap/ParkingMap";
 
 const ParkingModal = ({ setModalOpen, modalBackground, setParkingInfo }) => {
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
    const { auth } = useContext(AuthContext);
 
    const [mapOpenNum, setMapOpenNum] = useState(-1);
@@ -33,14 +34,14 @@ const ParkingModal = ({ setModalOpen, modalBackground, setParkingInfo }) => {
    const searchHandler = (e) => {
       if (auth.accessToken) {
          axios
-            .get(`http://localhost/parking/${search}`, {
+            .get(`${apiUrl}/parking/${search}`, {
                headers: {
                   Authorization: auth.accessToken,
                },
             })
             .then((result) => {
                console.log(result);
-               setParkingsInfo(result.data);
+               setParkingsInfo(result.data.item);
             })
             .catch((error) => {
                console.log(error);

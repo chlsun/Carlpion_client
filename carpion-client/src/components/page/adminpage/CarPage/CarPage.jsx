@@ -7,6 +7,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 const CarPage = () => {
+   const apiUrl = window.ENV?.API_URL || "http://localhost:8005";
    const { page } = useParams();
    const { auth } = useContext(AuthContext);
    const navi = useNavigate();
@@ -78,7 +79,7 @@ const CarPage = () => {
 
       if (auth.accessToken) {
          axios
-            .post("http://localhost/admin/car", rentCar, {
+            .post(`${apiUrl}/admin/car`, rentCar, {
                headers: {
                   Authorization: `Bearer ${auth.accessToken}`,
                },
@@ -90,9 +91,6 @@ const CarPage = () => {
                setSelectedModelNo(null);
             })
             .catch((error) => {
-               const errors = error.response.data;
-               const firstErrorMessage = Object.values(errors)[0];
-               alert(firstErrorMessage);
                alert(error.response.data);
             });
       }
@@ -109,26 +107,25 @@ const CarPage = () => {
    useEffect(() => {
       if (auth.accessToken) {
          axios
-            .get(`http://localhost/admin/model`, {
+            .get(`${apiUrl}/admin/model`, {
                headers: {
                   Authorization: `Bearer ${auth.accessToken}`,
                },
             })
             .then((result) => {
-               const modelList = result.data;
+               console.log(result);
+               const modelList = result.data.item;
                const option = modelList.map((model) => {
                   return { value: model.modelNo, label: model.carModel };
                });
                setOptions([...options, ...option]);
             })
             .catch((error) => {
-               setOptions([...option]);
-            })
-            .catch((error) => {
-               console.log(error);
-               if (error.response.status == 403) {
+               if (error.response.status && error.response.status == 403) {
                   navi("/");
                   alert("운영자만 이용가능한 페이지입니다.");
+               } else {
+                  console.log(error);
                }
             });
       }
@@ -137,25 +134,25 @@ const CarPage = () => {
    useEffect(() => {
       if (auth.accessToken) {
          axios
-            .get(`http://localhost/admin/car/${page}`, {
+            .get(`${apiUrl}/admin/car/${page}`, {
                headers: {
                   Authorization: `Bearer ${auth.accessToken}`,
                },
             })
             .then((result) => {
-               setRentCarList(result.data.carModelList);
+               setRentCarList(result.data.item.carModelList);
                setRentCar({
                   modelNo: null,
                   carId: null,
                   parkingId: null,
                });
                setCarId("");
-               setPageInfo(result.data.pageInfo);
+               setPageInfo(result.data.item.pageInfo);
                const pageArray = [];
 
                for (
-                  let i = result.data.pageInfo.startPage;
-                  i <= result.data.pageInfo.endPage;
+                  let i = result.data.item.pageInfo.startPage;
+                  i <= result.data.item.pageInfo.endPage;
                   i++
                ) {
                   pageArray.push(i);
@@ -207,7 +204,7 @@ const CarPage = () => {
       if (auth.accessToken) {
          axios
             .put(
-               "http://localhost/admin/car",
+               `${apiUrl}/admin/car`,
                {
                   carNo: rentCar.carNo,
                   modelNo: updateSelectedModelNo.value,
@@ -228,9 +225,7 @@ const CarPage = () => {
                setIsPageLoad(!isPageLoad);
             })
             .catch((error) => {
-               const errors = error.response.data;
-               const firstErrorMessage = Object.values(errors)[0];
-               alert(firstErrorMessage);
+               alert(error.response.data);
             });
       }
    };
@@ -241,7 +236,7 @@ const CarPage = () => {
       }
       if (auth.accessToken) {
          axios
-            .delete("http://localhost/admin/car", {
+            .delete(`${apiUrl}/admin/car`, {
                params: { carNo: rentCar.carNo },
                headers: {
                   Authorization: `Bearer ${auth.accessToken}`,

@@ -12,7 +12,6 @@ const AdminPage = () => {
       const username = sessionStorage.getItem("username");
 
       if (!username && !auth.accessToken) {
-         console.log(auth);
          alert("로그인 후 이용 가능합니다.");
          navi("/start");
       }
